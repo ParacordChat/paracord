@@ -56,5 +56,10 @@ export const generateHexColorFromString = (str: string) => {
   let color = (hash & 0x00ffffff).toString(16);
   color = "00000".substring(0, 6 - color.length) + color;
 
+  //if color is too dark make it lighter
+  if (parseInt(color, 16) < 0x888888) {
+    color = (parseInt(color, 16) + 0x888888).toString(16);
+  }
+
   return "#" + color;
 };

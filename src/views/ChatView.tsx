@@ -63,10 +63,9 @@ export function ChatView(props: { chatManagerInstance: ChatManager }) {
             console.log(e.target.value);
             setMessageValue(e.target.value);
           }}
-          onKeyDown={(e: { key: string; shiftKey: boolean }) => {
+          onKeyUp={(e: { key: string; shiftKey: boolean }) => {
             if (e.key === "Enter" && e.shiftKey === false && !multilineInput) {
               sendMessage();
-              console.log("f");
             } else {
               chatManagerInstance.sendTypingIndicator(true);
             }

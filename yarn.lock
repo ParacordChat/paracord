@@ -3292,6 +3292,11 @@ fsevents@2.3.2, fsevents@~2.3.2:
   resolved "https://registry.yarnpkg.com/fsevents/-/fsevents-2.3.2.tgz#8a526f78b8fdf4623b709e0b975c52c24c02fd1a"
   integrity sha512-xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA==
 
+fun-animal-names@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/fun-animal-names/-/fun-animal-names-0.1.1.tgz#865dd0ff2c7b2161723310028a0efae7734d0f3c"
+  integrity sha512-QAGZiESFUSlcJ17PMBtuzsmwYOI8KK9s4HAGYbxIzWP+IxvioDG/yLRiRjB+BOxgtoELCd1/Hii7sDKsm4htpw==
+
 function-bind@^1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/function-bind/-/function-bind-1.1.1.tgz#a56899d3ea3c9bab874bb9773b7c5ede92f4895d"

@@ -1,3 +1,4 @@
+import { funAnimalName } from "fun-animal-names";
 import * as kyber from "pqc-kyber";
 import { Room } from "trystero";
 import { sendSystemMessage } from "../helpers/helpers";
@@ -24,7 +25,7 @@ export default class UserManager {
       this.syncInfo(id);
       useUserStore
         .getState()
-        .addUser({ id, roomId, active: true, name: "Anonymous" });
+        .addUser({ id, roomId, active: true, name: funAnimalName(id) });
       useClientSideUserTraits.getState().addUser(id);
       sendSystemMessage(roomId, `${id} joined the room`);
     });
@@ -107,7 +108,7 @@ export default class UserManager {
   // };
 
   createPersona = async () => {
-    await usePersonaStore.getState().resetPersona();
+    await usePersonaStore.getState().createPersona();
     this.syncInfo();
   };
 }

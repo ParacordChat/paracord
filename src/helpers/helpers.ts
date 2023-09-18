@@ -1,3 +1,4 @@
+import { funAnimalName } from "fun-animal-names";
 import { useState } from "preact/hooks";
 import shortid from "shortid";
 import { useMessageStore } from "../stateManagers/messageStore";
@@ -63,3 +64,6 @@ export const generateHexColorFromString = (str: string) => {
 
   return "#" + color;
 };
+
+export const randomName = () =>
+  funAnimalName(Math.random().toString(36).substring(7));

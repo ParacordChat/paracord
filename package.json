@@ -16,6 +16,7 @@
     "curve25519-js": "^0.0.4",
     "dayjs": "^1.11.8",
     "dompurify": "^3.0.3",
+    "fun-animal-names": "^0.1.1",
     "grommet": "^2.33.2",
     "grommet-icons": "^4.11.0",
     "idb": "^7.1.1",

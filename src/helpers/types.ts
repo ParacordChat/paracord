@@ -13,7 +13,7 @@ export interface User {
   active: boolean;
   quantumSend?: Uint8Array;
   quantumRecv?: Uint8Array;
-  name: string | "Anonymous";
+  name: string;
 }
 
 export interface Message {
@@ -41,5 +41,5 @@ export interface FileProgress {
 
 export interface Persona {
   keyPair: Keys | undefined;
-  name: string | "Anonymous";
+  name: string;
 }

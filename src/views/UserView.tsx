@@ -1,3 +1,4 @@
+import { funAnimalName } from "fun-animal-names";
 import { Box, Button, Footer, Nav, Sidebar, Text, TextInput } from "grommet";
 import { Camera, Download, Monitor } from "grommet-icons";
 import { selfId } from "trystero";
@@ -40,7 +41,7 @@ export function UserView(props: {
             }
           />
           <Text size="small" style={{ color: "grey" }}>
-            {selfId}
+            {funAnimalName(selfId)}
           </Text>
           <hr />
           <Text size="large">Peers</Text>
@@ -84,7 +85,7 @@ export function UserView(props: {
                     </Text>
                   </Box>
                   <Text size="small" style={{ color: "grey" }}>
-                    {id}
+                    {funAnimalName(id)}
                   </Text>
                 </li>
               ))

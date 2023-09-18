@@ -9,7 +9,7 @@ export default defineConfig({
   define: {
     // global: {},
   },
-  // base: "/paracord/",
+  base: "/paracord/",
   plugins: [
     preact(),
     wasm(),
@@ -21,10 +21,8 @@ export default defineConfig({
         theme_color: "#4bffac",
         background_color: "#af79ff",
         display: "standalone",
-        // scope: "/paracord/",
-        // start_url: "/paracord/",
-        scope: "/",
-        start_url: "/",
+        scope: "/paracord/",
+        start_url: "/paracord/",
         name: "Paracord secure chat",
         short_name: "Paracord",
         description: "A secure chat that cleans up after itself",

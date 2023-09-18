@@ -1,0 +1,3 @@
+[submodule "trystero"]
+	path = trystero
+	url = https://github.com/JakeTrock/trystero

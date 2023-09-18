@@ -51,9 +51,8 @@ export function RoomCreator(props: {
                   roomRef.current &&
                   (roomRef.current.value = shortid.generate())
                 }
-              >
-                Random
-              </Button>
+                label="Random"
+              />
             </Box>
             <Box direction="row">
               <TextInput

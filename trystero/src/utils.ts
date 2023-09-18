@@ -1,11 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 // @ts-ignore
 import Peer from "simple-peer-light";
-import {
-  FirebaseRoomConfig,
-  IpfsRoomConfig,
-  TorrentRoomConfig,
-} from "trystero";
+import { FirebaseRoomConfig, TorrentRoomConfig } from "trystero";
 import { ExtendedInstance, Room } from "./types";
 
 const charSet =
@@ -59,7 +55,7 @@ export const initGuard =
     f: (config: any, ns: string | number) => Promise<Room>
   ) =>
   async (
-    config: TorrentRoomConfig | IpfsRoomConfig | FirebaseRoomConfig,
+    config: TorrentRoomConfig | FirebaseRoomConfig,
     ns: string | number
   ): Promise<Room> => {
     if (occupiedRooms[ns]) {

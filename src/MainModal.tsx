@@ -69,7 +69,7 @@ function MainModal(props: {
           }}
           align="center"
           direction="row"
-          background="brandSecondary"
+          background="accent-1"
           pad="medium"
         >
           <Tabs.List aria-label="tabs">

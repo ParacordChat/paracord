@@ -3,25 +3,25 @@ import { render } from "preact";
 import App from "./App";
 import "./assets/globals.css";
 
-const theme = {
-  //TODO: move to consts
-  global: {
-    font: {
-      family: "Space Mono",
-      size: "14px",
-      height: "20px",
-    },
-    colors: {
-      //neon lavender
-      brand: "#BFA5FF",
-      //neon green
-      brandSecondary: "#00FFA3",
-    },
-  },
-};
+// const theme = {
+//   global: {
+//     font: {
+//       family: "Space Mono",
+//       size: "14px",
+//       height: "20px",
+//     },
+//     colors: {
+//       //neon lavender
+//       brand: "#4bffac",
+//       //neon green
+//       "accent-1": "#af79ff",
+//       ...defaultProps.theme.global?.colors,
+//     },
+//   }, theme={theme}
+// };
 
 render(
-  <Grommet theme={theme}>
+  <Grommet>
     <App />
   </Grommet>,
   document.getElementById("app") as HTMLElement

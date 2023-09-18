@@ -7,9 +7,9 @@ import wasm from "vite-plugin-wasm";
 // https://vitejs.dev/config/
 export default defineConfig({
   define: {
-    global: "window",
+    // global: {},
   },
-  base: "/paracord/",
+  // base: "/paracord/",
   plugins: [
     preact(),
     wasm(),
@@ -21,6 +21,8 @@ export default defineConfig({
         theme_color: "#4bffac",
         background_color: "#af79ff",
         display: "standalone",
+        // scope: "/paracord/",
+        // start_url: "/paracord/",
         scope: "/",
         start_url: "/",
         name: "Paracord secure chat",

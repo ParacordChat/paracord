@@ -9,22 +9,19 @@
   "exports": {
     ".": "./src/index.js",
     "./firebase": "./src/firebase.js",
-    "./ipfs": "./src/ipfs.js",
     "./torrent": "./src/torrent.js"
   },
   "author": {
-    "name": "Dan Motzenbecker",
-    "email": "dan@oxism.com",
-    "url": "https://oxism.com"
+    "name": "Jacob Trock",
+    "url": "https://jake.trock.com"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/dmotz/trystero.git"
+    "url": "https://github.com/jaketrock/trystero.git"
   },
   "license": "MIT",
   "dependencies": {
     "firebase": "^9.6.5",
-    "ipfs-core": "0.9.0",
     "native-file-system-adapter": "^3.0.0",
     "simple-peer": "^9.11.1",
     "simple-peer-light": "^9.10.0",
@@ -39,23 +36,5 @@
   },
   "scripts": {
     "sizes": "./bundle-sizes.sh"
-  },
-  "keywords": [
-    "webrtc",
-    "p2p",
-    "peer to peer",
-    "chat",
-    "pairing",
-    "matchmaking",
-    "serverless",
-    "torrent",
-    "bittorrent",
-    "webtorrent",
-    "ipfs",
-    "firebase",
-    "realtime",
-    "decentralized",
-    "signaling",
-    "pairing"
-  ]
+  }
 }

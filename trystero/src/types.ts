@@ -22,10 +22,6 @@ export interface BaseRoomConfig {
   };
 }
 
-export interface IpfsRoomConfig extends BaseRoomConfig {
-  swarmAddresses?: string[];
-}
-
 export interface FirebaseRoomConfig extends BaseRoomConfig {
   appId: string;
   firebaseApp?: FirebaseApp;

@@ -43,7 +43,7 @@ export function DownloadView(props: {
                 background="dark-3"
                 round="small"
                 pad="medium"
-                border={{ color: "brandSecondary", size: "medium" }}
+                border={{ color: "accent-1", size: "medium" }}
               >
                 Drag &amp; Drop files here
               </Box>
@@ -60,7 +60,7 @@ export function DownloadView(props: {
                     background="dark-3"
                     round="small"
                     pad="medium"
-                    border={{ color: "brandSecondary", size: "medium" }}
+                    border={{ color: "accent-1", size: "medium" }}
                     key={id}
                   >
                     {file.name} <p>{fancyBytes(file.size)} </p>
@@ -134,7 +134,7 @@ export function DownloadView(props: {
                   background="dark-3"
                   round="small"
                   pad="medium"
-                  border={{ color: "brandSecondary", size: "medium" }}
+                  border={{ color: "accent-1", size: "medium" }}
                 >
                   <Text size="medium" color="brand">
                     {status.toMe ? ` ← ${status.name}` : `${status.name} →`}

@@ -9,6 +9,7 @@ export default defineConfig({
   define: {
     global: "window",
   },
+  base: "/paracord/",
   plugins: [
     preact(),
     wasm(),

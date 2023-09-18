@@ -1,6 +1,7 @@
-- pipeline
-- make sure color generator color isn't too dark
-
+- BUGS
+  - chrome not working(welchs?)
+  - messages don't clear on new room
+  - better way to do URL refs? https://github.com/preactjs/preact-router
 - passwordless security
     - allow
     - allow with history
@@ -8,7 +9,6 @@
 - cam/desktop share
   - camera rotate?
 - stream saver mitm?
-- better names with fun-animal-names
 - remove css deps
 
 useful

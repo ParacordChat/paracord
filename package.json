@@ -29,6 +29,7 @@
     "streamsaver": "^2.0.6",
     "styled-components": "5.3.11",
     "trystero": "./trystero",
+    "webrtc-adapter": "^8.2.3",
     "zustand": "^4.3.8"
   },
   "devDependencies": {

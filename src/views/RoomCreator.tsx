@@ -10,6 +10,7 @@ import {
   TextInput,
 } from "grommet";
 import { FormView, FormViewHide, Key, Login, Risk } from "grommet-icons";
+import { route } from "preact-router";
 import { useRef, useState } from "preact/hooks";
 import shortid from "shortid";
 import pcdLogo from "/logo.svg";
@@ -20,7 +21,6 @@ export function RoomCreator(props: {
   const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
   const roomRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
-  const { bootStrapRoom } = props;
   return (
     <>
       <Page kind="narrow">
@@ -70,10 +70,9 @@ export function RoomCreator(props: {
             </Box>
             <Button
               onClick={() =>
-                roomRef.current &&
-                bootStrapRoom(
-                  roomRef.current.value,
-                  passwordRef.current ? passwordRef.current.value : undefined
+                route(
+                  `/paracord/${roomRef.current?.value}/${passwordRef.current?.value}`,
+                  true
                 )
               }
               label="Go"

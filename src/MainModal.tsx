@@ -12,12 +12,8 @@ import { DownloadView } from "./views/DownloadView";
 import { RoomCard } from "./views/RoomCard";
 import { UserView } from "./views/UserView";
 
-function MainModal(props: {
-  room: Room;
-  roomId: string;
-  leaveRoom: () => void;
-}) {
-  const { room, roomId, leaveRoom } = props;
+const MainModal = (roomId: string, room: Room) => () => {
+  console.log(roomId, room);
 
   const [userManagerInstance] = useState(
     new UserManager({
@@ -44,11 +40,9 @@ function MainModal(props: {
     userManagerInstance.createPersona();
   }, []);
 
-  //TODO: revamp, merge dl/chat, highlight does not change, but it'll be gutted so...
-
   return (
     <>
-      <RoomCard roomId={roomId} leaveRoom={leaveRoom} />
+      <RoomCard roomId={roomId} />
       <Tabs.Root defaultValue="tab1">
         <div className="horizontal">
           <div style={{ width: "80%", height: "100%" }}>
@@ -84,6 +78,6 @@ function MainModal(props: {
       </Tabs.Root>
     </>
   );
-}
+};
 
 export default MainModal;

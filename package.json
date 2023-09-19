@@ -24,6 +24,8 @@
     "polished": "^4.2.2",
     "pqc-kyber": "^0.6.0",
     "preact": "^10.13.1",
+    "preact-async-route": "^2.2.1",
+    "preact-router": "^4.1.2",
     "react-drag-drop-files": "^2.3.10",
     "shortid": "^2.2.16",
     "streamsaver": "^2.0.6",

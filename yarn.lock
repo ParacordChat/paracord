@@ -4185,6 +4185,16 @@ pqc-kyber@^0.6.0:
   resolved "https://registry.yarnpkg.com/pqc-kyber/-/pqc-kyber-0.6.0.tgz#dc82c7e2c0629b11cdcb27067e9d74a3b8c3ac5e"
   integrity sha512-yaufnpO5MJfUHtCc18CXfgTxpFq5LmX4bkuecSQj6lzjQ2DoJKcDV2s3xKbN2bhxWwZXuUDPGnR1ME6MUUZm3g==
 
+preact-async-route@^2.2.1:
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/preact-async-route/-/preact-async-route-2.2.1.tgz#729f8f8650281973251fbbf852d5004f32f48594"
+  integrity sha512-8bg1007akXs3YDmzYT4McaTe6ji2FIzcc0/NTlu+vjJaKPNQ8lNG/HQ6LP+FoIxQ4m/KH5vvJCHJN5ADp2iNGA==
+
+preact-router@^4.1.2:
+  version "4.1.2"
+  resolved "https://registry.yarnpkg.com/preact-router/-/preact-router-4.1.2.tgz#f44b03737b670eeaec958563582eb8c4efaa87a5"
+  integrity sha512-uICUaUFYh+XQ+6vZtQn1q+X6rSqwq+zorWOCLWPF5FAsQh3EJ+RsDQ9Ee+fjk545YWQHfUxhrBAaemfxEnMOUg==
+
 preact@^10.13.1:
   version "10.15.0"
   resolved "https://registry.yarnpkg.com/preact/-/preact-10.15.0.tgz#14bae0afe3547ca9d45d22fda2a4266462d31cf3"

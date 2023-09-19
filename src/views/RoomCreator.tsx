@@ -15,9 +15,7 @@ import { useRef, useState } from "preact/hooks";
 import shortid from "shortid";
 import pcdLogo from "/logo.svg";
 
-export function RoomCreator(props: {
-  bootStrapRoom: (id: string, password?: string) => void;
-}) {
+export function RoomCreator() {
   const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
   const roomRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);

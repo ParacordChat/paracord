@@ -19,7 +19,10 @@ export function RoomCard(props: { roomId: string }) {
       >
         <Button
           label="home"
-          onClick={() => route(`/${baseUrl}`, true)}
+          onClick={() => {
+            route(`/${baseUrl}`, true);
+            location.reload();
+          }}
           icon={<CaretLeftFill />}
         />
 

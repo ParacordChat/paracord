@@ -1,6 +1,6 @@
 import { funAnimalName } from "fun-animal-names";
 import { Box, Button, Footer, Nav, Sidebar, Text, TextInput } from "grommet";
-import { Camera, Download, Monitor } from "grommet-icons";
+import { Camera, Download, Monitor, Phone } from "grommet-icons";
 import { selfId } from "trystero";
 import UserManager from "../TrysteroManagers/userManager";
 import { generateHexColorFromString } from "../helpers/helpers";
@@ -52,6 +52,7 @@ export function UserView(props: {
           icon={
             <Footer background="brand" pad="medium">
               <Download />
+              <Phone />
               <Camera />
               <Monitor />
             </Footer>

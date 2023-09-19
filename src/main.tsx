@@ -22,7 +22,7 @@ const theme = {
 };
 
 render(
-  <Grommet theme={theme}>
+  <Grommet theme={theme} themeMode="dark">
     <App />
   </Grommet>,
   document.getElementById("app") as HTMLElement

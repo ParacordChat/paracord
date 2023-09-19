@@ -78,10 +78,7 @@ export function UserView(props: {
                       toggleMuted={() => mutedPeers.toggleMute(id)}
                       isMuted={mutedPeers.mutedUsers[id] || false}
                     />
-                    <Text
-                      className="horizontal"
-                      style={{ color: generateHexColorFromString(id) }}
-                    >
+                    <Text style={{ color: generateHexColorFromString(id) }}>
                       {name}
                     </Text>
                   </Box>

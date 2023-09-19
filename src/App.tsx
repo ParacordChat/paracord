@@ -1,8 +1,8 @@
 import { joinRoom } from "trystero";
 
+import { Image, PageHeader, Text } from "grommet";
 import AsyncRoute from "preact-async-route";
 import { Router } from "preact-router";
-import "./assets/App.css";
 import { encryptDecrypt } from "./helpers/cryptoSuite";
 import { isRtcSupported } from "./helpers/helpers";
 import { baseUrl, defaultRoomConfig } from "./helpers/roomConfig";
@@ -47,20 +47,18 @@ function App() {
         </Router>
       ) : (
         <>
-          <div className="headtext horizontal">
-            <img style={{ height: ".5em" }} src={pcdLogo} />
-            <h1 className="headtext">Paracord</h1>
-          </div>
-          <div className="center">
-            <div className="card">
-              <h2>Sorry, your browser is not supported</h2>
-              <p>
+          <PageHeader
+            title="Paracord"
+            subtitle="Sorry, your browser is not supported"
+            parent={<Image src={pcdLogo} />}
+            actions={
+              <Text size="small">
                 Paracord uses WebRTC to connect peers, and your browser does not
                 support it. Please use a browser that supports WebRTC, such as
                 Google Chrome.
-              </p>
-            </div>
-          </div>
+              </Text>
+            }
+          />
         </>
       )}
     </>

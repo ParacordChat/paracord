@@ -28,7 +28,9 @@ export function DownloadView(props: {
         <>
           <CollapsibleContainer
             open={true}
-            className="filelistbox"
+            style={{
+              padding: "1rem 1.2rem",
+            }}
             title="Send File"
           >
             <FileUploader
@@ -66,7 +68,6 @@ export function DownloadView(props: {
                     {file.name} <p>{fancyBytes(file.size)} </p>
                     <Button
                       type="button"
-                      className="bigbutton"
                       style={{ padding: "0.3em" }}
                       onClick={() => downloadManagerInstance.removeRealFile(id)}
                       icon={<FormClose />}
@@ -76,8 +77,18 @@ export function DownloadView(props: {
                 ))}
             </Box>
           </CollapsibleContainer>
-          <CollapsibleContainer className="filelistbox" title="Send Request">
-            <div className="filelistcontainer">
+          <CollapsibleContainer
+            style={{
+              padding: "1rem 1.2rem",
+            }}
+            title="Send Request"
+          >
+            <Box
+              background="dark-3"
+              round="small"
+              pad="medium"
+              border={{ color: "brand", size: "medium" }}
+            >
               {requestableDownloads &&
                 Object.entries(requestableDownloads).map(([id, fileOffers]) => {
                   const userName = useUserStore((state) =>
@@ -86,7 +97,6 @@ export function DownloadView(props: {
 
                   return fileOffers.map(({ id, name, size, ownerId }) => (
                     <Box
-                      className="filelistbox"
                       round="small"
                       background="dark-3"
                       pad="medium"
@@ -114,10 +124,12 @@ export function DownloadView(props: {
                     </Box>
                   ));
                 })}
-            </div>
+            </Box>
           </CollapsibleContainer>
           <CollapsibleContainer
-            className="filelistbox"
+            style={{
+              padding: "1rem 1.2rem",
+            }}
             title="Active Transfers"
           >
             <Box

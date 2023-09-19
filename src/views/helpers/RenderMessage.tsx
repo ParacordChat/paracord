@@ -52,7 +52,6 @@ export default function RenderMessage(props: {
       {message.sentBy === "system" ? (
         <Box
           key={index}
-          className="filelistbox"
           border={{ color: "grey", size: "small" }}
           pad="medium"
           round="small"
@@ -69,13 +68,13 @@ export default function RenderMessage(props: {
             key={message.id}
             id={message.id}
             ref={isLast ? lastMessage : null}
-            className={`tag is-medium filelistbox`}
+            background="dark-1"
+            fill="width"
             style={{
-              backgroundColor: "var(--background-rgb)",
-              color: "var(--foreground-rgb)",
               textAlign: "left",
-              width: "fit-content",
-              overflowY: "auto",
+              overflow: "hidden",
+              overflowY: "hidden",
+              overflowX: "auto",
             }}
           >
             <Box direction="row">

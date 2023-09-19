@@ -13,7 +13,7 @@ export default function CollapsibleContainer(
   const { children, title, open = false, ...extprops } = props;
   const [collapsed, setCollapsed] = useState(!open);
   return (
-    <Box className="collapsible" {...extprops}>
+    <Box {...extprops}>
       <Button
         width="100%"
         icon={collapsed ? <CaretRightFill /> : <CaretDownFill />}

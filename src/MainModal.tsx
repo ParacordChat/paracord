@@ -1,12 +1,11 @@
 import * as Tabs from "@radix-ui/react-tabs";
-import { Button, Footer } from "grommet";
+import { Box, Button, Footer } from "grommet";
 import { Chat, Download } from "grommet-icons";
 import { useEffect, useState } from "preact/hooks";
 import { Room } from "trystero";
 import ChatManager from "./TrysteroManagers/chatManager";
 import DownloadManager from "./TrysteroManagers/downloadManager";
 import UserManager from "./TrysteroManagers/userManager";
-import "./assets/App.css";
 import { ChatView } from "./views/ChatView";
 import { DownloadView } from "./views/DownloadView";
 import { RoomCard } from "./views/RoomCard";
@@ -44,17 +43,17 @@ const MainModal = (roomId: string, room: Room) => () => {
     <>
       <RoomCard roomId={roomId} />
       <Tabs.Root defaultValue="tab1">
-        <div className="horizontal">
-          <div style={{ width: "80%", height: "100%" }}>
+        <Box direction="row">
+          <Box fill="true">
             <Tabs.Content value="tab1">
               <ChatView chatManagerInstance={chatManagerInstance} />
             </Tabs.Content>
             <Tabs.Content value="tab2">
               <DownloadView downloadManagerInstance={downloadManagerInstance} />
             </Tabs.Content>
-          </div>
+          </Box>
           <UserView roomId={roomId} userManagerInstance={userManagerInstance} />
-        </div>
+        </Box>
         <Footer
           style={{
             paddingTop: "0",
@@ -67,10 +66,24 @@ const MainModal = (roomId: string, room: Room) => () => {
           pad="medium"
         >
           <Tabs.List aria-label="tabs">
-            <Tabs.Trigger className="tabbutton" value="tab1" title="Chat">
-              <Button icon={<Chat />} primary />
+            <Tabs.Trigger
+              style={{
+                padding: "0.5em",
+                margin: "0.5em",
+              }}
+              value="tab1"
+              title="Chat"
+            >
+              <Button icon={<Chat />} />
             </Tabs.Trigger>
-            <Tabs.Trigger className="tabbutton" value="tab2" title="Downloads">
+            <Tabs.Trigger
+              style={{
+                padding: "0.5em",
+                margin: "0.5em",
+              }}
+              value="tab2"
+              title="Downloads"
+            >
               <Button icon={<Download />} />
             </Tabs.Trigger>
           </Tabs.List>

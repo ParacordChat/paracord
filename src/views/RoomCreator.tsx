@@ -44,7 +44,6 @@ export function RoomCreator() {
               />
               <Button
                 icon={<Risk />}
-                className="button"
                 onClick={() =>
                   roomRef.current &&
                   (roomRef.current.value = shortid.generate())

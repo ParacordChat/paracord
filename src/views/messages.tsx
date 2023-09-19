@@ -28,9 +28,11 @@ export default function Messages() {
       style={{
         whiteSpace: "pre-line",
         //fill space with height
-        overflowX: "auto",
+        overflow: "scroll",
+
+        height: "32em",
       }}
-      className="filelistcontainer"
+      background="dark-1"
     >
       {messageQueue
         .sort((a, b) => a.recievedAt - b.recievedAt)

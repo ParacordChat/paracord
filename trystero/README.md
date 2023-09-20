@@ -70,14 +70,14 @@ You can [compare strategies here](#strategy-comparison).
 You can install with npm (`npm i trystero`) and import like so:
 
 ```javascript
-import {joinRoom} from 'trystero'
+import { joinRoom } from "trystero";
 ```
 
 Or maybe you prefer a simple script tag?
 
 ```html
 <script type="module">
-  import {joinRoom} from 'https://cdn.skypack.dev/trystero'
+  import { joinRoom } from "https://cdn.skypack.dev/trystero";
 </script>
 ```
 
@@ -86,16 +86,16 @@ different one just deep import like so (your bundler should handle including
 only relevant code):
 
 ```javascript
-import {joinRoom} from 'trystero/firebase'
+import { joinRoom } from "trystero/firebase";
 // or
-import {joinRoom} from 'trystero/ipfs'
+import { joinRoom } from "trystero/ipfs";
 ```
 
 Next, join the user to a room with a namespace:
 
 ```javascript
-const config = {appId: 'san_narciso_3d'}
-const room = joinRoom(config, 'yoyodyne')
+const config = { appId: "san_narciso_3d" };
+const room = joinRoom(config, "yoyodyne");
 ```
 
 The first argument is a configuration object that requires an `appId`. This
@@ -113,13 +113,13 @@ second argument is the room name.
 Listen for peers joining the room:
 
 ```javascript
-room.onPeerJoin(peerId => console.log(`${peerId} joined`))
+room.onPeerJoin((peerId) => console.log(`${peerId} joined`));
 ```
 
 Listen for peers leaving the room:
 
 ```javascript
-room.onPeerLeave(peerId => console.log(`${peerId} left`))
+room.onPeerLeave((peerId) => console.log(`${peerId} left`));
 ```
 
 Listen for peers sending their audio/video streams:
@@ -127,13 +127,13 @@ Listen for peers sending their audio/video streams:
 ```javascript
 room.onPeerStream(
   (stream, peerId) => (peerElements[peerId].video.srcObject = stream)
-)
+);
 ```
 
 To unsubscribe from events, leave the room:
 
 ```javascript
-room.leave()
+room.leave();
 ```
 
 ## Broadcast events
@@ -142,62 +142,62 @@ Send peers your video stream:
 
 ```javascript
 room.addStream(
-  await navigator.mediaDevices.getUserMedia({audio: true, video: true})
-)
+  await navigator.mediaDevices.getUserMedia({ audio: true, video: true })
+);
 ```
 
 Send and subscribe to custom P2P actions:
 
 ```javascript
-const [sendDrink, getDrink] = room.makeAction('drink')
+const [sendDrink, getDrink] = room.makeAction("drink");
 
 // buy drink for a friend
-sendDrink({drink: 'negroni', withIce: true}, friendId)
+sendDrink({ drink: "negroni", withIce: true }, friendId);
 
 // buy round for the house (second argument omitted)
-sendDrink({drink: 'mezcal', withIce: false})
+sendDrink({ drink: "mezcal", withIce: false });
 
 // listen for drinks sent to you
 getDrink((data, peerId) =>
   console.log(
-    `got a ${data.drink} with${data.withIce ? '' : 'out'} ice from ${peerId}`
+    `got a ${data.drink} with${data.withIce ? "" : "out"} ice from ${peerId}`
   )
-)
+);
 ```
 
 You can also use actions to send binary data, like images:
 
 ```javascript
-const [sendPic, getPic] = room.makeAction('pic')
+const [sendPic, getPic] = room.makeAction("pic");
 
 // blobs are automatically handled, as are any form of TypedArray
-canvas.toBlob(blob => sendPic(blob))
+canvas.toBlob((blob) => sendPic(blob));
 
 // binary data is received as raw ArrayBuffers so your handling code should
 // interpret it in a way that makes sense
 getPic(
   (data, peerId) => (imgs[peerId].src = URL.createObjectURL(new Blob([data])))
-)
+);
 ```
 
 Let's say we want users to be able to name themselves:
 
 ```javascript
-const idsToNames = {}
-const [sendName, getName] = room.makeAction('name')
+const idsToNames = {};
+const [sendName, getName] = room.makeAction("name");
 
 // tell other peers currently in the room our name
-sendName('Oedipa')
+sendName("Oedipa");
 
 // tell newcomers
-room.onPeerJoin(peerId => sendName('Oedipa', peerId))
+room.onPeerJoin((peerId) => sendName("Oedipa", peerId));
 
 // listen for peers naming themselves
-getName((name, peerId) => (idsToNames[peerId] = name))
+getName((name, peerId) => (idsToNames[peerId] = name));
 
-room.onPeerLeave(peerId =>
-  console.log(`${idsToNames[peerId] || 'a weird stranger'} left`)
-)
+room.onPeerLeave((peerId) =>
+  console.log(`${idsToNames[peerId] || "a weird stranger"} left`)
+);
 ```
 
 > Actions are smart and handle serialization and chunking for you behind the
@@ -211,55 +211,55 @@ Here's a simple example of how you could create an audio chatroom:
 
 ```javascript
 // this object can store audio instances for later
-const peerAudios = {}
+const peerAudios = {};
 
 // get a local audio stream from the microphone
 const selfStream = await navigator.mediaDevices.getUserMedia({
   audio: true,
-  video: false
-})
+  video: false,
+});
 
 // send stream to peers currently in the room
-room.addStream(selfStream)
+room.addStream(selfStream);
 
 // send stream to peers who join later
-room.onPeerJoin(peerId => room.addStream(selfStream, peerId))
+room.onPeerJoin((peerId) => room.addStream(selfStream, peerId));
 
 // handle streams from other peers
 room.onPeerStream((stream, peerId) => {
   // create an audio instance and set the incoming stream
-  const audio = new Audio()
-  audio.srcObject = stream
-  audio.autoplay = true
+  const audio = new Audio();
+  audio.srcObject = stream;
+  audio.autoplay = true;
 
   // add the audio to peerAudio object if you want to address it for something
   // later (volume, etc.)
-  peerAudios[peerId] = audio
-})
+  peerAudios[peerId] = audio;
+});
 ```
 
 Doing the same with video is similar, just be sure to add incoming streams to
 video elements in the DOM:
 
 ```javascript
-const peerVideos = {}
-const videoContainer = document.getElementById('videos')
+const peerVideos = {};
+const videoContainer = document.getElementById("videos");
 
 room.onPeerStream((stream, peerId) => {
-  let video = peerVideos[peerId]
+  let video = peerVideos[peerId];
 
   // if this peer hasn't sent a stream before, create a video element
   if (!video) {
-    video = document.createElement('video')
-    video.autoplay = true
+    video = document.createElement("video");
+    video.autoplay = true;
 
     // add video element to the DOM
-    videoContainer.appendChild(video)
+    videoContainer.appendChild(video);
   }
 
-  video.srcObject = stream
-  peerVideos[peerId] = video
-})
+  video.srcObject = stream;
+  peerVideos[peerId] = video;
+});
 ```
 
 ## Advanced
@@ -272,18 +272,21 @@ interpreted. Instead of manually adding metadata bytes to the buffer you can
 simply pass a metadata argument in the sender action for your binary payload:
 
 ```javascript
-const [sendFile, getFile] = makeAction('file')
+const [sendFile, getFile] = makeAction("file");
 
 getFile((data, peerId, metadata) =>
   console.log(
     `got a file (${metadata.name}) from ${peerId} with type ${metadata.type}`,
     data
   )
-)
+);
 
 // to send metadata, pass a third argument
 // to broadcast to the whole room, set the second peer ID argument to null
-sendFile(buffer, null, {name: 'The Courierʼs Tragedy', type: 'application/pdf'})
+sendFile(buffer, null, {
+  name: "The Courierʼs Tragedy",
+  type: "application/pdf",
+});
 ```
 
 ### Action promises
@@ -293,8 +296,8 @@ sending. You can optionally use this to indicate to the user when a large
 transfer is done.
 
 ```javascript
-await sendFile(amplePayload)
-console.log('done sending to all peers')
+await sendFile(amplePayload);
+console.log("done sending to all peers");
 ```
 
 ### Progress updates
@@ -312,23 +315,23 @@ sendFile(
   [peerIdA, peerIdB, peerIdC],
   // metadata, which can also be null if you're only interested in the
   // progress handler
-  {filename: 'paranoids.flac'},
+  { filename: "paranoids.flac" },
   // assuming each peer has a loading bar added to the DOM, its value is
   // updated here
   (percent, peerId) => (loadingBars[peerId].value = percent)
-)
+);
 ```
 
 Similarly you can listen for progress events as a receiver like this:
 
 ```javascript
-const [sendFile, getFile, onFileProgress] = room.makeAction('file')
+const [sendFile, getFile, onFileProgress] = room.makeAction("file");
 
 onFileProgress((percent, peerId, metadata) =>
   console.log(
     `${percent * 100}% done receiving ${metadata.filename} from ${peerId}`
   )
-)
+);
 ```
 
 Notice that any metadata is sent with progress events so you can show the
@@ -351,7 +354,7 @@ against a MITM peering attack if both intended peers have a shared secret. To
 opt in, just pass a `password` parameter in the app configuration object:
 
 ```javascript
-joinRoom({appId: 'kinneret', password: 'MuchoMaa$'}, 'w_a_s_t_e__v_i_p')
+joinRoom({ appId: "kinneret", password: "MuchoMaa$" }, "w_a_s_t_e__v_i_p");
 ```
 
 Keep in mind the password has to match for all peers in the room for them to be
@@ -493,7 +496,7 @@ Returns an object with the following methods:
   Example:
 
   ```javascript
-  onPeerJoin(peerId => console.log(`${peerId} joined`))
+  onPeerJoin((peerId) => console.log(`${peerId} joined`));
   ```
 
 - ### `onPeerLeave(callback)`
@@ -507,7 +510,7 @@ Returns an object with the following methods:
   Example:
 
   ```javascript
-  onPeerLeave(peerId => console.log(`${peerId} left`))
+  onPeerLeave((peerId) => console.log(`${peerId} left`));
   ```
 
 - ### `onPeerStream(callback)`
@@ -525,7 +528,7 @@ Returns an object with the following methods:
   ```javascript
   onPeerStream((stream, peerId) =>
     console.log(`got stream from ${peerId}`, stream)
-  )
+  );
   ```
 
 - ### `onPeerTrack(callback)`
@@ -543,7 +546,7 @@ Returns an object with the following methods:
   ```javascript
   onPeerTrack((track, stream, peerId) =>
     console.log(`got track from ${peerId}`, track)
-  )
+  );
   ```
 
 - ### `makeAction(namespace)`
@@ -612,15 +615,17 @@ Returns an object with the following methods:
   Example:
 
   ```javascript
-  const [sendCursor, getCursor] = room.makeAction('cursormove')
+  const [sendCursor, getCursor] = room.makeAction("cursormove");
 
-  window.addEventListener('mousemove', e => sendCursor([e.clientX, e.clientY]))
+  window.addEventListener("mousemove", (e) =>
+    sendCursor([e.clientX, e.clientY])
+  );
 
   getCursor(([x, y], peerId) => {
-    const peerCursor = cursorMap[peerId]
-    peerCursor.style.left = x + 'px'
-    peerCursor.style.top = y + 'px'
-  })
+    const peerCursor = cursorMap[peerId];
+    peerCursor.style.left = x + "px";
+    peerCursor.style.top = y + "px";
+  });
   ```
 
 - ### `ping(peerId)`
@@ -634,12 +639,12 @@ Returns an object with the following methods:
 
   ```javascript
   // log round-trip time every 2 seconds
-  room.onPeerJoin(peerId =>
+  room.onPeerJoin((peerId) =>
     setInterval(
       async () => console.log(`took ${await room.ping(peerId)}ms`),
       2000
     )
-  )
+  );
   ```
 
 ### `selfId`
@@ -659,7 +664,7 @@ in a room without joining it.
 Example:
 
 ```javascript
-console.log((await trystero.getOccupants(config, 'the_scope')).length)
+console.log((await trystero.getOccupants(config, "the_scope")).length);
 // => 3
 ```
 
@@ -675,7 +680,7 @@ Trystero makes it trivial to switch between strategies – just change a single
 import line:
 
 ```javascript
-import {joinRoom} from 'trystero/[torrent|firebase|ipfs]'
+import { joinRoom } from "trystero/[torrent|firebase|ipfs]";
 ```
 
 |                   | setup¹  | reliability² | time to connect³ | bundle size⁴ | occupancy polling⁵ |

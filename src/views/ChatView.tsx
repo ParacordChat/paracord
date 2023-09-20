@@ -77,6 +77,7 @@ export function ChatView(props: { chatManagerInstance: ChatManager }) {
           disabled={!uiInteractive}
           label="Send"
           primary
+          hoverIndicator
           icon={<Send />}
         />
       </Box>

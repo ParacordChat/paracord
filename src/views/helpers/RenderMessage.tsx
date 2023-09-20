@@ -50,31 +50,29 @@ export default function RenderMessage(props: {
   return (
     <>
       {message.sentBy === "system" ? (
-        <Box
-          key={index}
-          border={{ color: "grey", size: "small" }}
-          pad="medium"
-          round="small"
-        >
-          {message.text}
-          <Text style={{ color: "grey" }}>
-            {dayjs().to(dayjs(message.recievedAt))}
-          </Text>
-        </Box>
+        <div>
+          <Box
+            key={index}
+            border={{ color: "grey", size: "small" }}
+            pad="medium"
+            round="small"
+          >
+            {message.text}
+            <Text style={{ color: "grey" }}>
+              {dayjs().to(dayjs(message.recievedAt))}
+            </Text>
+          </Box>
+        </div>
       ) : (
         <>
-          <Box
-            direction="column"
+          <div
             key={message.id}
             id={message.id}
             ref={isLast ? lastMessage : null}
-            background="dark-1"
-            fill="width"
             style={{
               textAlign: "left",
-              overflow: "hidden",
-              overflowY: "hidden",
-              overflowX: "auto",
+              backgroundColor: "dark-1",
+              //WARN: this must remain a div due to css overrides
             }}
           >
             <Box direction="row">
@@ -111,12 +109,13 @@ export default function RenderMessage(props: {
               />
             </Box>
             <Text
+              style={{ width: "fit-content" }}
               size="medium"
               dangerouslySetInnerHTML={{
                 __html: DOMPurify.sanitize(formatMessage(message.text)),
               }}
             />
-          </Box>
+          </div>
         </>
       )}
     </>

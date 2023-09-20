@@ -1,5 +1,14 @@
 import { funAnimalName } from "fun-animal-names";
-import { Box, Button, Footer, Nav, Sidebar, Text, TextInput } from "grommet";
+import {
+  Box,
+  Button,
+  Footer,
+  InfiniteScroll,
+  Nav,
+  Sidebar,
+  Text,
+  TextInput,
+} from "grommet";
 import { Camera, Download, Monitor, Phone } from "grommet-icons";
 import { selfId } from "trystero";
 import UserManager from "../TrysteroManagers/userManager";
@@ -48,32 +57,34 @@ export function UserView(props: {
         </>
       }
       footer={
-        <Button
-          icon={
-            <Footer background="brand" pad="medium">
-              <Download />
-              <Phone />
-              <Camera />
-              <Monitor />
-            </Footer>
-          }
-          hoverIndicator
-        />
+        <Footer round="small" background="brand" pad="medium">
+          <Button hoverIndicator icon={<Download />} />
+          <Button hoverIndicator icon={<Phone />} />
+          <Button hoverIndicator icon={<Camera />} />
+          <Button hoverIndicator icon={<Monitor />} />
+        </Footer>
       }
     >
       {/*TODO: download dialog, screen/video/audio share */}
       <Nav gap="small">
-        <ul
+        <Box
+          pad="small"
           style={{
-            listStyle: "none",
+            whiteSpace: "pre-line",
+            //fill space with height
+            overflowX: "auto",
+            overflowY: "scroll",
+            // overflow: "auto",
+            height: "26em",
           }}
         >
           {activePeers.length ? (
-            activePeers
-              .filter((p) => p.roomId === roomId && p.active)
-              .map(({ name, id }) => (
-                <li key={id}>
-                  <Box direction="row" gap="small">
+            <InfiniteScroll
+              items={activePeers.filter((p) => p.roomId === roomId && p.active)}
+            >
+              {({ name, id }: { name: string; id: string }, index: number) => (
+                <div>
+                  <Box key={id} direction="row" gap="small">
                     <MuteUserButton
                       toggleMuted={() => mutedPeers.toggleMute(id)}
                       isMuted={mutedPeers.mutedUsers[id] || false}
@@ -85,12 +96,13 @@ export function UserView(props: {
                   <Text size="small" style={{ color: "grey" }}>
                     {funAnimalName(id)}
                   </Text>
-                </li>
-              ))
+                </div>
+              )}
+            </InfiniteScroll>
           ) : (
             <Text size="medium">Waiting...</Text>
           )}
-        </ul>
+        </Box>
       </Nav>
     </Sidebar>
   );

@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import { Box } from "grommet";
+import { Box, InfiniteScroll } from "grommet";
 import { selfId } from "trystero";
 import { Message, Persona } from "../helpers/types";
 import { useMessageStore } from "../stateManagers/messageStore";
@@ -18,25 +18,27 @@ export default function Messages() {
     (state: { persona: Persona }) => state.persona.name
   );
 
-  //TODO: infinite scroll, get scroll posn and request more messages if 100 from top
+  //TODO: make it truly lazyload(or, do we even need it?) https://v2.grommet.io/infinitescroll
   return (
     <Box
       direction="column"
       border={{ color: "brand", size: "small" }}
       pad="small"
       round="small"
+      background="dark-1"
       style={{
         whiteSpace: "pre-line",
         //fill space with height
-        overflow: "scroll",
-
-        height: "32em",
+        overflowX: "auto",
+        overflowY: "scroll",
+        // overflow: "auto",
+        height: "36em",
       }}
-      background="dark-1"
     >
-      {messageQueue
-        .sort((a, b) => a.recievedAt - b.recievedAt)
-        .map((message, index) => (
+      <InfiniteScroll
+        items={messageQueue.sort((a, b) => a.recievedAt - b.recievedAt)}
+      >
+        {(message: Message, index: number) => (
           <RenderMessage
             message={message}
             index={index}
@@ -49,7 +51,8 @@ export default function Messages() {
             }
             isLast={index === messageQueue.length - 1}
           />
-        ))}
+        )}
+      </InfiniteScroll>
     </Box>
   );
 }

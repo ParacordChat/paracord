@@ -82,7 +82,7 @@ export function UserView(props: {
             <InfiniteScroll
               items={activePeers.filter((p) => p.roomId === roomId && p.active)}
             >
-              {({ name, id }: { name: string; id: string }, index: number) => (
+              {({ name, id }: { name: string; id: string }) => (
                 <div>
                   <Box key={id} direction="row" gap="small">
                     <MuteUserButton

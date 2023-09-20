@@ -22,6 +22,12 @@ function App() {
             }
           />
           <AsyncRoute
+            path={`${baseUrl}/About`}
+            getComponent={() =>
+              import("./views/About").then((module) => module.default)
+            }
+          />
+          <AsyncRoute
             path={`${baseUrl}:id/:pwd?`}
             getComponent={(url) =>
               import("./MainModal").then(async (module) => {

@@ -9,16 +9,16 @@ interface UserStore {
 }
 
 export const useUserStore = create<UserStore>((set) => ({
-  users: [],
-  addUser: (user: User) => set((state) => ({ users: [...state.users, user] })),
-  updateUser: (id: string, updates: Partial<User>) =>
-    set((state) => ({
-      users: state.users.map((user) =>
-        user.id === id ? { ...user, ...updates } : user
-      ),
-    })),
-  deleteUser: (id: string) =>
-    set((state) => ({
-      users: state.users.filter((user) => user.id !== id),
-    })),
+	users: [],
+	addUser: (user: User) => set((state) => ({ users: [...state.users, user] })),
+	updateUser: (id: string, updates: Partial<User>) =>
+		set((state) => ({
+			users: state.users.map((user) =>
+				user.id === id ? { ...user, ...updates } : user
+			)
+		})),
+	deleteUser: (id: string) =>
+		set((state) => ({
+			users: state.users.filter((user) => user.id !== id)
+		}))
 }));

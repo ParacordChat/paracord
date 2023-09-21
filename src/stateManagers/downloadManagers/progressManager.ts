@@ -10,22 +10,22 @@ interface ProgressStore {
 }
 
 export const useProgressStore = create<ProgressStore>((set) => ({
-  progressQueue: [],
+	progressQueue: [],
 
-  addProgress: (progress: FileProgress) =>
-    set((state) => ({
-      progressQueue: [...state.progressQueue, progress],
-    })),
-  deleteProgress: (fileId: string) =>
-    set((state) => ({
-      progressQueue: state.progressQueue.filter(
-        (progress) => progress.id !== fileId
-      ),
-    })),
-  updateProgress: (fileId: string, updates: Partial<FileProgress>) =>
-    set((state) => ({
-      progressQueue: state.progressQueue.map((progress) =>
-        progress.id === fileId ? { ...progress, ...updates } : progress
-      ),
-    })),
+	addProgress: (progress: FileProgress) =>
+		set((state) => ({
+			progressQueue: [...state.progressQueue, progress]
+		})),
+	deleteProgress: (fileId: string) =>
+		set((state) => ({
+			progressQueue: state.progressQueue.filter(
+				(progress) => progress.id !== fileId
+			)
+		})),
+	updateProgress: (fileId: string, updates: Partial<FileProgress>) =>
+		set((state) => ({
+			progressQueue: state.progressQueue.map((progress) =>
+				progress.id === fileId ? { ...progress, ...updates } : progress
+			)
+		}))
 }));

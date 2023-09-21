@@ -2,23 +2,23 @@ import { Box, Heading, InfiniteScroll, Paragraph } from "grommet";
 import CollapsibleContainer from "./helpers/Collapsible";
 
 const abouts = [
-  {
-    title: "What is Paracord?",
-    more: `Paracord is a secure chat program intended to be as easy to use as possible. It abstracts away any possible confusable ambiguity in order to increase compatability in conversations between laypeople and those who are more privacy-centric. I've found people who are squarely in the privacy camp have typically expect you to at least have signal, but most people don't want to install stuff. If you don't want to use zoom, setting up a JAMI instance isn't too easy either(there is a small subset of people reading this with a smug smirk, yes you know about the buttons to push to get a JAMI instance. Enjoy your power bills). For the rest of us, a link is the best solution. But every time without fail, providers have constantly let us down with leaked data and the sort of antics you wouldn't expect of a major corporation. For that reason we don't store data. We do matchmaking instead. You may be of the age that still remembers peer to peer matchmaking, gamespy, goldsource and the sort. All we know is that you'd like to talk. That's it. No phone numbers, no storage permissions. Gone forever when you hit x. As it should be.`,
-  },
-  {
-    title: "Is it secure?",
-    more: "I wouldn't use it otherwise if I wasn't sure. My confidence could be misplaced, I wouldn't be the first. But this is more secure than most other options out there. This uses the NIST-approved KYBER-crystals postquantum cryptography standard to synchronize messages. This is on top of the known-secure(and quantum resistant) AES algorithm. Needless to say, this is more secure than a certain ghost-shaped messenger that stores your messages in plaintext, forever. Or others that don't know what you're saying but would very much like to know your contacts.",
-  },
+	{
+		title: "What is Paracord?",
+		more: `Paracord is a secure chat program intended to be as easy to use as possible. It abstracts away any possible confusable ambiguity in order to increase compatability in conversations between laypeople and those who are more privacy-centric. I've found people who are squarely in the privacy camp have typically expect you to at least have signal, but most people don't want to install stuff. If you don't want to use zoom, setting up a JAMI instance isn't too easy either(there is a small subset of people reading this with a smug smirk, yes you know about the buttons to push to get a JAMI instance. Enjoy your power bills). For the rest of us, a link is the best solution. But every time without fail, providers have constantly let us down with leaked data and the sort of antics you wouldn't expect of a major corporation. For that reason we don't store data. We do matchmaking instead. You may be of the age that still remembers peer to peer matchmaking, gamespy, goldsource and the sort. All we know is that you'd like to talk. That's it. No phone numbers, no storage permissions. Gone forever when you hit x. As it should be.`
+	},
+	{
+		title: "Is it secure?",
+		more: "I wouldn't use it otherwise if I wasn't sure. My confidence could be misplaced, I wouldn't be the first. But this is more secure than most other options out there. This uses the NIST-approved KYBER-crystals postquantum cryptography standard to synchronize messages. This is on top of the known-secure(and quantum resistant) AES algorithm. Needless to say, this is more secure than a certain ghost-shaped messenger that stores your messages in plaintext, forever. Or others that don't know what you're saying but would very much like to know your contacts."
+	},
 
-  {
-    title: "Why did you make it?",
-    more: "I was tired of the usual rigamarole of video-call hot potato, as well as the lack of privacy-respecting file-sharing programs on the net that don't require hundreds of precious hours away from touchable grass",
-  },
+	{
+		title: "Why did you make it?",
+		more: "I was tired of the usual rigamarole of video-call hot potato, as well as the lack of privacy-respecting file-sharing programs on the net that don't require hundreds of precious hours away from touchable grass"
+	},
 
-  {
-    title: "Disclaimer",
-    more: `
+	{
+		title: "Disclaimer",
+		more: `
   Interpretation and Definitions
 Interpretation
 
@@ -63,36 +63,36 @@ All information in the Service is provided "as is", with no guarantee of complet
 
 The Project will not be liable to You or anyone else for any decision made or action taken in reliance on the information given by the Service or for any consequential, special or similar damages, even if advised of the possibility of such damages.
   
-  `,
-  },
+  `
+	}
 ];
 
 export default function About() {
-  return (
-    <Box
-      pad="large"
-      gap="medium"
-      width="large"
-      border={{
-        color: "brand",
-        size: "large",
-      }}
-      background="dark-1"
-      round="medium"
-    >
-      <Heading margin="none">About</Heading>
-      <InfiniteScroll items={abouts}>
-        {(item: { title: string; more: string }) => (
-          <CollapsibleContainer
-            style={{
-              padding: "1rem 1.2rem",
-            }}
-            title={item.title}
-          >
-            <Paragraph>{item.more}</Paragraph>
-          </CollapsibleContainer>
-        )}
-      </InfiniteScroll>
-    </Box>
-  );
+	return (
+		<Box
+			pad="large"
+			gap="medium"
+			width="large"
+			border={{
+				color: "brand",
+				size: "large"
+			}}
+			background="dark-1"
+			round="medium"
+		>
+			<Heading margin="none">About</Heading>
+			<InfiniteScroll items={abouts}>
+				{(item: { title: string; more: string }) => (
+					<CollapsibleContainer
+						style={{
+							padding: "1rem 1.2rem"
+						}}
+						title={item.title}
+					>
+						<Paragraph>{item.more}</Paragraph>
+					</CollapsibleContainer>
+				)}
+			</InfiniteScroll>
+		</Box>
+	);
 }

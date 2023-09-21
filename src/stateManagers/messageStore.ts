@@ -8,13 +8,13 @@ interface MessageStore {
 }
 
 export const useMessageStore = create<MessageStore>((set) => ({
-  messages: [],
-  addMessage: (message: Message) =>
-    set((state) => ({ messages: [...state.messages, message] })),
-  deleteMessagesBefore: (roomId: string, before: number) =>
-    set((state) => ({
-      messages: state.messages.filter(
-        (message) => message.roomId !== roomId && message.recievedAt > before
-      ),
-    })),
+	messages: [],
+	addMessage: (message: Message) =>
+		set((state) => ({ messages: [...state.messages, message] })),
+	deleteMessagesBefore: (roomId: string, before: number) =>
+		set((state) => ({
+			messages: state.messages.filter(
+				(message) => message.roomId !== roomId && message.recievedAt > before
+			)
+		}))
 }));

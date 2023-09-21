@@ -8,21 +8,21 @@ interface OfferStore {
 }
 
 export const useOfferStore = create<OfferStore>((set) => ({
-  requestableDownloads: {},
+	requestableDownloads: {},
 
-  updateOrAddRequestable: (id: string, offers: FileOffer[]) =>
-    set((state) => ({
-      requestableDownloads: {
-        ...state.requestableDownloads,
-        [id]: offers,
-      },
-    })),
-  removeRequestablesForId: (id: string) =>
-    set((state) => ({
-      requestableDownloads: (() => {
-        const requestables = state.requestableDownloads;
-        if (id in requestables) delete requestables[id];
-        return requestables;
-      })(),
-    })),
+	updateOrAddRequestable: (id: string, offers: FileOffer[]) =>
+		set((state) => ({
+			requestableDownloads: {
+				...state.requestableDownloads,
+				[id]: offers
+			}
+		})),
+	removeRequestablesForId: (id: string) =>
+		set((state) => ({
+			requestableDownloads: (() => {
+				const requestables = state.requestableDownloads;
+				if (id in requestables) delete requestables[id];
+				return requestables;
+			})()
+		}))
 }));

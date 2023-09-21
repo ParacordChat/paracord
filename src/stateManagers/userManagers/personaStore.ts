@@ -13,24 +13,24 @@ interface PersonaStore {
 }
 
 export const usePersonaStore = create<PersonaStore>((set) => ({
-  persona: {
-    name: randomName(),
-    keyPair: undefined,
-  },
-  createPersona: () =>
-    set((_state) => ({
-      persona: {
-        name: funAnimalName(selfId),
-        keyPair: generateKeyPair(),
-      },
-    })),
-  updatePersona: (updates: Partial<Persona>) =>
-    set((state) => ({ persona: { ...state.persona, ...updates } })),
-  resetPersona: () =>
-    set((_state) => ({
-      persona: {
-        name: randomName(),
-        keyPair: generateKeyPair(),
-      },
-    })),
+	persona: {
+		name: randomName(),
+		keyPair: undefined
+	},
+	createPersona: () =>
+		set((_state) => ({
+			persona: {
+				name: funAnimalName(selfId),
+				keyPair: generateKeyPair()
+			}
+		})),
+	updatePersona: (updates: Partial<Persona>) =>
+		set((state) => ({ persona: { ...state.persona, ...updates } })),
+	resetPersona: () =>
+		set((_state) => ({
+			persona: {
+				name: randomName(),
+				keyPair: generateKeyPair()
+			}
+		}))
 }));

@@ -13,7 +13,7 @@ export default class UserManager {
 	private sendEncryptionInfo;
 
 	constructor({ room, roomId }: { room: Room; roomId: string }) {
-		const [sendName, getName] = room.makeAction("name"); // TODO: maybe encrypt later
+		const [sendName, getName] = room.makeAction("name", true);
 		const [sendEncryptionInfo, getEncryptionInfo] = room.makeAction("encReq");
 		const [sendProcessedKey, getProcessedKey] = room.makeAction("encProc");
 
@@ -30,6 +30,12 @@ export default class UserManager {
 			sendSystemMessage(roomId, `${id} joined the room`);
 		});
 
+		useUserStore.subscribe((state, prevState) => {
+			if (state.keyedUsers.size > prevState.keyedUsers.size) {
+				this.syncInfo();
+			}
+		});
+
 		room.onPeerLeave((id: string) => {
 			useUserStore.getState()
 				.updateUser(id, { active: false });
@@ -42,8 +48,10 @@ export default class UserManager {
 
 			useOfferStore.getState()
 				.removeRequestablesForId(id);
+
 			useClientSideUserTraits.getState()
 				.removeUser(id);
+
 			sendSystemMessage(roomId, `${id} left the room`);
 		});
 
@@ -59,11 +67,12 @@ export default class UserManager {
 
 			try {
 				const { ciphertext, sharedSecret } = await kyber.encapsulate(key);
+				console.log(id, key, ciphertext, sharedSecret);
 				useUserStore.getState()
 					.updateUser(id, { quantumSend: sharedSecret });
 				sendProcessedKey(ciphertext, id);
 			} catch (error) {
-				console.error(error);
+				console.error(error); // TODO: mystery null error here
 			}
 		});
 
@@ -72,19 +81,13 @@ export default class UserManager {
 				return;
 			}
 			const activePersona = usePersonaStore.getState().persona;
-			if (activePersona) {
-				this.sendName(activePersona.name);
-				if (activePersona.keyPair) {
-					const key = kyber.decapsulate(
-						cyphertext,
-						activePersona.keyPair.secret
-					);
-					try {
-						useUserStore.getState()
-							.updateUser(id, { quantumRecv: key });
-					} catch (error) {
-						console.error(error);
-					}
+			if (activePersona && activePersona.keyPair) {
+				const key = kyber.decapsulate(cyphertext, activePersona.keyPair.secret);
+				try {
+					useUserStore.getState()
+						.updateUser(id, { quantumRecv: key });
+				} catch (error) {
+					console.error(error);
 				}
 			}
 		});
@@ -93,10 +96,20 @@ export default class UserManager {
 	syncInfo = async (id?: string) => {
 		// ID is only defined if initiating connection
 		const activePersona = usePersonaStore.getState().persona;
+		const allowedSendNames = useUserStore.getState().keyedUsers;
 		if (activePersona) {
-			this.sendName(activePersona.name);
-			if (activePersona.keyPair) {
-				await this.sendEncryptionInfo(activePersona.keyPair.pubkey, id);
+			if (id) {
+				if (activePersona.keyPair) {
+					await this.sendEncryptionInfo(activePersona.keyPair.pubkey, id);
+				}
+				if (allowedSendNames.has(id)) {
+					this.sendName(activePersona.name, id);
+				}
+			} else {
+				if (activePersona.keyPair) {
+					await this.sendEncryptionInfo(activePersona.keyPair.pubkey);
+				}
+				this.sendName(activePersona.name);
 			}
 		}
 	};

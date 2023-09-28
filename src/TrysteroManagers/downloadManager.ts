@@ -9,20 +9,32 @@ import { useUserStore } from "../stateManagers/userManagers/userStore";
 
 export default class DownloadManager {
 	private sendFileRequest: (
-    id: string,
-    ids?: string | string[]
-  ) => Promise<any[]>;
+		id: string,
+		ids?: string | string[]
+	) => Promise<any[]>;
 	private sendFileOffer: (
-    files: FileOffer[],
-    ids?: string | string[]
-  ) => Promise<any[]>;
+		files: FileOffer[],
+		ids?: string | string[]
+	) => Promise<any[]>;
 
 	constructor({ room, roomId }: { room: Room; roomId: string }) {
-		const [sendFile, getFile, onFileProgress] = room.makeAction("transfer");
-		const [sendFileRequest, getFileRequest] = room.makeAction("fileRequest");
-		const [sendFileOffer, getFileOffer] = room.makeAction("fileOffer");
+		const [sendFile, getFile, onFileProgress] = room.makeAction(
+			"transfer",
+			true
+		);
+		const [sendFileRequest, getFileRequest] = room.makeAction(
+			"fileRequest",
+			true
+		);
+		const [sendFileOffer, getFileOffer] = room.makeAction("fileOffer", true);
 		this.sendFileRequest = sendFileRequest;
 		this.sendFileOffer = sendFileOffer;
+
+		useUserStore.subscribe((state, prevState) => {
+			if (state.keyedUsers.size > prevState.keyedUsers.size) {
+				this.offerRequestableFiles();
+			}
+		});
 
 		onFileProgress((progress, _id, metadata) => {
 			const processedMeta = metadata as FileMetaData;
@@ -77,9 +89,9 @@ export default class DownloadManager {
 
 	public requestFile = async (fromUser: string, fileId: string) => {
 		const requestableFiles =
-      useOfferStore.getState().requestableDownloads[fromUser];
+			useOfferStore.getState().requestableDownloads[fromUser];
 		const findName =
-      requestableFiles && requestableFiles.find((f) => f.id === fileId);
+			requestableFiles && requestableFiles.find((f) => f.id === fileId);
 		if (findName) {
 			useProgressStore.getState()
 				.addProgress({
@@ -96,7 +108,7 @@ export default class DownloadManager {
 
 	public offerRequestableFiles = async () => {
 		const realFiles = useRealFiles.getState().realFiles;
-		if (!realFiles) return;
+		if (!realFiles || Object.keys(realFiles).length === 0) return;
 		const files: FileOffer[] = Object.entries(realFiles)
 			.map(
 				([fileId, file]) => ({
@@ -107,10 +119,8 @@ export default class DownloadManager {
 				})
 			);
 
-		const recipientUsers = useUserStore.getState().users.map((user) => user.id);
-
 		// await
-		this.sendFileOffer(files, recipientUsers)
+		this.sendFileOffer(files)
 			.catch((error) => console.error(error));
 	};
 

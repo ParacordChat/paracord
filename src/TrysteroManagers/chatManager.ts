@@ -7,29 +7,28 @@ import { useUserStore } from "../stateManagers/userManagers/userStore";
 
 export default class ChatManager {
 	private sendChatAction: (
-    data: string,
-    ids?: string | string[]
-  ) => Promise<any[]>;
+		data: string,
+		ids?: string | string[]
+	) => Promise<any[]>;
 	private sendTyping: (
-    data: boolean,
-    ids?: string | string[]
-  ) => Promise<any[]>;
+		data: boolean,
+		ids?: string | string[]
+	) => Promise<any[]>;
 	private roomId: string;
 
 	constructor({ room, roomId }: { room: Room; roomId: string }) {
-		const [sendChatAction, getChatAction] = room.makeAction("chat");
-		const [sendTyping, getTyping] = room.makeAction("isTyping");
+		const [sendChatAction, getChatAction] = room.makeAction("chat", true);
+		const [sendTyping, getTyping] = room.makeAction("isTyping", true);
 		this.sendChatAction = sendChatAction;
 		this.sendTyping = sendTyping;
 		this.roomId = roomId;
 
 		getChatAction(async (rawData, id) => {
 			const data = JSON.parse(rawData);
-			console.log(data);
 			if (
 				data &&
-        data.text.trim() !== "" &&
-        useClientSideUserTraits.getState().mutedUsers[id] !== true
+				data.text.trim() !== "" &&
+				useClientSideUserTraits.getState().mutedUsers[id] !== true
 			) {
 				const newMessage: Message = {
 					id: data.id,
@@ -71,8 +70,7 @@ export default class ChatManager {
 			.map((user) => user.id);
 
 		this.sendTypingIndicator(false);
-		this.sendChatAction(msgString, users)
-			.then((x) => console.log(x));
+		this.sendChatAction(msgString, users);
 
 		useMessageStore.getState()
 			.addMessage(newMessage);

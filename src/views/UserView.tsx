@@ -1,15 +1,5 @@
 import { funAnimalName } from "fun-animal-names";
-import {
-	Box,
-	Button,
-	Footer,
-	InfiniteScroll,
-	Nav,
-	Sidebar,
-	Text,
-	TextInput
-} from "grommet";
-import { Camera, Download, Monitor, Phone } from "grommet-icons";
+import { Box, InfiniteScroll, Nav, Sidebar, Text, TextInput } from "grommet";
 import { selfId } from "trystero";
 import UserManager from "../TrysteroManagers/userManager";
 import { generateHexColorFromString } from "../helpers/helpers";
@@ -19,8 +9,8 @@ import { useUserStore } from "../stateManagers/userManagers/userStore";
 import MuteUserButton from "./helpers/MuteUserButton";
 
 export function UserView(props: {
-  roomId: string;
-  userManagerInstance: UserManager;
+	roomId: string;
+	userManagerInstance: UserManager;
 }) {
 	const { roomId, userManagerInstance } = props;
 	const activePersona = usePersonaStore((state) => state.persona);
@@ -36,7 +26,7 @@ export function UserView(props: {
 						size="large"
 						style={{ color: generateHexColorFromString(selfId) }}
 					>
-            You
+						You
 					</Text>
 					<TextInput
 						type="text"
@@ -46,7 +36,7 @@ export function UserView(props: {
 						style={{ width: "100%" }}
 						onBlur={(e: { currentTarget: { value: string } }) =>
 							e.currentTarget.value.trim() !== "" &&
-              userManagerInstance.setMyName(e.currentTarget.value)
+							userManagerInstance.setMyName(e.currentTarget.value)
 						}
 					/>
 					<Text size="small" style={{ color: "grey" }}>
@@ -56,14 +46,9 @@ export function UserView(props: {
 					<Text size="large">Peers</Text>
 				</>
 			}
-			footer={
-				<Footer round="small" background="brand" pad="medium">
-					<Button hoverIndicator icon={<Download />} />
-					<Button hoverIndicator icon={<Phone />} />
-					<Button hoverIndicator icon={<Camera />} />
-					<Button hoverIndicator icon={<Monitor />} />
-				</Footer>
-			}
+			// footer={
+
+			// }
 		>
 			{/* TODO: download dialog, screen/video/audio share */}
 			<Nav gap="small">
@@ -75,7 +60,7 @@ export function UserView(props: {
 						overflowX: "auto",
 						overflowY: "scroll",
 						// overflow: "auto",
-						height: "26em"
+						height: "27em"
 					}}
 				>
 					{activePeers.length > 0

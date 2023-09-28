@@ -3,6 +3,7 @@
 	"rules": {
 		"unicorn/no-array-for-each": "off",
 		"react-hooks/rules-of-hooks": "off",
-		"no-warning-comments": "off"
+		"no-warning-comments": "off",
+		"multiline-ternary": "off"
 	}
 }

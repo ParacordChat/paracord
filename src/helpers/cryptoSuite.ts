@@ -109,18 +109,12 @@ const findUserAndDecrypt = async (fromId: string, data: Uint8Array) => {
 	return await decryptData(data, recKey);
 };
 
-export const hasKey = (id: string) =>
-	Boolean(
-		useUserStore.getState().users.find((user: User) => user.id === id)
-			?.quantumRecv
-	);
+export const ecPeerlist = () => [...useUserStore.getState().keyedUsers];
 
 export const encryptDecrypt = {
 	encrypt: findUserAndEncrypt,
 	decrypt: findUserAndDecrypt,
-	hasKey,
-	IV_LENGTH
-	// SALT_LENGTH
+	ecPeerlist
 };
 
 // (() => {

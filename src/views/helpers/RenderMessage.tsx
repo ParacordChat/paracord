@@ -35,7 +35,6 @@ export default function RenderMessage(props: {
 	isLast: boolean;
 }) {
 	const { message, index, isLast, sentByName } = props;
-	console.log(message);
 	const lastMessage = useRef<HTMLDivElement>(null);
 	useEffect(() => {
 		if (isLast && lastMessage.current)

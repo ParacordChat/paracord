@@ -28,43 +28,43 @@ export default defineConfig({
 				description: "A secure chat that cleans up after itself",
 				icons: [
 					{
-						src: "/iconMasks/maskable_icon_x48.png",
+						src: "iconMasks/maskable_icon_x48.png",
 						sizes: "48x48",
 						type: "image/png",
 						purpose: "any maskable"
 					},
 					{
-						src: "/iconMasks/maskable_icon_x72.png",
+						src: "iconMasks/maskable_icon_x72.png",
 						sizes: "72x72",
 						type: "image/png",
 						purpose: "any maskable"
 					},
 					{
-						src: "/iconMasks/maskable_icon_x96.png",
+						src: "iconMasks/maskable_icon_x96.png",
 						sizes: "96x96",
 						type: "image/png",
 						purpose: "any maskable"
 					},
 					{
-						src: "/iconMasks/maskable_icon_x128.png",
+						src: "iconMasks/maskable_icon_x128.png",
 						sizes: "128x128",
 						type: "image/png",
 						purpose: "any maskable"
 					},
 					{
-						src: "/iconMasks/maskable_icon_x192.png",
+						src: "iconMasks/maskable_icon_x192.png",
 						sizes: "192x192",
 						type: "image/png",
 						purpose: "any maskable"
 					},
 					{
-						src: "/iconMasks/maskable_icon_x384.png",
+						src: "iconMasks/maskable_icon_x384.png",
 						sizes: "384x384",
 						type: "image/png",
 						purpose: "any maskable"
 					},
 					{
-						src: "/iconMasks/maskable_icon_x512.png",
+						src: "iconMasks/maskable_icon_x512.png",
 						sizes: "512x512",
 						type: "image/png",
 						purpose: "any maskable"

@@ -46,7 +46,7 @@ const MainModal = (roomId: string, room: Room) => () => {
 			<RoomCard roomId={roomId} />
 			<Tabs.Root defaultValue="tab1">
 				<Box direction="row">
-					<Box fill="true">
+					<Box fill>
 						<Tabs.Content value="tab1">
 							<ChatView chatManagerInstance={chatManagerInstance} />
 						</Tabs.Content>

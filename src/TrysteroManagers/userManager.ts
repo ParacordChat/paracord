@@ -1,6 +1,6 @@
 import { funAnimalName } from "fun-animal-names";
 import * as kyber from "pqc-kyber";
-import { Room } from "trystero";
+import { Room, selfId } from "trystero";
 import { sendSystemMessage } from "../helpers/helpers";
 import { useProgressStore } from "../stateManagers/downloadManagers/progressManager";
 import { useOfferStore } from "../stateManagers/downloadManagers/requestManager";
@@ -84,6 +84,7 @@ export default class UserManager {
 			if (activePersona && activePersona.keyPair) {
 				const key = kyber.decapsulate(cyphertext, activePersona.keyPair.secret);
 				try {
+					console.log("quantum bootstrap achieved", id, selfId);
 					useUserStore.getState()
 						.updateUser(id, { quantumRecv: key });
 				} catch (error) {

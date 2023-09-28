@@ -116,19 +116,3 @@ export const encryptDecrypt = {
 	decrypt: findUserAndDecrypt,
 	ecPeerlist
 };
-
-// (() => {
-//   const text = "pongo";
-//   const encKey = new Uint8Array(32);
-//   encKey.fill(1);
-
-//   console.log(encKey);
-
-//   encryptData(enc.encode(text), encKey).then((encod) => {
-//     console.log("exr", encod);
-//     decryptData(encod, encKey).then((decod) => {
-//       console.log("dxr", dec.decode(decod));
-//     });
-//   });
-// })(); //crypto test
-// https://github.com/bradyjoslin/webcrypto-example/blob/master/script.js

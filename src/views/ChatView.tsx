@@ -17,8 +17,8 @@ export function ChatView(props: { chatManagerInstance: ChatManager }) {
 			return { id: p.id, name: p.name };
 		})
 	);
-	const uiInteractive = useUserStore(
-		(state) => state.users.some((p) => p.active)
+	const uiInteractive = useUserStore((state) =>
+		state.users.some((p) => p.active)
 	);
 
 	const sendMessage = () => {
@@ -34,14 +34,14 @@ export function ChatView(props: { chatManagerInstance: ChatManager }) {
 			<Messages />
 			<Box direction="row" style={{ overflow: "hidden" }}>
 				{typingUsers.length > 0 &&
-          typingUsers.map((typingId) => {
-          	const userName = userNames.find((u) => u.id === typingId)?.name;
-          	return (
-          		<Text key={typingId} style={{ color: "grey" }}>
-          			{userName} is typing...
-          		</Text>
-          	);
-          })}
+					typingUsers.map((typingId) => {
+						const userName = userNames.find((u) => u.id === typingId)?.name;
+						return (
+							<Text key={typingId} style={{ color: "grey" }}>
+								{userName} is typing...
+							</Text>
+						);
+					})}
 			</Box>
 			<Box direction="row">
 				<Button
@@ -59,10 +59,9 @@ export function ChatView(props: { chatManagerInstance: ChatManager }) {
 					placeholder="Type your message"
 					disabled={!uiInteractive}
 					value={messageValue}
-					onChange={(e: { target: { value: string } }) => {
-						console.log(e.target.value);
-						setMessageValue(e.target.value);
-					}}
+					onChange={(e: { target: { value: string } }) =>
+						setMessageValue(e.target.value)
+					}
 					onKeyUp={(e: { key: string; shiftKey: boolean }) => {
 						if (e.key === "Enter" && e.shiftKey === false && !multilineInput) {
 							sendMessage();

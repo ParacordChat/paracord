@@ -14,8 +14,6 @@ import { RoomCard } from "./views/RoomCard";
 import { UserView } from "./views/UserView";
 
 const MainModal = (roomId: string, room: Room) => () => {
-	console.log(roomId, room);
-
 	const [userManagerInstance] = useState(
 		new UserManager({
 			room,

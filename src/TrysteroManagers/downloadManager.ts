@@ -71,8 +71,6 @@ export default class DownloadManager {
 
 		getFile((_success, _id, metadata) => {
 			const processedMeta = metadata as FileMetaData;
-			console.log(useProgressStore.getState().progressQueue);
-			console.log(processedMeta);
 			useProgressStore.getState()
 				.deleteProgress(processedMeta.id);
 		});

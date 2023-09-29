@@ -15,6 +15,8 @@ interface VideoBubble {
 	isViewOnly?: boolean;
 }
 
+type RoomActionType = "phone" | "video" | "screen" | "cutStream" | "view";
+
 export function CallView(props: { room: Room }) {
 	const { room } = props;
 	const [isSharing, setIsSharing] = useState(false);
@@ -22,7 +24,7 @@ export function CallView(props: { room: Room }) {
 	const [callConsent, setCallConsent] = useState(false);
 	const [myStream, setMyStream] = useState<MediaStream>();
 	const [[joinRoom, getRoomJoined]] = useState(() =>
-		room.makeAction("joinRTCRoom", true)
+		room.makeAction<RoomActionType>("joinRTCRoom", true)
 	);
 	const userNames = useUserStore((state) =>
 		state.users.map((p) => {
@@ -65,9 +67,7 @@ export function CallView(props: { room: Room }) {
 		state.users.some((p) => p.active)
 	);
 
-	const shareMedia = async (
-		type: "phone" | "video" | "screen" | "cutStream" | "view"
-	) => {
+	const shareMedia = async (type: RoomActionType) => {
 		if (type === "cutStream") {
 			if (myStream) {
 				[...videoBubbles.map((vb) => vb.stream), myStream].forEach((stream) => {

@@ -26,7 +26,7 @@ export default function StreamPlayer(props: {
 		) {
 			deployEqualizer(id, stream);
 		}
-	}, [player, stream]);
+	}, [player, stream, id]);
 
 	const deployEqualizer = (
 		// TODO: no garbage collection for this?

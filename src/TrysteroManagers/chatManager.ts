@@ -17,14 +17,17 @@ export default class ChatManager {
 	private roomId: string;
 
 	constructor({ room, roomId }: { room: Room; roomId: string }) {
-		const [sendChatAction, getChatAction] = room.makeAction("chat", true);
-		const [sendTyping, getTyping] = room.makeAction("isTyping", true);
+		const [sendChatAction, getChatAction] = room.makeAction<string>(
+			"chat",
+			true
+		);
+		const [sendTyping, getTyping] = room.makeAction<boolean>("isTyping", true);
 		this.sendChatAction = sendChatAction;
 		this.sendTyping = sendTyping;
 		this.roomId = roomId;
 
 		getChatAction(async (rawData, id) => {
-			const data = JSON.parse(rawData);
+			const data = JSON.parse(rawData); // TODO: this no longer needs to be a string
 			if (
 				data &&
 				data.text.trim() !== "" &&

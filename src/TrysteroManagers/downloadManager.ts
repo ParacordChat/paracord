@@ -18,15 +18,18 @@ export default class DownloadManager {
 	) => Promise<any[]>;
 
 	constructor({ room, roomId }: { room: Room; roomId: string }) {
-		const [sendFile, getFile, onFileProgress] = room.makeAction(
+		const [sendFile, getFile, onFileProgress] = room.makeAction<File>(
 			"transfer",
 			true
 		);
-		const [sendFileRequest, getFileRequest] = room.makeAction(
+		const [sendFileRequest, getFileRequest] = room.makeAction<string>(
 			"fileRequest",
 			true
 		);
-		const [sendFileOffer, getFileOffer] = room.makeAction("fileOffer", true);
+		const [sendFileOffer, getFileOffer] = room.makeAction<FileOffer[]>(
+			"fileOffer",
+			true
+		);
 		this.sendFileRequest = sendFileRequest;
 		this.sendFileOffer = sendFileOffer;
 

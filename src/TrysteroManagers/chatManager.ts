@@ -7,7 +7,7 @@ import { useUserStore } from "../stateManagers/userManagers/userStore";
 
 export default class ChatManager {
 	private sendChatAction: (
-		data: string,
+		data: Message,
 		ids?: string | string[]
 	) => Promise<any[]>;
 	private sendTyping: (
@@ -17,7 +17,7 @@ export default class ChatManager {
 	private roomId: string;
 
 	constructor({ room, roomId }: { room: Room; roomId: string }) {
-		const [sendChatAction, getChatAction] = room.makeAction<string>(
+		const [sendChatAction, getChatAction] = room.makeAction<Message>(
 			"chat",
 			true
 		);
@@ -26,20 +26,15 @@ export default class ChatManager {
 		this.sendTyping = sendTyping;
 		this.roomId = roomId;
 
-		getChatAction(async (rawData, id) => {
-			const data = JSON.parse(rawData); // TODO: this no longer needs to be a string
-			if (
-				data &&
-				data.text.trim() !== "" &&
-				useClientSideUserTraits.getState().mutedUsers[id] !== true
-			) {
+		getChatAction(async (chatData, id) => {
+			if (useClientSideUserTraits.getState().mutedUsers[id] !== true) {
 				const newMessage: Message = {
-					id: data.id,
-					text: data.text,
-					sentAt: data.sentAt,
+					id: chatData.id,
+					text: chatData.text,
+					sentAt: chatData.sentAt,
 					sentBy: id,
 					recievedAt: Date.now(),
-					roomId: data.roomId
+					roomId: chatData.roomId
 				};
 				useMessageStore.getState()
 					.addMessage(newMessage);
@@ -64,7 +59,6 @@ export default class ChatManager {
 			recievedAt: Date.now(),
 			roomId: this.roomId
 		};
-		const msgString = JSON.stringify(newMessage);
 		const users = useUserStore
 			.getState()
 			.users.filter((user) => {
@@ -73,7 +67,7 @@ export default class ChatManager {
 			.map((user) => user.id);
 
 		this.sendTypingIndicator(false);
-		this.sendChatAction(msgString, users);
+		this.sendChatAction(newMessage, users);
 
 		useMessageStore.getState()
 			.addMessage(newMessage);

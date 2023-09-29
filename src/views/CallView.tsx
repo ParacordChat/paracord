@@ -55,9 +55,11 @@ export function CallView(props: { room: Room }) {
 			} else if (type === "cutStream") {
 				setVideoBubbles(videoBubbles.filter((vb) => vb.id !== id));
 			}
-			room.sendStream(myStream, id);
+			if (myStream) {
+				room.addStream(myStream, id); // TODO: refreshing streams in room still dosen't work...
+			}
 		});
-	}, []);
+	});
 
 	const uiInteractive = useUserStore((state) =>
 		state.users.some((p) => p.active)

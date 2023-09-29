@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/media-has-caption */
 import AudioMotionAnalyzer from "audiomotion-analyzer";
 import { Box, Text } from "grommet";
+import { View } from "grommet-icons";
 import { useEffect, useRef } from "preact/hooks";
 import { generateHexColorFromString } from "../../helpers/helpers";
 
@@ -19,7 +20,10 @@ export default function StreamPlayer(props: {
 		if (player.current) {
 			player.current.srcObject = stream;
 		}
-		if (stream.getVideoTracks().length === 0) {
+		if (
+			stream.getVideoTracks().length === 0 &&
+			stream.getAudioTracks().length > 0
+		) {
 			deployEqualizer(id, stream);
 		}
 	}, [player, stream]);
@@ -59,8 +63,9 @@ export default function StreamPlayer(props: {
 			border={{ color: generateHexColorFromString(id), size: "medium" }}
 		>
 			<Text color={generateHexColorFromString(id)}>{username}</Text>
-			{stream.getVideoTracks().length === 0
-				? (
+			{stream.getVideoTracks().length === 0 ? (
+				<>
+					{stream.getVideoTracks().length === 0 ? (
 						<>
 							<video
 								autoPlay={true}
@@ -73,12 +78,15 @@ export default function StreamPlayer(props: {
 								style={{ width: "10em", height: "10em" }}
 							/>
 						</>
-					)
-				: (
-						<>
-							<video autoPlay={true} muted={isMuted} ref={player} />
-						</>
+					) : (
+						<View size="xlarge" />
 					)}
+				</>
+			) : (
+				<>
+					<video autoPlay={true} muted={isMuted} ref={player} />
+				</>
+			)}
 		</Box>
 	);
 }

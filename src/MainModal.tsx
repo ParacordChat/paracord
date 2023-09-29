@@ -2,18 +2,21 @@
 /* eslint-disable react/display-name */
 import * as Tabs from "@radix-ui/react-tabs";
 import { Box, Button, Footer } from "grommet";
-import { Chat, Download } from "grommet-icons";
+import { Chat, Download, Phone } from "grommet-icons";
 import { useEffect, useState } from "preact/hooks";
 import { Room } from "trystero";
 import ChatManager from "./TrysteroManagers/chatManager";
 import DownloadManager from "./TrysteroManagers/downloadManager";
 import UserManager from "./TrysteroManagers/userManager";
+import { CallView } from "./views/CallView";
 import { ChatView } from "./views/ChatView";
 import { DownloadView } from "./views/DownloadView";
 import { RoomCard } from "./views/RoomCard";
 import { UserView } from "./views/UserView";
 
 const MainModal = (roomId: string, room: Room) => () => {
+	console.log(roomId, room);
+
 	const [userManagerInstance] = useState(
 		new UserManager({
 			room,
@@ -44,12 +47,15 @@ const MainModal = (roomId: string, room: Room) => () => {
 			<RoomCard roomId={roomId} />
 			<Tabs.Root defaultValue="tab1">
 				<Box direction="row">
-					<Box fill>
+					<Box fill={true}>
 						<Tabs.Content value="tab1">
 							<ChatView chatManagerInstance={chatManagerInstance} />
 						</Tabs.Content>
 						<Tabs.Content value="tab2">
 							<DownloadView downloadManagerInstance={downloadManagerInstance} />
+						</Tabs.Content>
+						<Tabs.Content value="tab3">
+							<CallView room={room} />
 						</Tabs.Content>
 					</Box>
 					<UserView roomId={roomId} userManagerInstance={userManagerInstance} />
@@ -74,7 +80,7 @@ const MainModal = (roomId: string, room: Room) => () => {
 							value="tab1"
 							title="Chat"
 						>
-							<Button icon={<Chat />} />
+							<Button primary icon={<Chat />} />
 						</Tabs.Trigger>
 						<Tabs.Trigger
 							style={{
@@ -84,7 +90,18 @@ const MainModal = (roomId: string, room: Room) => () => {
 							value="tab2"
 							title="Downloads"
 						>
-							<Button icon={<Download />} />
+							<Button primary background="brand" icon={<Download />} />
+						</Tabs.Trigger>
+
+						<Tabs.Trigger
+							style={{
+								padding: "0.5em",
+								margin: "0.5em"
+							}}
+							value="tab3"
+							title="Call"
+						>
+							<Button primary background="brand" icon={<Phone />} />
 						</Tabs.Trigger>
 					</Tabs.List>
 				</Footer>

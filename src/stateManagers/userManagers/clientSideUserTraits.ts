@@ -1,17 +1,21 @@
 import { create } from "zustand";
 
 interface ClientSideUserTraitsStore {
-  mutedUsers: { [userId: string]: boolean };
-  toggleMute: (userId: string) => void;
-  addUser: (userId: string) => void;
-  removeUser: (userId: string) => void;
-  typingUsers: string[];
-  addTypingUser: (userId: string) => void;
-  removeTypingUser: (userId: string) => void;
+	roomPassword: string | undefined;
+	setPassword: (password: string) => void;
+	mutedUsers: { [userId: string]: boolean };
+	toggleMute: (userId: string) => void;
+	addUser: (userId: string) => void;
+	removeUser: (userId: string) => void;
+	typingUsers: string[];
+	addTypingUser: (userId: string) => void;
+	removeTypingUser: (userId: string) => void;
 }
 
 export const useClientSideUserTraits = create<ClientSideUserTraitsStore>(
 	(set, get) => ({
+		roomPassword: undefined,
+		setPassword: (password: string) => set({ roomPassword: password }),
 		mutedUsers: {},
 		toggleMute: (userId: string) =>
 			set((state) => ({

@@ -2,6 +2,7 @@ import {
 	Anchor,
 	Box,
 	Button,
+	CheckBox,
 	Footer,
 	Image,
 	Main,
@@ -10,7 +11,7 @@ import {
 	Text,
 	TextInput
 } from "grommet";
-import { FormView, FormViewHide, Key, Login, Risk } from "grommet-icons";
+import { Login, Risk } from "grommet-icons";
 import { route } from "preact-router";
 import { useRef, useState } from "preact/hooks";
 import shortid from "shortid";
@@ -18,9 +19,8 @@ import { baseUrl } from "../helpers/roomConfig";
 import pcdLogo from "/logo.svg";
 
 export function RoomCreator() {
-	const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
+	const [usePassword, setUsePassword] = useState(true);
 	const roomRef = useRef<HTMLInputElement>(null);
-	const passwordRef = useRef<HTMLInputElement>(null);
 	return (
 		<>
 			<Page kind="narrow">
@@ -43,6 +43,16 @@ export function RoomCreator() {
 								autoComplete="off"
 								icon={<Login />}
 								placeholder="Room ID"
+								onKeyUp={(e: { key: string }) => {
+									if (e.key === "Enter") {
+										route(
+											`/paracord/${roomRef.current?.value}/${
+												usePassword ? "a" : ""
+											}`,
+											true
+										);
+									}
+								}}
 							/>
 							<Button
 								icon={<Risk />}
@@ -54,23 +64,22 @@ export function RoomCreator() {
 							/>
 						</Box>
 						<Box direction="row">
-							<TextInput
-								icon={<Key />}
-								ref={passwordRef}
-								name="userInput"
-								type={passwordVisible ? "text" : "password"}
-								autoComplete="off"
-								placeholder="Password (optional)"
-							/>
-							<Button
-								icon={passwordVisible ? <FormView /> : <FormViewHide />}
-								onClick={() => setPasswordVisible(!passwordVisible)}
+							<CheckBox
+								checked={usePassword}
+								label="Use Password?"
+								onChange={(event: {
+									target: {
+										checked: boolean | ((prevState: boolean) => boolean);
+									};
+								}) => setUsePassword(event.target.checked)}
 							/>
 						</Box>
 						<Button
 							onClick={() =>
 								route(
-									`/paracord/${roomRef.current?.value}/${passwordRef.current?.value}`,
+									`/paracord/${roomRef.current?.value}/${
+										usePassword ? "a" : ""
+									}`,
 									true
 								)
 							}

@@ -1,11 +1,8 @@
-import { joinRoom } from "trystero";
-
 import { Image, PageHeader, Text } from "grommet";
 import AsyncRoute from "preact-async-route";
 import { Router } from "preact-router";
-import { encryptDecrypt } from "./helpers/cryptoSuite";
 import { isRtcSupported } from "./helpers/helpers";
-import { baseUrl, defaultRoomConfig } from "./helpers/roomConfig";
+import { baseUrl } from "./helpers/roomConfig";
 import pcdLogo from "/logo.svg";
 
 const RTCSupport = isRtcSupported();
@@ -30,21 +27,13 @@ function App() {
 					<AsyncRoute
 						path={`${baseUrl}:id/:pwd?`}
 						getComponent={(url) =>
-							import("./MainModal").then(async (module) => {
+							import("./views/PasswordModal").then(async (module) => {
 								const cleanUrl = url.split("/");
 								if (cleanUrl.length < 3) alert("Invalid URL");
 								const roomId = cleanUrl[2].trim();
 								const password = cleanUrl[3]?.trim();
 
-								const room = await joinRoom(
-									{
-										...defaultRoomConfig,
-										password: password === "" ? undefined : password,
-										encryptDecrypt
-									},
-									roomId
-								);
-								return module.default(roomId, room);
+								return module.default(roomId, password === "a");
 							})
 						}
 						loading={() => <div>loading...</div>}
@@ -60,7 +49,7 @@ function App() {
 							<Text size="small">
 								Paracord uses WebRTC to connect peers, and your browser does not
 								support it. Please use a browser that supports WebRTC, such as
-								Google Chrome.
+								Firefox or Google Chrome.
 							</Text>
 						}
 					/>

@@ -3,13 +3,13 @@ import { funAnimalName } from "fun-animal-names";
 import { Box, Button, Footer, Text } from "grommet";
 import { Camera, Close, Monitor, Phone, View } from "grommet-icons";
 import { selfId } from "trystero";
-import RtcManager from "../TrysteroManagers/RtcManager";
+import RTCManager from "../TrysteroManagers/RtcManager";
 import { generateHexColorFromString } from "../helpers/helpers";
 import { useCallPrefsState } from "../stateManagers/RTCManagers/personalCallPrefs";
 import { useUserStore } from "../stateManagers/userManagers/userStore";
 import StreamPlayer from "./helpers/StreamPlayer";
 
-export function CallView(props: { rtcManagerInstance: RtcManager }) {
+export function CallView(props: { rtcManagerInstance: RTCManager }) {
 	const { rtcManagerInstance } = props;
 
 	const userNames = useUserStore((state) =>

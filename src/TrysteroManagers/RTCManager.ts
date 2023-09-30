@@ -3,7 +3,7 @@ import { useCallPrefsState } from "../stateManagers/RTCManagers/personalCallPref
 
 type RoomActionType = "phone" | "video" | "screen" | "cutStream" | "view";
 
-export default class RtcManager {
+export default class RTCManager {
 	private joinRoom: (
 		roomAction: RoomActionType,
 		ids?: string | string[]

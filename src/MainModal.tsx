@@ -3,7 +3,7 @@ import { Box, Button, Footer } from "grommet";
 import { Chat, Download, Phone } from "grommet-icons";
 import { useEffect, useState } from "preact/hooks";
 import { Room } from "trystero";
-import RTCManager from "./TrysteroManagers/RtcManager";
+import RTCManager from "./TrysteroManagers/RTCManager";
 import ChatManager from "./TrysteroManagers/chatManager";
 import DownloadManager from "./TrysteroManagers/downloadManager";
 import UserManager from "./TrysteroManagers/userManager";

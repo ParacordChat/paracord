@@ -3,7 +3,7 @@ import { funAnimalName } from "fun-animal-names";
 import { Box, Button, Footer, Text } from "grommet";
 import { Camera, Close, Monitor, Phone, View } from "grommet-icons";
 import { selfId } from "trystero";
-import RTCManager from "../TrysteroManagers/RtcManager";
+import RTCManager from "../TrysteroManagers/RTCManager";
 import { generateHexColorFromString } from "../helpers/helpers";
 import { useCallPrefsState } from "../stateManagers/RTCManagers/personalCallPrefs";
 import { useUserStore } from "../stateManagers/userManagers/userStore";

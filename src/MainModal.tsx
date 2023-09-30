@@ -5,6 +5,7 @@ import { Box, Button, Footer } from "grommet";
 import { Chat, Download, Phone } from "grommet-icons";
 import { useEffect, useState } from "preact/hooks";
 import { Room } from "trystero";
+import RTCManager from "./TrysteroManagers/RTCManager";
 import ChatManager from "./TrysteroManagers/chatManager";
 import DownloadManager from "./TrysteroManagers/downloadManager";
 import UserManager from "./TrysteroManagers/userManager";
@@ -38,6 +39,13 @@ const MainModal = (roomId: string, room: Room) => () => {
 		})
 	);
 
+	const [rtcManagerInstance] = useState(
+		new RTCManager({
+			room,
+			roomId
+		})
+	);
+
 	useEffect(() => {
 		userManagerInstance.createPersona();
 	}, [userManagerInstance]);
@@ -55,7 +63,7 @@ const MainModal = (roomId: string, room: Room) => () => {
 							<DownloadView downloadManagerInstance={downloadManagerInstance} />
 						</Tabs.Content>
 						<Tabs.Content value="tab3">
-							<CallView room={room} />
+							<CallView rtcManagerInstance={rtcManagerInstance} />
 						</Tabs.Content>
 					</Box>
 					<UserView roomId={roomId} userManagerInstance={userManagerInstance} />

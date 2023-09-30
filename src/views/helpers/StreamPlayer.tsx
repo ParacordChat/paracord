@@ -15,8 +15,6 @@ export default function StreamPlayer(props: {
 	const player = useRef<HTMLVideoElement>(null);
 
 	useEffect(() => {
-		console.log("stream", stream);
-		console.log("player", player);
 		if (player.current) {
 			player.current.srcObject = stream;
 		}

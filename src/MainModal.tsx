@@ -3,7 +3,7 @@ import { Box, Button, Footer } from "grommet";
 import { Chat, Download, Phone } from "grommet-icons";
 import { useEffect, useState } from "preact/hooks";
 import { Room } from "trystero";
-import RTCManager from "./TrysteroManagers/RtcManager";
+import RtcManager from "./TrysteroManagers/RtcManager";
 import ChatManager from "./TrysteroManagers/chatManager";
 import DownloadManager from "./TrysteroManagers/downloadManager";
 import UserManager from "./TrysteroManagers/userManager";
@@ -36,7 +36,7 @@ const MainModal = ({ roomId, room }: { roomId: string; room: Room }) => {
 	);
 
 	const [rtcManagerInstance] = useState(
-		new RTCManager({
+		new RtcManager({
 			room,
 			roomId
 		})

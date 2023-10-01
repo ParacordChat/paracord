@@ -3,7 +3,7 @@ import { BaseRoomConfig, TorrentRoomConfig } from "trystero";
 
 export const tradeName = "paracord_chat";
 
-export const baseUrl = "paracord/";
+export const baseUrl = "/";
 
 export const defaultRoomConfig: BaseRoomConfig & TorrentRoomConfig = {
 	appId: tradeName,

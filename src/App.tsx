@@ -28,9 +28,9 @@ function App() {
 						getComponent={(url) =>
 							import("./views/PasswordModal").then(async (module) => {
 								const cleanUrl = url.split("/");
-								if (cleanUrl.length < 3) alert("Invalid URL");
-								const roomId = cleanUrl[2].trim();
-								const password = cleanUrl[3]?.trim();
+								if (cleanUrl.length < 2) alert("Invalid URL");
+								const roomId = cleanUrl[1].trim();
+								const password = cleanUrl[2]?.trim();
 
 								return module.default(roomId, password === "a");
 							})

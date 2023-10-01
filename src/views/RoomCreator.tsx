@@ -46,9 +46,7 @@ export function RoomCreator() {
 								onKeyUp={(e: { key: string }) => {
 									if (e.key === "Enter") {
 										route(
-											`/paracord/${roomRef.current?.value}/${
-												usePassword ? "a" : ""
-											}`,
+											`/${roomRef.current?.value}/${usePassword ? "a" : ""}`,
 											true
 										);
 									}
@@ -77,9 +75,7 @@ export function RoomCreator() {
 						<Button
 							onClick={() =>
 								route(
-									`/paracord/${roomRef.current?.value}/${
-										usePassword ? "a" : ""
-									}`,
+									`/${roomRef.current?.value}/${usePassword ? "a" : ""}`,
 									true
 								)
 							}

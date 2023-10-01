@@ -62,6 +62,7 @@ export function RoomCreator() {
 						</Box>
 						<Box direction="row">
 							<CheckBox
+								pad="small"
 								checked={usePassword}
 								label="Use Password?"
 								onChange={(event: {

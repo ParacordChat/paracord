@@ -12,6 +12,11 @@ const abouts = [
 	},
 
 	{
+		title: `Is it secure - addendum "Dig it!"`,
+		more: "This site is fully open source and hosted at https://github.com/ParacordChat/paracord, try using the dig command, and you can verify that the IP matches the one that github uses. Therefore you can be sure that the code you're running is the same as the code that's on github. If you're still not convinced, you can download the code and run it locally."
+	},
+
+	{
 		title: "Why did you make it?",
 		more: "I was tired of the usual rigamarole of video-call hot potato, as well as the lack of privacy-respecting file-sharing programs on the net that don't require hundreds of precious hours away from touchable grass"
 	},

@@ -15,7 +15,6 @@ import { Login, Risk } from "grommet-icons";
 import { route } from "preact-router";
 import { useRef, useState } from "preact/hooks";
 import shortid from "shortid";
-import { baseUrl } from "../helpers/roomConfig";
 import pcdLogo from "/logo.svg";
 
 export function RoomCreator() {
@@ -89,7 +88,7 @@ export function RoomCreator() {
 					<Anchor
 						label="About"
 						onClick={() => {
-							route(`/${baseUrl}/About`, true);
+							route(`/About`, true);
 						}}
 					/>
 				</Footer>

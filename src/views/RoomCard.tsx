@@ -1,7 +1,6 @@
 import { Box, Button, Header, Image, Text } from "grommet";
 import { CaretLeftFill, Copy } from "grommet-icons";
 import { route } from "preact-router";
-import { baseUrl } from "../helpers/roomConfig";
 import pcdLogo from "/logo.svg";
 
 export function RoomCard(props: { roomId: string }) {
@@ -20,7 +19,7 @@ export function RoomCard(props: { roomId: string }) {
 				<Button
 					label="home"
 					onClick={() => {
-						route(`/${baseUrl}`, true);
+						route(`/`, true);
 						location.reload();
 					}}
 					icon={<CaretLeftFill />}
@@ -32,7 +31,7 @@ export function RoomCard(props: { roomId: string }) {
 					<hr />
 					<Box direction="row">
 						<Text size="small" style={{ paddingRight: "1em" }}>
-              Room ID
+							Room ID
 						</Text>
 						<Text size="medium">{roomId}</Text>
 					</Box>

@@ -2,7 +2,6 @@ import { Image, PageHeader, Text } from "grommet";
 import AsyncRoute from "preact-async-route";
 import { Router } from "preact-router";
 import { isRtcSupported } from "./helpers/helpers";
-import { baseUrl } from "./helpers/roomConfig";
 import pcdLogo from "/logo.svg";
 
 const RTCSupport = isRtcSupported();
@@ -13,19 +12,19 @@ function App() {
 			{RTCSupport ? (
 				<Router>
 					<AsyncRoute
-						path={`${baseUrl}`}
+						path={`/`}
 						getComponent={() =>
 							import("./views/RoomCreator").then((module) => module.RoomCreator)
 						}
 					/>
 					<AsyncRoute
-						path={`${baseUrl}/About`}
+						path={`/About`}
 						getComponent={() =>
 							import("./views/About").then((module) => module.default)
 						}
 					/>
 					<AsyncRoute
-						path={`${baseUrl}:id/:pwd?`}
+						path={`/:id/:pwd?`}
 						getComponent={(url) =>
 							import("./views/PasswordModal").then(async (module) => {
 								const cleanUrl = url.split("/");

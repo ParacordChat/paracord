@@ -7,6 +7,9 @@ import "./assets/globals.css";
 const theme = {
 	global: {
 		font: {
+			face: {
+				fontFamily: "lucidatypewriter, monospace"
+			},
 			family: "Space Mono",
 			size: "14px",
 			height: "20px"

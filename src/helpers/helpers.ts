@@ -68,3 +68,11 @@ export const randomName = () =>
 	funAnimalName(Math.random()
 		.toString(36)
 		.slice(7));
+
+export const confirmDialog = (msg: string) => {
+	return new Promise(function (resolve, reject) {
+		const confirmed = window.confirm(msg);
+
+		return confirmed ? resolve(true) : reject(false);
+	});
+};

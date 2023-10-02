@@ -1,5 +1,6 @@
+import { funAnimalName } from "fun-animal-names";
 import { Room, selfId } from "trystero";
-import { sendSystemMessage } from "../helpers/helpers";
+import { confirmDialog, sendSystemMessage } from "../helpers/helpers";
 import { FileMetaData, FileOffer } from "../helpers/types";
 import { useProgressStore } from "../stateManagers/downloadManagers/progressManager";
 import { useRealFiles } from "../stateManagers/downloadManagers/realFileManager";
@@ -48,27 +49,50 @@ export default class DownloadManager {
 
 		getFileRequest((fileId, userId) => {
 			const realFiles = useRealFiles.getState().realFiles;
-			if (realFiles && fileId in realFiles) {
-				const currentFile = realFiles[fileId];
-				useProgressStore.getState()
-					.addProgress({
-						id: fileId,
-						name: currentFile.name,
-						progress: 0,
-						toMe: false
-					});
-				sendFile(
-					currentFile,
-					userId,
-					{
-						id: fileId,
-						name: currentFile.name,
-						size: currentFile.size
-					},
-					(progress, _fromUser) =>
-						useProgressStore.getState()
-							.updateProgress(fileId, { progress })
-				);
+			const mutedUsers = useClientSideUserTraits.getState().mutedUsers;
+			if (realFiles && fileId in realFiles && mutedUsers[userId] !== true) {
+				const sendAction = () => {
+					const currentFile = realFiles[fileId];
+
+					useProgressStore.getState()
+						.addProgress({
+							id: fileId,
+							name: currentFile.name,
+							progress: 0,
+							toUser: userId
+						});
+					sendFile(
+						currentFile,
+						userId,
+						{
+							id: fileId,
+							name: currentFile.name,
+							size: currentFile.size
+						},
+						(progress, _fromUser) => {
+							useProgressStore.getState()
+								.updateProgress(fileId, { progress });
+						}
+					);
+				};
+				if (
+					useProgressStore
+						.getState()
+						.progressQueue.some((p) => p.id === fileId && p.toUser === userId)
+				) {
+					confirmDialog(
+						`file already being sent, you can click ok to send it again, or mute the user with id ${funAnimalName(
+							userId
+						)} to prevent spamming`
+					)
+						.then((ok) => {
+							if (ok) {
+								sendAction();
+							}
+						});
+				} else {
+					sendAction();
+				}
 			}
 		});
 
@@ -99,7 +123,7 @@ export default class DownloadManager {
 					id: findName.id,
 					name: findName.name,
 					progress: 0,
-					toMe: true
+					toUser: selfId
 				});
 			this.sendFileRequest(fileId, fromUser);
 		} else {

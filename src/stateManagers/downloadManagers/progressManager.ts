@@ -2,11 +2,11 @@ import { create } from "zustand";
 import { FileProgress } from "../../helpers/types";
 
 interface ProgressStore {
-  progressQueue: FileProgress[];
+	progressQueue: FileProgress[];
 
-  addProgress: (progress: FileProgress) => void;
-  deleteProgress: (fileId: string) => void;
-  updateProgress: (fileId: string, updates: Partial<FileProgress>) => void;
+	addProgress: (progress: FileProgress) => void;
+	deleteProgress: (fileId: string) => void;
+	updateProgress: (fileId: string, updates: Partial<FileProgress>) => void;
 }
 
 export const useProgressStore = create<ProgressStore>((set) => ({

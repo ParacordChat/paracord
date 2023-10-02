@@ -1,6 +1,7 @@
 import { Box, Button, Meter, Text } from "grommet";
 import { FormClose } from "grommet-icons";
 import { FileUploader } from "react-drag-drop-files";
+import { selfId } from "trystero";
 import DownloadManager from "../TrysteroManagers/downloadManager";
 import { fancyBytes } from "../helpers/helpers";
 import { useProgressStore } from "../stateManagers/downloadManagers/progressManager";
@@ -141,9 +142,9 @@ export function DownloadView(props: {
 							border={{ color: "brand", size: "medium" }}
 						>
 							{/* TODO: add a "stop" button */}
-							{progressQueue.map((status) => (
+							{progressQueue.map((status, index) => (
 								<Box
-									key={status.id}
+									key={`${status.id}-${index}`}
 									className={status.id}
 									background="dark-3"
 									round="small"
@@ -151,7 +152,9 @@ export function DownloadView(props: {
 									border={{ color: "accent-1", size: "medium" }}
 								>
 									<Text size="medium" color="brand">
-										{status.toMe ? ` ← ${status.name}` : `${status.name} →`}
+										{status.toUser === selfId
+											? ` ← ${status.name}`
+											: `${status.name} →`}
 									</Text>
 									<Meter
 										values={[

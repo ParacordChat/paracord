@@ -103,6 +103,7 @@ export default class DownloadManager {
 		});
 
 		getFileOffer(async (data, id) => {
+			console.log("got file offer", data, id);
 			if (useClientSideUserTraits.getState().mutedUsers[id] !== true) {
 				useOfferStore.getState()
 					.updateOrAddRequestable(id, data);
@@ -131,7 +132,8 @@ export default class DownloadManager {
 		}
 	};
 
-	public offerRequestableFiles = async () => {
+	public offerRequestableFiles = async (id?: string | string[]) => {
+		console.log("offering files", id);
 		const realFiles = useRealFiles.getState().realFiles;
 		if (!realFiles || Object.keys(realFiles).length === 0) return;
 		const files: FileOffer[] = Object.entries(realFiles)
@@ -145,7 +147,7 @@ export default class DownloadManager {
 			);
 
 		// await
-		this.sendFileOffer(files)
+		this.sendFileOffer(files, id)
 			.catch((error) => console.error(error));
 	};
 
@@ -161,4 +163,7 @@ export default class DownloadManager {
 			.addRealFiles(initialList);
 		this.offerRequestableFiles();
 	};
+
+	public peerJoinHook = (id: string) =>
+		setInterval(() => this.offerRequestableFiles(id), 5000); // TODO: kind of an ugly fix, but it works
 }

@@ -44,7 +44,11 @@ const MainModal = ({ roomId, room }: { roomId: string; room: Room }) => {
 
 	useEffect(() => {
 		userManagerInstance.createPersona();
-	}, [userManagerInstance]);
+		room.onPeerJoin((peerId) => {
+			userManagerInstance.peerJoinHook(peerId);
+			downloadManagerInstance.peerJoinHook(peerId);
+		});
+	}, [downloadManagerInstance, room, userManagerInstance]);
 
 	return (
 		<>

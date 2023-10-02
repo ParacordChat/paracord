@@ -11,6 +11,7 @@ import { useUserStore } from "../stateManagers/userManagers/userStore";
 export default class UserManager {
 	private sendName;
 	private sendEncryptionInfo;
+	private roomId: string;
 
 	constructor({ room, roomId }: { room: Room; roomId: string }) {
 		const [sendName, getName] = room.makeAction<string>("name", true);
@@ -21,16 +22,7 @@ export default class UserManager {
 
 		this.sendName = sendName;
 		this.sendEncryptionInfo = sendEncryptionInfo;
-
-		room.onPeerJoin(async (id: string) => {
-			this.syncInfo(id);
-			useUserStore
-				.getState()
-				.addUser({ id, roomId, active: true, name: funAnimalName(id) });
-			useClientSideUserTraits.getState()
-				.addUser(id);
-			sendSystemMessage(roomId, `${id} joined the room`);
-		});
+		this.roomId = roomId;
 
 		useUserStore.subscribe((state, prevState) => {
 			if (state.keyedUsers.size > prevState.keyedUsers.size) {
@@ -94,15 +86,29 @@ export default class UserManager {
 		});
 	}
 
+	public peerJoinHook = async (id: string) => {
+		this.syncInfo(id);
+		useUserStore.getState()
+			.addUser({
+				id,
+				roomId: this.roomId,
+				active: true,
+				name: funAnimalName(id)
+			});
+		useClientSideUserTraits.getState()
+			.addUser(id);
+		sendSystemMessage(this.roomId, `${id} joined the room`);
+	};
+
 	syncInfo = async (id?: string) => {
 		// ID is only defined if initiating connection
 		const activePersona = usePersonaStore.getState().persona;
-		const allowedSendNames = useUserStore.getState().keyedUsers;
 		if (activePersona) {
 			if (id) {
 				if (activePersona.keyPair) {
 					await this.sendEncryptionInfo(activePersona.keyPair.pubkey, id);
 				}
+				const allowedSendNames = useUserStore.getState().keyedUsers;
 				if (allowedSendNames.has(id)) {
 					this.sendName(activePersona.name, id);
 				}

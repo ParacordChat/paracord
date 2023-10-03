@@ -84,6 +84,7 @@ export function DownloadView(props: {
 							padding: "1rem 1.2rem"
 						}}
 						title="Send Request"
+						open={true}
 					>
 						<Box
 							background="dark-3"
@@ -134,6 +135,7 @@ export function DownloadView(props: {
 							padding: "1rem 1.2rem"
 						}}
 						title="Active Transfers"
+						open={true}
 					>
 						<Box
 							background="dark-3"

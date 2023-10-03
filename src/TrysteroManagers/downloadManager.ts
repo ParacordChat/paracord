@@ -42,9 +42,10 @@ export default class DownloadManager {
 
 		onFileProgress((progress, _id, metadata) => {
 			const processedMeta = metadata as FileMetaData;
-			useProgressStore
-				.getState()
-				.updateProgress(processedMeta.id, { progress });
+			processedMeta.id &&
+				useProgressStore
+					.getState()
+					.updateProgress(processedMeta.id, { progress });
 		});
 
 		getFileRequest((fileId, userId) => {
@@ -165,5 +166,5 @@ export default class DownloadManager {
 	};
 
 	public peerJoinHook = (id: string) =>
-		setInterval(() => this.offerRequestableFiles(id), 5000); // TODO: kind of an ugly fix, but it works
+		setTimeout(() => this.offerRequestableFiles(id), 5000); // TODO: kind of an ugly fix, but it works
 }

@@ -16,7 +16,6 @@ const PasswordModal = (roomId: string, hasPassword: boolean) => () => {
 
 	const roomSet = async (password = "") => {
 		if (!currentRoom) {
-			console.log("pswd", password);
 			const room = await joinRoom(
 				{
 					...defaultRoomConfig,

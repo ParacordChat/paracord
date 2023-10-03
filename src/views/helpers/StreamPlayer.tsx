@@ -13,6 +13,7 @@ export default function StreamPlayer(props: {
 }) {
 	const { stream, username, id, isMuted } = props;
 	const player = useRef<HTMLVideoElement>(null);
+	const eqContainer = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
 		if (player.current) {
@@ -51,8 +52,7 @@ export default function StreamPlayer(props: {
 		// mute output to prevent feedback loops from the speakers
 		audioMotion.volume = 0;
 
-		const eqParent = document.querySelector(`#${id}-equalizer`);
-		if (eqParent) eqParent.append(container);
+		if (eqContainer.current) eqContainer.current.append(container);
 	};
 	return (
 		<Box
@@ -72,7 +72,7 @@ export default function StreamPlayer(props: {
 								ref={player}
 							/>
 							<Box
-								id={`${id}-equalizer`}
+								ref={eqContainer}
 								style={{ width: "10em", height: "10em" }}
 							/>
 						</>

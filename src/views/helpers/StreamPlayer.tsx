@@ -23,13 +23,12 @@ export default function StreamPlayer(props: {
 			stream.getVideoTracks().length === 0 &&
 			stream.getAudioTracks().length > 0
 		) {
-			deployEqualizer(id, stream);
+			deployEqualizer(stream);
 		}
 	}, [player, stream, id]);
 
 	const deployEqualizer = (
 		// TODO: no garbage collection for this?
-		id: string,
 		mediaStream: MediaStream
 	) => {
 		const container = document.createElement("div");

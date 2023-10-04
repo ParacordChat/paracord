@@ -60,35 +60,38 @@ export function UserView(props: {
 						overflowX: "auto",
 						overflowY: "scroll",
 						// overflow: "auto",
-						height: "27em"
+						height: "20em"
 					}}
 				>
-					{activePeers.length > 0
-						? (
-								<InfiniteScroll
-									items={activePeers.filter((p) => p.roomId === roomId && p.active)}
-								>
-									{({ name, id }: { name: string; id: string }) => (
-										<div>
-											<Box key={id} direction="row" gap="small">
-												<MuteUserButton
-													toggleMuted={() => mutedPeers.toggleMute(id)}
-													isMuted={mutedPeers.mutedUsers[id] || false}
-												/>
-												<Text style={{ color: generateHexColorFromString(id) }}>
-													{name}
-												</Text>
-											</Box>
-											<Text size="small" style={{ color: "grey" }}>
-												{funAnimalName(id)}
-											</Text>
-										</div>
-									)}
-								</InfiniteScroll>
-							)
-						: (
-								<Text size="medium">Waiting...</Text>
+					{activePeers.length > 0 ? (
+						<InfiniteScroll
+							items={activePeers.filter((p) => p.roomId === roomId && p.active)}
+						>
+							{({ name, id }: { name: string; id: string }) => (
+								<div>
+									<Box key={id} direction="row" gap="small">
+										<MuteUserButton
+											toggleMuted={() => mutedPeers.toggleMute(id)}
+											isMuted={mutedPeers.mutedUsers[id] || false}
+										/>
+										<Text style={{ color: generateHexColorFromString(id) }}>
+											{name}
+										</Text>
+									</Box>
+									<Text size="small" style={{ color: "grey" }}>
+										{funAnimalName(id)}
+									</Text>
+								</div>
 							)}
+						</InfiniteScroll>
+					) : (
+						<>
+							<Text size="medium">Waiting...</Text>
+							<Text color="red" size="small">
+								[invite another person to unlock the UI]
+							</Text>
+						</>
+					)}
 				</Box>
 			</Nav>
 		</Sidebar>

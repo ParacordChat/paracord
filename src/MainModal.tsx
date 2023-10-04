@@ -1,5 +1,5 @@
 import * as Tabs from "@radix-ui/react-tabs";
-import { Box, Button, Footer } from "grommet";
+import { Box, Button } from "grommet";
 import { Chat, Download, Phone } from "grommet-icons";
 import { useEffect, useState } from "preact/hooks";
 import { Room } from "trystero";
@@ -52,8 +52,42 @@ const MainModal = ({ roomId, room }: { roomId: string; room: Room }) => {
 
 	return (
 		<>
-			<RoomCard roomId={roomId} />
 			<Tabs.Root defaultValue="tab1">
+				<RoomCard roomId={roomId}>
+					<Tabs.List aria-label="tabs">
+						<Tabs.Trigger
+							style={{
+								background: "transparent",
+								border: "none"
+							}}
+							value="tab1"
+							title="Chat"
+						>
+							<Button primary icon={<Chat />} />
+						</Tabs.Trigger>
+						<Tabs.Trigger
+							style={{
+								background: "transparent",
+								border: "none"
+							}}
+							value="tab2"
+							title="Downloads"
+						>
+							<Button primary background="brand" icon={<Download />} />
+						</Tabs.Trigger>
+
+						<Tabs.Trigger
+							style={{
+								background: "transparent",
+								border: "none"
+							}}
+							value="tab3"
+							title="Call"
+						>
+							<Button primary background="brand" icon={<Phone />} />
+						</Tabs.Trigger>
+					</Tabs.List>
+				</RoomCard>
 				<Box direction="row">
 					<Box fill={true}>
 						<Tabs.Content value="tab1">
@@ -68,51 +102,6 @@ const MainModal = ({ roomId, room }: { roomId: string; room: Room }) => {
 					</Box>
 					<UserView roomId={roomId} userManagerInstance={userManagerInstance} />
 				</Box>
-				<Footer
-					style={{
-						paddingTop: "0",
-						paddingBottom: "0",
-						justifyContent: "center"
-					}}
-					align="center"
-					direction="row"
-					background="accent-1"
-					pad="medium"
-				>
-					<Tabs.List aria-label="tabs">
-						<Tabs.Trigger
-							style={{
-								padding: "0.5em",
-								margin: "0.5em"
-							}}
-							value="tab1"
-							title="Chat"
-						>
-							<Button primary icon={<Chat />} />
-						</Tabs.Trigger>
-						<Tabs.Trigger
-							style={{
-								padding: "0.5em",
-								margin: "0.5em"
-							}}
-							value="tab2"
-							title="Downloads"
-						>
-							<Button primary background="brand" icon={<Download />} />
-						</Tabs.Trigger>
-
-						<Tabs.Trigger
-							style={{
-								padding: "0.5em",
-								margin: "0.5em"
-							}}
-							value="tab3"
-							title="Call"
-						>
-							<Button primary background="brand" icon={<Phone />} />
-						</Tabs.Trigger>
-					</Tabs.List>
-				</Footer>
 			</Tabs.Root>
 		</>
 	);

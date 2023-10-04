@@ -32,7 +32,7 @@ export default function Messages() {
 				overflowX: "auto",
 				overflowY: "scroll",
 				// overflow: "auto",
-				height: "36em"
+				height: "30em"
 			}}
 		>
 			<InfiniteScroll
@@ -47,7 +47,7 @@ export default function Messages() {
 								? yourName
 								: useUserStore((state) =>
 									state.users.find((user) => user.id === message.sentBy)
-								)?.name || message.sentBy
+								  )?.name || message.sentBy
 						}
 						isLast={index === messageQueue.length - 1}
 					/>

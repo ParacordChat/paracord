@@ -3,8 +3,8 @@ import { CaretLeftFill, Copy } from "grommet-icons";
 import { route } from "preact-router";
 import pcdLogo from "/logo.svg";
 
-export function RoomCard(props: { roomId: string }) {
-	const { roomId } = props;
+export function RoomCard(props: { roomId: string; children?: any }) {
+	const { roomId, children } = props;
 	return (
 		<Header background="brand" pad="medium">
 			<Box
@@ -37,6 +37,7 @@ export function RoomCard(props: { roomId: string }) {
 					</Box>
 				</Box>
 			</Box>
+			{children}
 			<Button
 				style={{ marginLeft: "auto" }}
 				onClick={() => {

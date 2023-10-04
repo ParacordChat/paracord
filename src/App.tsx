@@ -1,16 +1,26 @@
-import { Image, PageHeader, Text } from "grommet";
+import { Box, Button, Image, PageHeader, Text } from "grommet";
 import AsyncRoute from "preact-async-route";
-import { Router } from "preact-router";
+import { route, Route, Router } from "preact-router";
 import { isRtcSupported } from "./helpers/helpers";
 import pcdLogo from "/logo.svg";
 
 const RTCSupport = isRtcSupported();
+
+const Component404 = () => (
+	<Box direction="column">
+		<Text size="xlarge">404</Text>
+		<Text size="medium">Page not found</Text>
+		<Button label="Go home" onClick={() => route("/", true)} />
+	</Box>
+);
 
 function App() {
 	return (
 		<>
 			{RTCSupport ? (
 				<Router>
+					<Route path="*" component={Component404} />
+					<Route path="/404" component={Component404} />
 					<AsyncRoute
 						path={`/`}
 						getComponent={() =>
@@ -31,6 +41,8 @@ function App() {
 								if (cleanUrl.length < 2) alert("Invalid URL");
 								const roomId = cleanUrl[1].trim();
 								const password = cleanUrl[2]?.trim();
+								if (password !== undefined && password !== "a")
+									route("/404", true);
 
 								return module.default(roomId, password === "a");
 							})

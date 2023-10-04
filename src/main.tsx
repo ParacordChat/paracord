@@ -6,6 +6,12 @@ import "./assets/globals.css";
 
 const theme = {
 	global: {
+		control: {
+			border: {
+				color: "brand",
+				radius: "20px"
+			}
+		},
 		font: {
 			face: {
 				fontFamily: "lucidatypewriter, monospace"

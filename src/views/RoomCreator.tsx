@@ -25,6 +25,7 @@ export function RoomCreator() {
 			<Page kind="narrow">
 				<PageHeader
 					title="Paracord"
+					pad="medium"
 					subtitle="There in seconds, gone in seconds. Always yours."
 					// parent={<Anchor label="Parent Page" />}
 					actions={<Image style={{ height: "5em" }} src={pcdLogo} />}
@@ -37,6 +38,7 @@ export function RoomCreator() {
 					>
 						<Box direction="row">
 							<TextInput
+								border={{ color: "brand", size: "small" }}
 								ref={roomRef}
 								name="userInput"
 								autoComplete="off"
@@ -65,6 +67,7 @@ export function RoomCreator() {
 								pad="small"
 								checked={usePassword}
 								label="Use Password?"
+								color="brand"
 								onChange={(event: {
 									target: {
 										checked: boolean | ((prevState: boolean) => boolean);
@@ -84,7 +87,11 @@ export function RoomCreator() {
 						/>
 					</Box>
 				</Main>
-				<Footer background="brand" pad="medium">
+				<Footer
+					background="brand"
+					pad="medium"
+					style={{ position: "absolute", bottom: 0, width: "100%" }}
+				>
 					<Text>Copyright 2023 ParaCord</Text>
 					<Anchor
 						label="About"

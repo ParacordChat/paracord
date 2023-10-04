@@ -41,8 +41,7 @@ function App() {
 								if (cleanUrl.length < 2) alert("Invalid URL");
 								const roomId = cleanUrl[1].trim();
 								const password = cleanUrl[2]?.trim();
-								if (password !== undefined && password !== "a")
-									route("/404", true);
+								if (password && password !== "a") route("/404", true);
 
 								return module.default(roomId, password === "a");
 							})

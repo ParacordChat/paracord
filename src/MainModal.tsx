@@ -1,6 +1,6 @@
 import * as Tabs from "@radix-ui/react-tabs";
 import { Box, Button } from "grommet";
-import { Chat, Download, Phone } from "grommet-icons";
+import { Chat, Download, Phone, SettingsOption } from "grommet-icons";
 import { useEffect, useState } from "preact/hooks";
 import { Room } from "trystero";
 import RTCManager from "./TrysteroManagers/RTCManager";
@@ -11,6 +11,7 @@ import { CallView } from "./views/CallView";
 import { ChatView } from "./views/ChatView";
 import { DownloadView } from "./views/DownloadView";
 import { RoomCard } from "./views/RoomCard";
+import { SettingsView } from "./views/SettingsView";
 import { UserView } from "./views/UserView";
 
 const MainModal = ({ roomId, room }: { roomId: string; room: Room }) => {
@@ -86,6 +87,16 @@ const MainModal = ({ roomId, room }: { roomId: string; room: Room }) => {
 						>
 							<Button primary background="brand" icon={<Phone />} />
 						</Tabs.Trigger>
+						<Tabs.Trigger
+							style={{
+								background: "transparent",
+								border: "none"
+							}}
+							value="tab4"
+							title="Chat"
+						>
+							<Button primary icon={<SettingsOption />} />
+						</Tabs.Trigger>
 					</Tabs.List>
 				</RoomCard>
 				<Box direction="row">
@@ -98,6 +109,9 @@ const MainModal = ({ roomId, room }: { roomId: string; room: Room }) => {
 						</Tabs.Content>
 						<Tabs.Content value="tab3">
 							<CallView rtcManagerInstance={rtcManagerInstance} />
+						</Tabs.Content>
+						<Tabs.Content value="tab4">
+							<SettingsView />
 						</Tabs.Content>
 					</Box>
 					<UserView roomId={roomId} userManagerInstance={userManagerInstance} />

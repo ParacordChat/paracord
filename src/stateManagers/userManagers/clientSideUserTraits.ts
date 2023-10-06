@@ -3,6 +3,8 @@ import { create } from "zustand";
 interface ClientSideUserTraitsStore {
 	roomPassword: string | undefined;
 	setPassword: (password: string) => void;
+	disappearingMessagesLength: number;
+	setDisappearingMessagesLength: (length: number) => void;
 	mutedUsers: { [userId: string]: boolean };
 	toggleMute: (userId: string) => void;
 	addUser: (userId: string) => void;
@@ -16,6 +18,9 @@ export const useClientSideUserTraits = create<ClientSideUserTraitsStore>(
 	(set, get) => ({
 		roomPassword: undefined,
 		setPassword: (password: string) => set({ roomPassword: password }),
+		disappearingMessagesLength: 1000,
+		setDisappearingMessagesLength: (length: number) =>
+			set({ disappearingMessagesLength: length }),
 		mutedUsers: {},
 		toggleMute: (userId: string) =>
 			set((state) => ({

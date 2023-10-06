@@ -36,8 +36,10 @@ export default class ChatManager {
 					recievedAt: Date.now(),
 					roomId: chatData.roomId
 				};
+				const maxLen =
+					useClientSideUserTraits.getState().disappearingMessagesLength;
 				useMessageStore.getState()
-					.addMessage(newMessage);
+					.addMessage(newMessage, maxLen);
 			}
 		});
 
@@ -69,8 +71,10 @@ export default class ChatManager {
 		this.sendTypingIndicator(false);
 		this.sendChatAction(newMessage, users);
 
+		const maxLen =
+			useClientSideUserTraits.getState().disappearingMessagesLength;
 		useMessageStore.getState()
-			.addMessage(newMessage);
+			.addMessage(newMessage, maxLen);
 	};
 
 	sendTypingIndicator = (isTyping: boolean) => {

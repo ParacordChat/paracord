@@ -104,7 +104,6 @@ export default class DownloadManager {
 		});
 
 		getFileOffer(async (data, id) => {
-			console.log("got file offer", data, id);
 			if (useClientSideUserTraits.getState().mutedUsers[id] !== true) {
 				useOfferStore.getState()
 					.updateOrAddRequestable(id, data);
@@ -134,7 +133,6 @@ export default class DownloadManager {
 	};
 
 	public offerRequestableFiles = async (id?: string | string[]) => {
-		console.log("offering files", id);
 		const realFiles = useRealFiles.getState().realFiles;
 		if (!realFiles || Object.keys(realFiles).length === 0) return;
 		const files: FileOffer[] = Object.entries(realFiles)

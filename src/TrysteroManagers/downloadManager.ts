@@ -71,8 +71,14 @@ export default class DownloadManager {
 							size: currentFile.size
 						},
 						(progress, _fromUser) => {
-							useProgressStore.getState()
-								.updateProgress(fileId, { progress });
+							if (progress === 1) {
+								useProgressStore.getState()
+									.deleteProgress(fileId);
+							} else {
+								useProgressStore
+									.getState()
+									.updateProgress(fileId, { progress });
+							}
 						}
 					);
 				};

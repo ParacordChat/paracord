@@ -155,8 +155,12 @@ export function DownloadView(props: {
 								>
 									<Text size="medium" color="brand">
 										{status.toUser === selfId
-											? ` ← ${status.name}`
-											: `${status.name} →`}
+											? ` ← ${status.name} (${Math.trunc(
+												status.progress * 100
+											  )}%)`
+											: `(${Math.trunc(status.progress * 100)}%) ${
+												status.name
+											  } →`}
 									</Text>
 									<Meter
 										values={[

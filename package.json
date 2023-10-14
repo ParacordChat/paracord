@@ -23,6 +23,7 @@
 		"grommet-icons": "^4.11.0",
 		"idb": "^7.1.1",
 		"kyber-crystals": "^1.0.7",
+		"native-file-system-adapter": "^3.0.0",
 		"polished": "^4.2.2",
 		"pqc-kyber": "^0.6.0",
 		"preact": "^10.13.1",

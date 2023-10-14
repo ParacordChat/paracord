@@ -2,9 +2,11 @@ import { Keys } from "pqc-kyber";
 
 export type FileMetaData = {
 	id: string;
-	owner?: string;
+	uuid: string;
+	chunkN: number;
 	name: string;
 	size: number;
+	last: boolean;
 };
 
 export interface User {
@@ -32,8 +34,14 @@ export interface FileOffer {
 	ownerId: string;
 }
 
+export interface FileRequest {
+	id: string;
+	uuid: string;
+}
+
 export interface FileProgress {
 	id: string;
+	uuid: string;
 	name: string;
 	progress: number;
 	toUser: string; // id of user

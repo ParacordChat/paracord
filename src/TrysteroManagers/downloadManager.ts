@@ -1,16 +1,32 @@
 import { funAnimalName } from "fun-animal-names";
+import { showSaveFilePicker } from "native-file-system-adapter";
+import shortid from "shortid";
 import { Room, selfId } from "trystero";
 import { confirmDialog, sendSystemMessage } from "../helpers/helpers";
-import { FileMetaData, FileOffer } from "../helpers/types";
+import { FileMetaData, FileOffer, FileRequest } from "../helpers/types";
 import { useProgressStore } from "../stateManagers/downloadManagers/progressManager";
 import { useRealFiles } from "../stateManagers/downloadManagers/realFileManager";
 import { useOfferStore } from "../stateManagers/downloadManagers/requestManager";
 import { useClientSideUserTraits } from "../stateManagers/userManagers/clientSideUserTraits";
 import { useUserStore } from "../stateManagers/userManagers/userStore";
 
+const chunkSize = 1_000_000 * 20; // 20MB
+
+const readFileChunk = (data: File, chunkN: number) =>
+	new Promise<Uint8Array>((res, rej) => {
+		const dataStart = chunkN * chunkSize;
+		const dataEnd = (chunkN + 1) * chunkSize;
+
+		data
+			.slice(dataStart, dataEnd)
+			.arrayBuffer()
+			.then((buffer: ArrayBuffer) => res(new Uint8Array(buffer)))
+			.catch((error: Error) => rej(error));
+	});
+
 export default class DownloadManager {
 	private sendFileRequest: (
-		id: string,
+		id: FileRequest,
 		ids?: string | string[]
 	) => Promise<any[]>;
 	private sendFileOffer: (
@@ -19,11 +35,9 @@ export default class DownloadManager {
 	) => Promise<any[]>;
 
 	constructor({ room, roomId }: { room: Room; roomId: string }) {
-		const [sendFile, getFile, onFileProgress] = room.makeAction<File>(
-			"transfer",
-			true
-		);
-		const [sendFileRequest, getFileRequest] = room.makeAction<string>(
+		const [sendFileChunk, getFileChunk, onFileProgress] =
+			room.makeAction<Uint8Array>("transfer", true);
+		const [sendFileRequest, getFileRequest] = room.makeAction<FileRequest>(
 			"fileRequest",
 			true
 		);
@@ -40,52 +54,59 @@ export default class DownloadManager {
 			}
 		});
 
-		onFileProgress((progress, _id, metadata) => {
-			const processedMeta = metadata as FileMetaData;
-			processedMeta.id &&
-				useProgressStore
-					.getState()
-					.updateProgress(processedMeta.id, { progress });
-		});
-
-		getFileRequest((fileId, userId) => {
+		getFileRequest((fileReq, userId) => {
 			const realFiles = useRealFiles.getState().realFiles;
 			const mutedUsers = useClientSideUserTraits.getState().mutedUsers;
-			if (realFiles && fileId in realFiles && mutedUsers[userId] !== true) {
-				const sendAction = () => {
-					const currentFile = realFiles[fileId];
+			if (realFiles && fileReq.id in realFiles && mutedUsers[userId] !== true) {
+				const sendAction = async () => {
+					const currentFile = realFiles[fileReq.id];
 
 					useProgressStore.getState()
 						.addProgress({
-							id: fileId,
+							id: fileReq.id,
+							uuid: fileReq.uuid,
 							name: currentFile.name,
 							progress: 0,
 							toUser: userId
 						});
-					sendFile(
-						currentFile,
-						userId,
-						{
-							id: fileId,
-							name: currentFile.name,
-							size: currentFile.size
-						},
-						(progress, _fromUser) => {
-							if (progress === 1) {
-								useProgressStore.getState()
-									.deleteProgress(fileId);
-							} else {
-								useProgressStore
-									.getState()
-									.updateProgress(fileId, { progress });
-							}
-						}
-					);
+
+					const totalChunks = Math.ceil(currentFile.size / chunkSize);
+					for (let i = 0; i < totalChunks; i++) {
+						await readFileChunk(currentFile, i)
+							.then((chunk) =>
+								sendFileChunk(
+									chunk,
+									userId,
+									{
+										id: fileReq.id,
+										uuid: fileReq.uuid,
+										chunkN: i,
+										name: currentFile.name,
+										size: currentFile.size,
+										last: i === totalChunks - 1
+									},
+									(chkProgress: number, _fromUser: any) => {
+										const progress =
+										((i + chkProgress) * chunkSize) / currentFile.size;
+										if (progress > 1) {
+											useProgressStore.getState()
+												.deleteProgress(fileReq.uuid);
+										} else {
+											useProgressStore
+												.getState()
+												.updateProgress(fileReq.uuid, { progress });
+										}
+									}
+								)
+							);
+					}
 				};
 				if (
 					useProgressStore
 						.getState()
-						.progressQueue.some((p) => p.id === fileId && p.toUser === userId)
+						.progressQueue.some(
+							(p) => p.id === fileReq.id && p.toUser === userId
+						)
 				) {
 					confirmDialog(
 						`file already being sent, you can click ok to send it again, or mute the user with id ${funAnimalName(
@@ -103,10 +124,30 @@ export default class DownloadManager {
 			}
 		});
 
-		getFile((_success, _id, metadata) => {
+		onFileProgress((rawProgress, _id, metadata) => {
 			const processedMeta = metadata as FileMetaData;
-			useProgressStore.getState()
-				.deleteProgress(processedMeta.id);
+			const progress =
+				((processedMeta.chunkN + rawProgress) * chunkSize) / processedMeta.size;
+
+			processedMeta.uuid &&
+				useProgressStore
+					.getState()
+					.updateProgress(processedMeta.uuid, { progress });
+			if (processedMeta.last && progress > 1) {
+				useProgressStore.getState()
+					.deleteProgress(processedMeta.uuid);
+			}
+		});
+
+		getFileChunk(async (fileReceipt, _id, metadata) => {
+			const processedMeta = metadata as FileMetaData;
+			const fwrt =
+				useProgressStore.getState().writablesQueue[processedMeta.uuid];
+			if (fwrt) await fwrt.write(fileReceipt);
+			if (processedMeta.last) {
+				useProgressStore.getState()
+					.removeWritable(processedMeta.uuid);
+			}
 		});
 
 		getFileOffer(async (data, id) => {
@@ -125,14 +166,36 @@ export default class DownloadManager {
 		const findName =
 			requestableFiles && requestableFiles.find((f) => f.id === fileId);
 		if (findName) {
-			useProgressStore.getState()
-				.addProgress({
-					id: findName.id,
-					name: findName.name,
-					progress: 0,
-					toUser: selfId
-				});
-			this.sendFileRequest(fileId, fromUser);
+			const fileUUID = shortid.generate();
+			await showSaveFilePicker({
+				suggestedName: findName.name,
+				excludeAcceptAllOption: false // default
+			})
+				.then(async (fileHandle) => {
+					useProgressStore.getState()
+						.addProgress({
+							id: findName.id,
+							uuid: fileUUID,
+							name: findName.name,
+							progress: 0,
+							toUser: selfId
+						});
+					return fileHandle;
+				})
+				.then((fileHandle) => fileHandle.createWritable())
+				.then((fileWriter) =>
+					useProgressStore.getState()
+						.addWritable(fileUUID, fileWriter)
+				)
+				.then(() =>
+					this.sendFileRequest(
+						{
+							id: findName.id,
+							uuid: fileUUID
+						},
+						fromUser
+					)
+				);
 		} else {
 			alert("file not found!");
 		}

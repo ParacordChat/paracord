@@ -1,5 +1,8 @@
-import { BaseRoomConfig, TorrentRoomConfig } from "trystero";
-// import { FirebaseRoomConfig, Room, joinFirebaseRoom as joinRoom } from "trystero";
+import {
+	BaseRoomConfig,
+	FirebaseRoomConfig,
+	TorrentRoomConfig
+} from "trystero";
 
 export const tradeName = "paracord_chat";
 
@@ -29,6 +32,6 @@ export const defaultRoomConfig: BaseRoomConfig & TorrentRoomConfig = {
 	}
 };
 
-// const defaultRoomConfig: FirebaseRoomConfig = {
-//   appId: "paracordserver-default-rtdb",
-// };
+export const firebaseRoomConfig: FirebaseRoomConfig = {
+	appId: "paracord-d5594-default-rtdb"
+};

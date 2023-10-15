@@ -3,10 +3,10 @@
 import { Box, Button, Text, TextInput } from "grommet";
 import { FormView, FormViewHide, Key } from "grommet-icons";
 import { useEffect, useRef, useState } from "preact/hooks";
-import { joinRoom, Room } from "trystero";
+import { joinFirebaseRoom, Room } from "trystero";
 import MainModal from "../MainModal";
 import { encryptDecrypt } from "../helpers/cryptoSuite";
-import { defaultRoomConfig } from "../helpers/roomConfig";
+import { firebaseRoomConfig } from "../helpers/roomConfig";
 import GenericHeader from "./helpers/GenericHeader";
 
 const PasswordModal = (roomId: string, hasPassword: boolean) => () => {
@@ -16,9 +16,10 @@ const PasswordModal = (roomId: string, hasPassword: boolean) => () => {
 
 	const roomSet = async (password = "") => {
 		if (!currentRoom) {
-			const room = await joinRoom(
+			const room = await joinFirebaseRoom(
 				{
-					...defaultRoomConfig,
+					// ...defaultRoomConfig,
+					...firebaseRoomConfig,
 					password: password === "" ? undefined : password,
 					encryptDecrypt
 				},

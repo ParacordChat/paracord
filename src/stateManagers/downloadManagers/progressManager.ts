@@ -36,7 +36,6 @@ export const useProgressStore = create<ProgressStore>((set) => ({
 	addWritable: (uuid: string, writable: FileSystemWritableFileStream) =>
 		set((state) => {
 			state.writablesQueue[uuid] = writable;
-			console.log("addedwrt", uuid, writable);
 			return { writablesQueue: state.writablesQueue };
 		}),
 	removeWritable: (fid: string) => {

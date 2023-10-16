@@ -71,7 +71,7 @@ export function RoomCreator() {
 				pad="medium"
 				style={{ position: "absolute", bottom: 0, width: "100%" }}
 			>
-				<Text>Copyright 2023 ParaCord</Text>
+				<Text>Copyright 2023 Paracord</Text>
 				<Anchor
 					label="About"
 					onClick={() => {

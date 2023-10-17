@@ -7,7 +7,7 @@ import { ExtendedInstance, Room } from "./types";
 const charSet =
 	"0123456789AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz";
 
-export const libName = "Distra";
+export const libName = "distra";
 
 export const { keys, values, entries, fromEntries } = Object;
 

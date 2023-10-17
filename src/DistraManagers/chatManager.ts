@@ -55,7 +55,7 @@ export default class ChatManager {
 		if (message.trim() === "" || this.roomId.trim() === "") return;
 		const newMessage: Message = {
 			sentBy: selfId,
-			id: uuidSource.new(),
+			id: uuidSource(),
 			text: message,
 			sentAt: Date.now(),
 			recievedAt: Date.now(),

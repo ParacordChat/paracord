@@ -169,7 +169,7 @@ export default class DownloadManager {
 		const findName =
 			requestableFiles && requestableFiles.find((f) => f.id === fileId);
 		if (findName) {
-			const fileUUID = uuidSource.new();
+			const fileUUID = uuidSource();
 			await showSaveFilePicker({
 				suggestedName: findName.name,
 				excludeAcceptAllOption: false // default

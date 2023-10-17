@@ -16,7 +16,7 @@ export const useRealFiles = create<RealFileStore>((set) => ({
 				...(() => {
 					const newFiles: { [key: string]: File } = {};
 					for (const file of files) {
-						newFiles[uuidSource.new()] = file;
+						newFiles[uuidSource()] = file;
 					}
 					return newFiles;
 				})()

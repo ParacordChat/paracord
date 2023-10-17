@@ -39,7 +39,7 @@ export function RoomCreator() {
 					<Button
 						icon={<Risk />}
 						onClick={() =>
-							roomRef.current && (roomRef.current.value = uuidSource.new())
+							roomRef.current && (roomRef.current.value = uuidSource())
 						}
 						label="Random"
 					/>

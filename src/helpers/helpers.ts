@@ -5,7 +5,9 @@ import { useMessageStore } from "../stateManagers/messageStore";
 import short from "short-uuid";
 
 // flickr base58 style short uuid
-export const uuidSource = short();
+const uuidGen = short();
+export const uuidSource = ()=>uuidGen.new()
+	.slice(0, 6);
 
 export function useExtendedState<T>(initialState: T) {
 	const [state, setState] = useState<T>(initialState);
@@ -41,7 +43,7 @@ export const isRtcSupported = () => {
 export const sendSystemMessage = (roomId: string, text: string) =>
 	useMessageStore.getState()
 		.addMessage({
-			id: uuidSource.new(),
+			id: uuidSource(),
 			text,
 			sentAt: Date.now(),
 			roomId,

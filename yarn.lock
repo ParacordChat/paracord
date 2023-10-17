@@ -7402,7 +7402,7 @@ __metadata:
     react-drag-drop-files: ^2.3.10
     short-uuid: ^4.2.2
     styled-components: 5.3.11
-    trystero: "file:./trystero#./trystero::hash=0ddd38&locator=paracord%40workspace%3A."
+    trystero: "file:./trystero#./trystero::hash=c3e533&locator=paracord%40workspace%3A."
     typescript: ^5.2.2
     vite: ^4.4.11
     vite-plugin-pwa: ^0.16.5
@@ -8737,14 +8737,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"trystero@file:./trystero#./trystero::hash=0ddd38&locator=paracord%40workspace%3A.":
+"trystero@file:./trystero#./trystero::hash=c3e533&locator=paracord%40workspace%3A.":
   version: 0.12.1
-  resolution: "trystero@file:./trystero#./trystero::hash=0ddd38&locator=paracord%40workspace%3A."
+  resolution: "trystero@file:./trystero#./trystero::hash=c3e533&locator=paracord%40workspace%3A."
   dependencies:
     firebase: ^10.5.0
     simple-peer: ^9.11.1
     simple-peer-light: ^9.10.0
-  checksum: dd7bf1f8e3aa3191dbc95fb66c7f0c3d45119fc39c4795c2435efdbd5ce8f651855146855a164cfd243a6e3778903917f60c9e6e3cd79cb1327268501d496230
+  checksum: 0d9056963c5a629928180c16219d36b50cabf2ace18b2e017af32fa8c191f916ba8b453c079831c5cfb9f8bee0de90a8aec42ddccd32d0b97ac6ba8df17860e3
   languageName: node
   linkType: hard
 

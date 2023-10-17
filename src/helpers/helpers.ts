@@ -1,7 +1,11 @@
 import { funAnimalName } from "fun-animal-names";
 import { useState } from "preact/hooks";
-import shortid from "shortid";
 import { useMessageStore } from "../stateManagers/messageStore";
+
+import short from "short-uuid";
+
+// flickr base58 style short uuid
+export const uuidSource = short();
 
 export function useExtendedState<T>(initialState: T) {
 	const [state, setState] = useState<T>(initialState);
@@ -37,7 +41,7 @@ export const isRtcSupported = () => {
 export const sendSystemMessage = (roomId: string, text: string) =>
 	useMessageStore.getState()
 		.addMessage({
-			id: shortid.generate(),
+			id: uuidSource.new(),
 			text,
 			sentAt: Date.now(),
 			roomId,

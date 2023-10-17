@@ -28,3 +28,8 @@ dist-ssr
 /playwright/.cache/
 
 todo.md
+
+# yarn berry
+.yarn/*
+!.yarn/releases
+!.yarn/plugins

@@ -1,5 +1,5 @@
-import shortid from "shortid";
 import { create } from "zustand";
+import { uuidSource } from "../../helpers/helpers";
 
 interface RealFileStore {
 	realFiles: { [key: string]: File };
@@ -16,7 +16,7 @@ export const useRealFiles = create<RealFileStore>((set) => ({
 				...(() => {
 					const newFiles: { [key: string]: File } = {};
 					for (const file of files) {
-						newFiles[shortid.generate()] = file;
+						newFiles[uuidSource.new()] = file;
 					}
 					return newFiles;
 				})()

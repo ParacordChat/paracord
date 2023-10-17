@@ -1,8 +1,11 @@
 import { funAnimalName } from "fun-animal-names";
 import { showSaveFilePicker } from "native-file-system-adapter";
-import shortid from "shortid";
 import { Room, selfId } from "trystero";
-import { confirmDialog, sendSystemMessage } from "../helpers/helpers";
+import {
+	confirmDialog,
+	sendSystemMessage,
+	uuidSource
+} from "../helpers/helpers";
 import { FileMetaData, FileOffer, FileRequest } from "../helpers/types";
 import { useProgressStore } from "../stateManagers/downloadManagers/progressManager";
 import { useRealFiles } from "../stateManagers/downloadManagers/realFileManager";
@@ -166,7 +169,7 @@ export default class DownloadManager {
 		const findName =
 			requestableFiles && requestableFiles.find((f) => f.id === fileId);
 		if (findName) {
-			const fileUUID = shortid.generate();
+			const fileUUID = uuidSource.new();
 			await showSaveFilePicker({
 				suggestedName: findName.name,
 				excludeAcceptAllOption: false // default

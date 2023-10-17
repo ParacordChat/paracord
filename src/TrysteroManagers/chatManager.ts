@@ -1,5 +1,5 @@
-import shortid from "shortid";
 import { Room, selfId } from "trystero";
+import { uuidSource } from "../helpers/helpers";
 import { Message } from "../helpers/types";
 import { useMessageStore } from "../stateManagers/messageStore";
 import { useClientSideUserTraits } from "../stateManagers/userManagers/clientSideUserTraits";
@@ -55,7 +55,7 @@ export default class ChatManager {
 		if (message.trim() === "" || this.roomId.trim() === "") return;
 		const newMessage: Message = {
 			sentBy: selfId,
-			id: shortid.generate(),
+			id: uuidSource.new(),
 			text: message,
 			sentAt: Date.now(),
 			recievedAt: Date.now(),

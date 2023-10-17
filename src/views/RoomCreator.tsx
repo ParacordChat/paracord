@@ -10,7 +10,7 @@ import {
 import { Login, Risk } from "grommet-icons";
 import { route } from "preact-router";
 import { useRef, useState } from "preact/hooks";
-import shortid from "shortid";
+import { uuidSource } from "../helpers/helpers";
 import GenericHeader from "./helpers/GenericHeader";
 
 export function RoomCreator() {
@@ -39,7 +39,7 @@ export function RoomCreator() {
 					<Button
 						icon={<Risk />}
 						onClick={() =>
-							roomRef.current && (roomRef.current.value = shortid.generate())
+							roomRef.current && (roomRef.current.value = uuidSource.new())
 						}
 						label="Random"
 					/>

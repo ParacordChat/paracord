@@ -8741,12 +8741,12 @@ __metadata:
 
 "trystero@file:./trystero::locator=paracord%40workspace%3A.":
   version: 0.12.1
-  resolution: "trystero@file:./trystero#./trystero::hash=c3e533&locator=paracord%40workspace%3A."
+  resolution: "trystero@file:./trystero#./trystero::hash=335bcb&locator=paracord%40workspace%3A."
   dependencies:
     firebase: ^10.5.0
     simple-peer: ^9.11.1
     simple-peer-light: ^9.10.0
-  checksum: 0d9056963c5a629928180c16219d36b50cabf2ace18b2e017af32fa8c191f916ba8b453c079831c5cfb9f8bee0de90a8aec42ddccd32d0b97ac6ba8df17860e3
+  checksum: 1e0062f93924743c1958dd3c6573228a457cb3ebc84c77ff43d094616b00aa7a52171378b899e6a2468fdef8d8906815b31b3c0c1256b31b596b266d6ee398b7
   languageName: node
   linkType: hard
 

@@ -7402,7 +7402,7 @@ __metadata:
     react-drag-drop-files: ^2.3.10
     short-uuid: ^4.2.2
     styled-components: 5.3.11
-    trystero: "file:./trystero#./trystero::hash=c3e533&locator=paracord%40workspace%3A."
+    trystero: "file:./trystero"
     typescript: ^5.2.2
     vite: ^4.4.11
     vite-plugin-pwa: ^0.16.5
@@ -8737,7 +8737,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"trystero@file:./trystero#./trystero::hash=c3e533&locator=paracord%40workspace%3A.":
+"trystero@file:./trystero::locator=paracord%40workspace%3A.":
   version: 0.12.1
   resolution: "trystero@file:./trystero#./trystero::hash=c3e533&locator=paracord%40workspace%3A."
   dependencies:

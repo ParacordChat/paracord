@@ -5441,7 +5441,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"firebase@npm:^10.5.0":
+"firebase@npm:10.5.0":
   version: 10.5.0
   resolution: "firebase@npm:10.5.0"
   dependencies:
@@ -7387,6 +7387,7 @@ __metadata:
     eslint-plugin-react-hooks: ^4.6.0
     eslint-plugin-simple-import-sort: ^10.0.0
     eslint-plugin-unicorn: ^48.0.1
+    firebase: 10.5.0
     fun-animal-names: ^0.1.1
     grommet: ^2.33.2
     grommet-icons: ^4.11.0
@@ -7403,8 +7404,9 @@ __metadata:
     prettier: ^3.0.3
     react-drag-drop-files: ^2.3.10
     short-uuid: ^4.2.2
+    simple-peer: 9.11.1
+    simple-peer-light: 9.10.0
     styled-components: 5.3.11
-    trystero: "file:./trystero"
     typescript: ^5.2.2
     vite: ^4.4.11
     vite-plugin-pwa: ^0.16.5
@@ -8261,14 +8263,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"simple-peer-light@npm:^9.10.0":
+"simple-peer-light@npm:9.10.0":
   version: 9.10.0
   resolution: "simple-peer-light@npm:9.10.0"
   checksum: bf105ce2c268cee2ebc36a890f03eacc86d44557281b9a27ec5144f7d15c99c093ec6144cbbf828b6965c63ddd72624203503920428f7c2ae1fb7bf138c0ac5e
   languageName: node
   linkType: hard
 
-"simple-peer@npm:^9.11.1":
+"simple-peer@npm:9.11.1":
   version: 9.11.1
   resolution: "simple-peer@npm:9.11.1"
   dependencies:
@@ -8736,17 +8738,6 @@ __metadata:
   version: 0.0.3
   resolution: "tr46@npm:0.0.3"
   checksum: 726321c5eaf41b5002e17ffbd1fb7245999a073e8979085dacd47c4b4e8068ff5777142fc6726d6ca1fd2ff16921b48788b87225cbc57c72636f6efa8efbffe3
-  languageName: node
-  linkType: hard
-
-"trystero@file:./trystero::locator=paracord%40workspace%3A.":
-  version: 0.12.1
-  resolution: "trystero@file:./trystero#./trystero::hash=335bcb&locator=paracord%40workspace%3A."
-  dependencies:
-    firebase: ^10.5.0
-    simple-peer: ^9.11.1
-    simple-peer-light: ^9.10.0
-  checksum: 1e0062f93924743c1958dd3c6573228a457cb3ebc84c77ff43d094616b00aa7a52171378b899e6a2468fdef8d8906815b31b3c0c1256b31b596b266d6ee398b7
   languageName: node
   linkType: hard
 

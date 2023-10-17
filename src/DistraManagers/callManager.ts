@@ -1,4 +1,4 @@
-import { Room } from "trystero";
+import { Room } from "../Distra";
 import { useCallPrefsState } from "../stateManagers/RTCManagers/personalCallPrefs";
 
 type RoomActionType = "phone" | "video" | "screen" | "cutStream" | "view";

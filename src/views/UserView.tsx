@@ -1,7 +1,7 @@
 import { funAnimalName } from "fun-animal-names";
 import { Box, InfiniteScroll, Nav, Sidebar, Text, TextInput } from "grommet";
-import { selfId } from "trystero";
-import UserManager from "../TrysteroManagers/userManager";
+import { selfId } from "../Distra";
+import UserManager from "../DistraManagers/userManager";
 import { generateHexColorFromString } from "../helpers/helpers";
 import { useClientSideUserTraits } from "../stateManagers/userManagers/clientSideUserTraits";
 import { usePersonaStore } from "../stateManagers/userManagers/personaStore";

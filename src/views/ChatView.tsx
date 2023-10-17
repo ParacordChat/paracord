@@ -1,7 +1,7 @@
 import { Box, Button, Text, TextArea } from "grommet";
 import { FormDown, FormUp, Send } from "grommet-icons";
 import { useRef, useState } from "preact/hooks";
-import ChatManager from "../TrysteroManagers/chatManager";
+import ChatManager from "../DistraManagers/chatManager";
 import { useClientSideUserTraits } from "../stateManagers/userManagers/clientSideUserTraits";
 import { useUserStore } from "../stateManagers/userManagers/userStore";
 import Messages from "./messages";

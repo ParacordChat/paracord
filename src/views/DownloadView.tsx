@@ -1,8 +1,8 @@
 import { Box, Button, Meter, Text } from "grommet";
 import { FormClose } from "grommet-icons";
 import { FileUploader } from "react-drag-drop-files";
-import { selfId } from "trystero";
-import DownloadManager from "../TrysteroManagers/downloadManager";
+import { selfId } from "../Distra";
+import DownloadManager from "../DistraManagers/downloadManager";
 import { fancyBytes } from "../helpers/helpers";
 import { useProgressStore } from "../stateManagers/downloadManagers/progressManager";
 import { useRealFiles } from "../stateManagers/downloadManagers/realFileManager";

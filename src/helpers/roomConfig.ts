@@ -2,7 +2,7 @@ import {
 	BaseRoomConfig,
 	FirebaseRoomConfig,
 	TorrentRoomConfig
-} from "trystero";
+} from "../Distra";
 
 export const tradeName = "paracord_chat";
 

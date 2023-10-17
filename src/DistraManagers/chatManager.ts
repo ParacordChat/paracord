@@ -1,4 +1,4 @@
-import { Room, selfId } from "trystero";
+import { Room, selfId } from "../Distra";
 import { uuidSource } from "../helpers/helpers";
 import { Message } from "../helpers/types";
 import { useMessageStore } from "../stateManagers/messageStore";

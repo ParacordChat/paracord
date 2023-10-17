@@ -1,6 +1,6 @@
 import { funAnimalName } from "fun-animal-names";
 import { showSaveFilePicker } from "native-file-system-adapter";
-import { Room, selfId } from "trystero";
+import { Room, selfId } from "../Distra";
 import {
 	confirmDialog,
 	sendSystemMessage,

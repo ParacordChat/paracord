@@ -1,6 +1,6 @@
 import { funAnimalName } from "fun-animal-names";
-import { selfId } from "trystero";
 import { create } from "zustand";
+import { selfId } from "../../Distra";
 import { generateKeyPair } from "../../helpers/cryptoSuite";
 import { randomName } from "../../helpers/helpers";
 import { Persona } from "../../helpers/types";

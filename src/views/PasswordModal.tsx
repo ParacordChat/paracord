@@ -3,7 +3,7 @@
 import { Box, Button, Text, TextInput } from "grommet";
 import { FormView, FormViewHide, Key } from "grommet-icons";
 import { useEffect, useRef, useState } from "preact/hooks";
-import { joinFirebaseRoom, Room } from "trystero";
+import { Room, joinFirebaseRoom } from "../Distra";
 import MainModal from "../MainModal";
 import { encryptDecrypt } from "../helpers/cryptoSuite";
 import { firebaseRoomConfig } from "../helpers/roomConfig";

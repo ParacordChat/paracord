@@ -1,6 +1,6 @@
 import { funAnimalName } from "fun-animal-names";
 import * as kyber from "pqc-kyber";
-import { Room } from "trystero";
+import { Room } from "../Distra";
 import { sendSystemMessage } from "../helpers/helpers";
 import { useProgressStore } from "../stateManagers/downloadManagers/progressManager";
 import { useOfferStore } from "../stateManagers/downloadManagers/requestManager";

@@ -19,6 +19,7 @@
 		"curve25519-js": "^0.0.4",
 		"dayjs": "^1.11.10",
 		"dompurify": "^3.0.6",
+		"firebase": "10.5.0",
 		"fun-animal-names": "^0.1.1",
 		"grommet": "^2.33.2",
 		"grommet-icons": "^4.11.0",
@@ -32,8 +33,9 @@
 		"preact-router": "^4.1.2",
 		"react-drag-drop-files": "^2.3.10",
 		"short-uuid": "^4.2.2",
+		"simple-peer": "9.11.1",
+		"simple-peer-light": "9.10.0",
 		"styled-components": "5.3.11",
-		"trystero": "file:./trystero",
 		"webrtc-adapter": "^8.2.3",
 		"zustand": "^4.4.3"
 	},

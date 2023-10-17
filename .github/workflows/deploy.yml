@@ -39,8 +39,6 @@ jobs:
         run: git submodule update --init --recursive
       - name: install yarn
         run: npm install -g yarn
-      - name: install dependencies in trystero
-        run: cd trystero && yarn install --immutable && cd ..
       - name: Install dependencies with yarn
         run: yarn install --immutable
       - name: Build

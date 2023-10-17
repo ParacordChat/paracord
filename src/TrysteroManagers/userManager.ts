@@ -113,10 +113,14 @@ export default class UserManager {
 					this.sendName(activePersona.name, id);
 				}
 			} else {
-				if (activePersona.keyPair) {
-					await this.sendEncryptionInfo(activePersona.keyPair.pubkey);
+				if (useClientSideUserTraits.getState().roomPassword) {
+					if (activePersona.keyPair) {
+						await this.sendEncryptionInfo(activePersona.keyPair.pubkey);
+						this.sendName(activePersona.name);
+					}
+				} else {
+					this.sendName(activePersona.name);
 				}
-				this.sendName(activePersona.name);
 			}
 		}
 	};

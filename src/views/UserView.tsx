@@ -12,88 +12,88 @@ export function UserView(props: {
   roomId: string;
   userManagerInstance: UserManager;
 }) {
-  const { roomId, userManagerInstance } = props;
-  const activePersona = usePersonaStore((state) => state.persona);
-  const activePeers = useUserStore((state) => state.users);
-  const mutedPeers = useClientSideUserTraits();
-  return (
-    <Sidebar
-      border={{ color: "brand", size: "small" }}
-      round="small"
-      header={
-        <>
-          <Text
-            size="large"
-            style={{ color: generateHexColorFromString(selfId) }}
-          >
+	const { roomId, userManagerInstance } = props;
+	const activePersona = usePersonaStore((state) => state.persona);
+	const activePeers = useUserStore((state) => state.users);
+	const mutedPeers = useClientSideUserTraits();
+	return (
+		<Sidebar
+			border={{ color: "brand", size: "small" }}
+			round="small"
+			header={
+				<>
+					<Text
+						size="large"
+						style={{ color: generateHexColorFromString(selfId) }}
+					>
             You
-          </Text>
-          <TextInput
-            type="text"
-            value={activePersona?.name}
-            autocapitalize={"off"}
-            autoComplete={"off"}
-            style={{ width: "100%" }}
-            onBlur={(e: { currentTarget: { value: string } }) =>
-              e.currentTarget.value.trim() !== "" &&
+					</Text>
+					<TextInput
+						type="text"
+						value={activePersona?.name}
+						autocapitalize={"off"}
+						autoComplete={"off"}
+						style={{ width: "100%" }}
+						onBlur={(e: { currentTarget: { value: string } }) =>
+							e.currentTarget.value.trim() !== "" &&
               userManagerInstance.setMyName(e.currentTarget.value)
-            }
-          />
-          <Text size="small" style={{ color: "grey" }}>
-            {funAnimalName(selfId)}
-          </Text>
-          <hr />
-          <Text size="large">Peers</Text>
-        </>
-      }
-      // footer={
+						}
+					/>
+					<Text size="small" style={{ color: "grey" }}>
+						{funAnimalName(selfId)}
+					</Text>
+					<hr />
+					<Text size="large">Peers</Text>
+				</>
+			}
+			// footer={
 
-      // }
-    >
-      {/* TODO: download dialog, screen/video/audio share */}
-      <Nav gap="small">
-        <Box
-          pad="small"
-          style={{
-            whiteSpace: "pre-line",
-            // fill space with height
-            overflowX: "auto",
-            overflowY: "scroll",
-            // overflow: "auto",
-            height: "20em",
-          }}
-        >
-          {activePeers.length > 0 ? (
-            <InfiniteScroll
-              items={activePeers.filter((p) => p.roomId === roomId && p.active)}
-            >
-              {({ name, id }: { name: string; id: string }) => (
-                <div>
-                  <Box key={id} direction="row" gap="small">
-                    <MuteUserButton
-                      toggleMuted={() => mutedPeers.toggleMute(id)}
-                      isMuted={mutedPeers.mutedUsers[id] || false}
-                    />
-                    <Text style={{ color: generateHexColorFromString(id) }}>
-                      {name}
-                    </Text>
-                  </Box>
-                  <Text size="small" style={{ color: "grey" }}>
-                    {funAnimalName(id)}
-                  </Text>
-                </div>
-              )}
-            </InfiniteScroll>
-          ) : (
-            <>
-              <Text size="medium">Waiting...</Text>
-              <Text color="red" size="small">
+			// }
+		>
+			{/* TODO: download dialog, screen/video/audio share */}
+			<Nav gap="small">
+				<Box
+					pad="small"
+					style={{
+						whiteSpace: "pre-line",
+						// fill space with height
+						overflowX: "auto",
+						overflowY: "scroll",
+						// overflow: "auto",
+						height: "20em"
+					}}
+				>
+					{activePeers.length > 0 ? (
+						<InfiniteScroll
+							items={activePeers.filter((p) => p.roomId === roomId && p.active)}
+						>
+							{({ name, id }: { name: string; id: string }) => (
+								<div>
+									<Box key={id} direction="row" gap="small">
+										<MuteUserButton
+											toggleMuted={() => mutedPeers.toggleMute(id)}
+											isMuted={mutedPeers.mutedUsers[id] || false}
+										/>
+										<Text style={{ color: generateHexColorFromString(id) }}>
+											{name}
+										</Text>
+									</Box>
+									<Text size="small" style={{ color: "grey" }}>
+										{funAnimalName(id)}
+									</Text>
+								</div>
+							)}
+						</InfiniteScroll>
+					) : (
+						<>
+							<Text size="medium">Waiting...</Text>
+							<Text color="red" size="small">
                 [invite another person to unlock the UI]
-              </Text>
-            </>
-          )}
-        </Box>
-      </Nav>
-    </Sidebar>
-  );
+							</Text>
+						</>
+					)}
+				</Box>
+			</Nav>
+		</Sidebar>
+	);
 }

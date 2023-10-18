@@ -21,20 +21,20 @@ interface ClientSideUserTraitsStore {
 }
 
 export const useCallPrefsState = create<ClientSideUserTraitsStore>(
-  (set, get) => ({
-    isSharing: false,
-    setIsSharing: (isSharing) => set({ isSharing }),
-    videoBubbles: [],
-    addVideoBubble: (bubble) =>
-      set({ videoBubbles: [...get().videoBubbles, bubble] }),
-    removeBubbleWithId: (id) =>
-      set({
-        videoBubbles: get().videoBubbles.filter((bubble) => bubble.id !== id),
-      }),
-    clearVideoBubbles: () => set({ videoBubbles: [] }),
-    callConsent: false,
-    setCallConsent: (callConsent) => set({ callConsent }),
-    myStream: null,
-    setMyStream: (myStream) => set({ myStream }),
-  }),
+	(set, get) => ({
+		isSharing: false,
+		setIsSharing: (isSharing) => set({ isSharing }),
+		videoBubbles: [],
+		addVideoBubble: (bubble) =>
+			set({ videoBubbles: [...get().videoBubbles, bubble] }),
+		removeBubbleWithId: (id) =>
+			set({
+				videoBubbles: get().videoBubbles.filter((bubble) => bubble.id !== id)
+			}),
+		clearVideoBubbles: () => set({ videoBubbles: [] }),
+		callConsent: false,
+		setCallConsent: (callConsent) => set({ callConsent }),
+		myStream: null,
+		setMyStream: (myStream) => set({ myStream })
+	})
 );

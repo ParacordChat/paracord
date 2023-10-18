@@ -140,6 +140,7 @@ export default async (
 
 		peer.on(events.error, (e) => {
 			roomState.onPeerError(id, e);
+			exitPeer(id);
 			if (e.code === "ERR_DATA_CHANNEL") {
 				return;
 			}

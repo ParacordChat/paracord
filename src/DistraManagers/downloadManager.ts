@@ -29,17 +29,17 @@ const readFileChunk = (data: File, chunkN: number) =>
 
 export default class DownloadManager {
 	private sendFileRequest: (
-		id: FileRequest,
-		ids?: string | string[]
-	) => Promise<any[]>;
+    id: FileRequest,
+    ids?: string | string[]
+  ) => Promise<any[]>;
 	private sendFileOffer: (
-		files: FileOffer[],
-		ids?: string | string[]
-	) => Promise<any[]>;
+    files: FileOffer[],
+    ids?: string | string[]
+  ) => Promise<any[]>;
 
 	constructor({ room, roomId }: { room: Room; roomId: string }) {
 		const [sendFileChunk, getFileChunk, onFileProgress] =
-			room.makeAction<Uint8Array>("transfer", true);
+      room.makeAction<Uint8Array>("transfer", true);
 		const [sendFileRequest, getFileRequest] = room.makeAction<FileRequest>(
 			"fileRequest",
 			true
@@ -90,7 +90,7 @@ export default class DownloadManager {
 									},
 									(chkProgress: number, _fromUser: any) => {
 										const progress =
-										((i + chkProgress) * chunkSize) / currentFile.size;
+                    ((i + chkProgress) * chunkSize) / currentFile.size;
 										if (progress > 1) {
 											useProgressStore.getState()
 												.deleteProgress(fileReq.uuid);
@@ -130,12 +130,12 @@ export default class DownloadManager {
 		onFileProgress((rawProgress, _id, metadata) => {
 			const processedMeta = metadata as FileMetaData;
 			const progress =
-				((processedMeta.chunkN + rawProgress) * chunkSize) / processedMeta.size;
+        ((processedMeta.chunkN + rawProgress) * chunkSize) / processedMeta.size;
 
 			processedMeta.uuid &&
-				useProgressStore
-					.getState()
-					.updateProgress(processedMeta.uuid, { progress });
+        useProgressStore
+        	.getState()
+        	.updateProgress(processedMeta.uuid, { progress });
 			if (processedMeta.last && progress > 1) {
 				useProgressStore.getState()
 					.deleteProgress(processedMeta.uuid);
@@ -144,8 +144,9 @@ export default class DownloadManager {
 
 		getFileChunk(async (fileReceipt, _id, metadata) => {
 			const processedMeta = metadata as FileMetaData;
-			const fwrt =
-				useProgressStore.getState().writablesQueue[processedMeta.uuid];
+			const fwrt = useProgressStore
+				.getState()
+				.writablesQueue.find((w) => w.uuid === processedMeta.uuid)?.writable;
 			if (fwrt) await fwrt.write(fileReceipt);
 			if (processedMeta.last) {
 				useProgressStore.getState()
@@ -165,9 +166,9 @@ export default class DownloadManager {
 
 	public requestFile = async (fromUser: string, fileId: string) => {
 		const requestableFiles =
-			useOfferStore.getState().requestableDownloads[fromUser];
+      useOfferStore.getState().requestableDownloads[fromUser];
 		const findName =
-			requestableFiles && requestableFiles.find((f) => f.id === fileId);
+      requestableFiles && requestableFiles.find((f) => f.id === fileId);
 		if (findName) {
 			const fileUUID = uuidSource();
 			await showSaveFilePicker({
@@ -188,7 +189,11 @@ export default class DownloadManager {
 				.then((fileHandle) => fileHandle.createWritable())
 				.then((fileWriter) =>
 					useProgressStore.getState()
-						.addWritable(fileUUID, fileWriter)
+						.addWritable({  
+							fileId: findName.id,
+							uuid: fileUUID,
+							writable: fileWriter
+						})
 				)
 				.then(() =>
 					this.sendFileRequest(

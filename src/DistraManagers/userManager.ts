@@ -30,6 +30,11 @@ export default class UserManager {
 			}
 		});
 
+		room.onPeerError((id: string, error: Error) => {
+			console.log(id, "_",error);
+			// sendSystemMessage(roomId, `${id} left the room`);
+		});
+
 		room.onPeerLeave((id: string) => {
 			useUserStore.getState()
 				.updateUser(id, { active: false });
@@ -37,7 +42,7 @@ export default class UserManager {
 			const peerOffers = useOfferStore.getState().requestableDownloads[id];
 			peerOffers?.forEach((offer: { id: string }) =>
 				useProgressStore.getState()
-					.deleteProgress(offer.id)
+					.removeFile(offer.id)
 			);
 
 			useOfferStore.getState()

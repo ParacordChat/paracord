@@ -20,8 +20,8 @@ class MessagePortSource {
 	}
 
 	/**
-	 * @param {ReadableStreamController<any>} controller
-	 */
+   * @param {ReadableStreamController<any>} controller
+   */
 	start(controller) {
 		this.controller = controller;
 	}

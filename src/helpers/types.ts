@@ -1,53 +1,53 @@
 import { Keys } from "pqc-kyber";
 
 export type FileMetaData = {
-	id: string;
-	uuid: string;
-	chunkN: number;
-	name: string;
-	size: number;
-	last: boolean;
+  id: string;
+  uuid: string;
+  chunkN: number;
+  name: string;
+  size: number;
+  last: boolean;
 };
 
 export interface User {
-	id: string;
-	roomId: string;
-	active: boolean;
-	quantumSend?: Uint8Array;
-	quantumRecv?: Uint8Array;
-	name: string;
+  id: string;
+  roomId: string;
+  active: boolean;
+  quantumSend?: Uint8Array;
+  quantumRecv?: Uint8Array;
+  name: string;
 }
 
 export interface Message {
-	id: string;
-	text: string;
-	sentAt: number;
-	roomId: string;
-	sentBy: string;
-	recievedAt: number;
+  id: string;
+  text: string;
+  sentAt: number;
+  roomId: string;
+  sentBy: string;
+  recievedAt: number;
 }
 
 export interface FileOffer {
-	id: string;
-	name: string;
-	size: number;
-	ownerId: string;
+  id: string;
+  name: string;
+  size: number;
+  ownerId: string;
 }
 
 export interface FileRequest {
-	id: string;
-	uuid: string;
+  id: string;
+  uuid: string;
 }
 
 export interface FileProgress {
-	id: string;
-	uuid: string;
-	name: string;
-	progress: number;
-	toUser: string; // id of user
+  id: string;
+  uuid: string;
+  name: string;
+  progress: number;
+  toUser: string; // id of user
 }
 
 export interface Persona {
-	keyPair: Keys | undefined;
-	name: string;
+  keyPair: Keys | undefined;
+  name: string;
 }

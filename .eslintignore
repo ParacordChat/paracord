@@ -2,3 +2,6 @@
 dist
 playwright-report
 test-results
+package.json
+tsconfig.json
+sw-appended.js

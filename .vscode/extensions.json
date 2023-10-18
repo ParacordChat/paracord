@@ -1,6 +1,6 @@
 {
-	"recommendations": [
-		"rvest.vs-code-prettier-eslint",
-		"github.vscode-github-actions"
-	]
+  "recommendations": [
+    "dbaeumer.vscode-eslint",
+    "github.vscode-github-actions"
+  ]
 }

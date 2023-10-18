@@ -37,12 +37,12 @@ jobs:
           cache: "npm"
       - name: Install submodules
         run: git submodule update --init --recursive
-      - name: install yarn
-        run: npm install -g yarn
-      - name: Install dependencies with yarn
-        run: yarn install --immutable
+      - name: install pnpm
+        run: npm install -g pnpm
+      - name: Install dependencies with pnpm
+        run: pnpm i
       - name: Build
-        run: yarn build
+        run: pnpm build
       - name: Setup Pages
         uses: actions/configure-pages@v3
       - name: Upload artifact

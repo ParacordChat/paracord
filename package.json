@@ -4,6 +4,7 @@
   "version": "4.0.0",
   "type": "module",
   "scripts": {
+    "preinstall": "npx only-allow pnpm",
     "dev": "vite",
     "build": "tsc && vite build && cat sw-appended.js >> ./dist/sw.js",
     "preview": "vite preview",
@@ -63,5 +64,5 @@
     "vite-plugin-top-level-await": "^1.3.1",
     "vite-plugin-wasm": "^3.2.2"
   },
-  "packageManager": "yarn@3.6.4"
+  "packageManager": "pnpm@8.9.2"
 }

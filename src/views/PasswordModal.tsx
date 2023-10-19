@@ -17,7 +17,6 @@ const PasswordModal = (roomId: string, hasPassword: boolean) => () => {
 		if (!currentRoom) {
 			const room = await joinFirebaseRoom(
 				{
-					// ...defaultRoomConfig,
 					...firebaseRoomConfig,
 					password: password === "" ? undefined : password
 				},

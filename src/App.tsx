@@ -54,7 +54,7 @@ function App() {
 					<PageHeader
 						title="Paracord"
 						subtitle="Sorry, your browser is not supported"
-						parent={<Image src={pcdLogo} />}
+						parent={<Image alt="paracord logo" src={pcdLogo} />}
 						actions={
 							<Text size="small">
                 Paracord uses WebRTC to connect peers, and your browser does not

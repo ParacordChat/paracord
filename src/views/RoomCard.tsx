@@ -25,7 +25,7 @@ export function RoomCard(props: { roomId: string; children?: any }) {
 					icon={<CaretLeftFill />}
 				/>
 
-				<Image style={{ height: "4em" }} src={pcdLogo} />
+				<Image alt="paracord logo" style={{ height: "4em" }} src={pcdLogo} />
 				<Box style={{ width: "100%" }}>
 					<Text size="xxlarge">Paracord</Text>
 					<hr />

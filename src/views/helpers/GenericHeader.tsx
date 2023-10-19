@@ -10,7 +10,7 @@ export default function CollapsibleContainer(props: { children: any }) {
 				pad="medium"
 				subtitle="There in seconds, gone in seconds. Always yours."
 				// parent={<Anchor label="Parent Page" />}
-				actions={<Image style={{ height: "5em" }} src={pcdLogo} />}
+				actions={<Image alt="paracord logo" style={{ height: "5em" }} src={pcdLogo} />}
 			/>
 			<Main pad="large">
 				<Box

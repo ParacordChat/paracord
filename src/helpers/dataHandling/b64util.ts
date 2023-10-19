@@ -19,24 +19,6 @@
 // SOFTWARE.
 //
 
-//
-// // This constant can also be computed with the following algorithm:
-// const base64abc = [],
-// A = "A".charCodeAt(0),
-// a = "a".charCodeAt(0),
-// n = "0".charCodeAt(0);
-// for (let i = 0; i < 26; ++i) {
-// base64abc.push(String.fromCharCode(A + i));
-// }
-// for (let i = 0; i < 26; ++i) {
-// base64abc.push(String.fromCharCode(a + i));
-// }
-// for (let i = 0; i < 10; ++i) {
-// base64abc.push(String.fromCharCode(n + i));
-// }
-// base64abc.push("+");
-// base64abc.push("/");
-//
 const base64abc = [
 	"A",
 	"B",
@@ -301,12 +283,4 @@ export function base64ToBytes(str: string) {
 		result[j + 2] = buffer & 0xFF;
 	}
 	return result.subarray(0, result.length - missingOctets);
-}
-
-export function base64encode(str: string, encoder = new TextEncoder()) {
-	return bytesToBase64(encoder.encode(str));
-}
-
-export function base64decode(str: string, decoder = new TextDecoder()) {
-	return decoder.decode(base64ToBytes(str));
 }

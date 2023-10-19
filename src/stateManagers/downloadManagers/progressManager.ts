@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { FileProgress } from "../../helpers/types";
+import { FileProgress } from "../../helpers/types/types";
 
 export interface QueuedWritable {
   fileId: string;

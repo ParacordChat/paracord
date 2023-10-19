@@ -23,8 +23,19 @@ export function useExtendedState<T>(initialState: T) {
 }
 
 export const fancyBytes = (bytes: number) => {
-	const size = Math.floor(bytes / 1e6);
-	return size < 1 ? `${Math.floor(bytes / 1e3)}Kb` : `${size}Mb`;
+	if (bytes >= 1_073_741_824) {
+		return `${(bytes / 1_073_741_824).toFixed(2)  } GB`;
+	} else if (bytes >= 1_048_576) {
+		return `${(bytes / 1_048_576).toFixed(2)  } MB`;
+	} else if (bytes >= 1024) {
+		return `${(bytes / 1024).toFixed(2)  } KB`;
+	} else if (bytes > 1) {
+		return `${bytes  } bytes`;
+	} else if (bytes === 1) {
+		return `${bytes  } byte`;
+	} else {
+		return "0 bytes";
+	}
 };
 
 export const isRtcSupported = () => {

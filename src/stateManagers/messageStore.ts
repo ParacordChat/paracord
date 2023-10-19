@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { Message } from "../helpers/types";
+import { Message } from "../helpers/types/types";
 
 interface MessageStore {
   messages: Message[];

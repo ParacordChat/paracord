@@ -14,9 +14,6 @@ importers:
       audiomotion-analyzer:
         specifier: ^4.3.0
         version: 4.3.0
-      byte-base64:
-        specifier: ^1.1.0
-        version: 1.1.0
       curve25519-js:
         specifier: ^0.0.4
         version: 0.0.4
@@ -38,18 +35,12 @@ importers:
       grommet-icons:
         specifier: ^4.11.0
         version: 4.11.0(react-dom@18.2.0)(react@18.2.0)(styled-components@5.3.11)
-      idb:
-        specifier: ^7.1.1
-        version: 7.1.1
       kyber-crystals:
         specifier: ^1.0.7
         version: 1.0.7
       native-file-system-adapter:
         specifier: ^3.0.0
         version: 3.0.0
-      polished:
-        specifier: ^4.2.2
-        version: 4.2.2
       pqc-kyber:
         specifier: ^0.7.0
         version: 0.7.0
@@ -3343,10 +3334,6 @@ packages:
     engines: {node: '>=6'}
     dev: true
 
-  /byte-base64@1.1.0:
-    resolution: {integrity: sha512-56cXelkJrVMdCY9V/3RfDxTh4VfMFCQ5km7B7GkIGfo4bcPL9aACyJLB0Ms3Ezu5rsHmLB2suis96z4fLM03DA==}
-    dev: false
-
   /call-bind@1.0.2:
     resolution: {integrity: sha512-7O+FbCihrB5WGbFYesctwmTKae6rOiIzmz1icreWJ+0aA7LJfuqhEso2T9ncpcFtzMQtzXf2QGGueWJGTYsqrA==}
     dependencies:
@@ -5393,13 +5380,6 @@ packages:
     resolution: {integrity: sha512-Nc3IT5yHzflTfbjgqWcCPpo7DaKy4FnpB0l/zCAW0Tc7jxAiuqSxHasntB3D7887LSrA93kDJ9IXovxJYxyLCA==}
     engines: {node: '>=4'}
     dev: true
-
-  /polished@4.2.2:
-    resolution: {integrity: sha512-Sz2Lkdxz6F2Pgnpi9U5Ng/WdWAUZxmHrNPoVlm3aAemxoy2Qy7LGjQg4uf8qKelDAUW94F4np3iH2YPf2qefcQ==}
-    engines: {node: '>=10'}
-    dependencies:
-      '@babel/runtime': 7.22.15
-    dev: false
 
   /postcss-value-parser@4.2.0:
     resolution: {integrity: sha512-1NNCs6uurfkVbeXG4S8JFT9t19m45ICnif8zWLd5oPSZ50QnwMfK+H3jv408d4jw/7Bttv5axS5IiHoLaVNHeQ==}

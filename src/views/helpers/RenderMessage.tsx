@@ -6,7 +6,7 @@ import { Box, Button, Text } from "grommet";
 import { Return } from "grommet-icons";
 import { useEffect, useRef } from "preact/hooks";
 import { generateHexColorFromString } from "../../helpers/helpers";
-import { Message } from "../../helpers/types";
+import { Message } from "../../helpers/types/types";
 
 dayjs.extend(relativeTime);
 

@@ -6,7 +6,7 @@ import {
 	sendSystemMessage,
 	uuidSource
 } from "../helpers/helpers";
-import { FileMetaData, FileOffer, FileRequest } from "../helpers/types";
+import { FileMetaData, FileOffer, FileRequest } from "../helpers/types/types";
 import { useProgressStore } from "../stateManagers/downloadManagers/progressManager";
 import { useRealFiles } from "../stateManagers/downloadManagers/realFileManager";
 import { useOfferStore } from "../stateManagers/downloadManagers/requestManager";

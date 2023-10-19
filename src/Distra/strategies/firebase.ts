@@ -13,19 +13,17 @@ import {
 	set,
 	Unsubscribe
 } from "firebase/database";
-import { decrypt, encrypt, genKey } from "./helpers/crypto.js";
-import { ExtendedInstance, FirebaseRoomConfig } from "./helpers/types.js";
+import { decrypt, encrypt, genKey } from "../../helpers/cryptography/crypto.js";
+import { ExtendedInstance, FirebaseRoomConfig } from "../../helpers/types/distraTypes.js";
 import {
-	events,
 	firebaseGuard,
 	initGuard,
 	initPeer,
-	keys,
-	libName,
 	noOp,
 	selfId
-} from "./helpers/utils.js";
-import room from "./roomManagement/room.js";
+} from "../../helpers/utils.js";
+import room from "../roomManagement/room.js";
+import { events, libName } from "../../helpers/consts/consts.js";
 
 const presencePath = "_";
 const defaultRootPath = `__${libName.toLowerCase()}__`;
@@ -175,8 +173,7 @@ export const joinRoom = initGuard(
 				off(roomRef);
 				for (const f of unsubFns) f();
 				delete occupiedRooms[ns];
-			},
-			config.encryptDecrypt
+			}
 		);
 	}
 );
@@ -187,10 +184,10 @@ export const getOccupants = firebaseGuard(
 		new Promise((res) =>
 			onValue(
 				ref(init(config), getPath(config.rootPath || defaultRootPath, `${ns}`)),
-				(data) => res(keys(data.val() || {})),
+				(data) => res(Object.keys(data.val() || {})),
 				{ onlyOnce: true }
 			)
 		)
 );
 
-export { selfId } from "./helpers/utils.js";
+export { selfId } from "../../helpers/utils.js";

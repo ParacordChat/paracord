@@ -16,7 +16,6 @@
   "dependencies": {
     "@radix-ui/react-tabs": "^1.0.4",
     "audiomotion-analyzer": "^4.3.0",
-    "byte-base64": "^1.1.0",
     "curve25519-js": "^0.0.4",
     "dayjs": "^1.11.10",
     "dompurify": "^3.0.6",
@@ -24,10 +23,8 @@
     "fun-animal-names": "^0.1.1",
     "grommet": "^2.33.2",
     "grommet-icons": "^4.11.0",
-    "idb": "^7.1.1",
     "kyber-crystals": "^1.0.7",
     "native-file-system-adapter": "^3.0.0",
-    "polished": "^4.2.2",
     "pqc-kyber": "^0.7.0",
     "preact": "^10.18.1",
     "preact-async-route": "^2.2.1",

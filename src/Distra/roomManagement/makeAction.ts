@@ -1,29 +1,28 @@
-import { bytesToBase64 } from "../helpers/b64util";
-import { chunkSize, oneByteMax } from "../helpers/consts";
+import { bytesToBase64 } from "../../helpers/dataHandling/b64util";
+import { chunkSize, oneByteMax } from "../../helpers/consts/consts";
 import {
 	ActionProgress,
 	ActionReceiver,
 	ActionSender,
-	EncryptDecryptObj,
 	Metadata
-} from "../helpers/types";
-import { encodeBytes, iterate, keys, mkErr, noOp } from "../helpers/utils";
-import { RoomStateManager } from "./stateManager";
-
-export const buildMakeAction =
-  (roomState: RoomStateManager, encryptDecrypt: EncryptDecryptObj) =>
-  <T>(type: string, forceEncryption?: boolean | undefined) => {
+} from "../../helpers/types/distraTypes";
+import { encodeBytes, iterate, mkErr, noOp } from "../../helpers/utils";
+import { useUserStore } from "../../stateManagers/userManagers/userStore";
+import { findUserAndEncrypt } from "../../helpers/cryptography/cryptoSuite";
+import { useRoomStateManager } from "./state/stateManager";
+export const makeAction = <T>(type: string, forceEncryption?: boolean | undefined) => {
   	if (!type) {
   		throw mkErr("action type argument is required");
   	}
 
-  	if (roomState.actions[type]) {
+  	if (useRoomStateManager.getState().actions[type]) {
   		throw mkErr(`action '${type}' already registered`);
   	}
 
   	let nonce = 0;
 
-  	roomState.actions[type] = { onComplete: noOp, onProgress: noOp };
+  	useRoomStateManager.getState()
+  		.setActions(type, { onComplete: noOp, onProgress: noOp });
 
   	const actionSender: ActionSender<T> = async (
   		data,
@@ -44,7 +43,7 @@ export const buildMakeAction =
   		// }
 
   		if (!targets) {
-  			targets = keys(roomState.peerMap);
+  			targets = Object.keys(useRoomStateManager.getState().peerMap);
   		}
 
   		const isBlob = data instanceof Blob;
@@ -87,7 +86,7 @@ export const buildMakeAction =
 
   		nonce = (nonce + 1) & oneByteMax;
   		return Promise.all(
-  			iterate(roomState.peerMap, targets, async (id, peer) => {
+  			iterate(useRoomStateManager.getState().peerMap, targets, async (id, peer) => {
   				const chan = peer._channel;
   				let chunkN = 0;
 
@@ -127,14 +126,14 @@ export const buildMakeAction =
   						});
   					}
 
-  					if (!roomState.peerMap[id]) {
+  					if (!useRoomStateManager.getState().peerMap[id]) {
   						break;
   					}
 
   					if (forceEncryption) {
-  						if (encryptDecrypt && encryptDecrypt?.ecPeerlist()
-  							.includes(id)) {
-  							const encChunk = await encryptDecrypt.encrypt(id, chunk);
+  						if (useUserStore.getState().keyedUsers
+  							.has(id)) {
+  							const encChunk = await findUserAndEncrypt(id, chunk);
   							peer.send(encChunk);
   						} // fail if chunk cannot be encrypted
   					} else {
@@ -155,7 +154,7 @@ export const buildMakeAction =
 
   		// functions are passed in and "registered" based on their type
   		(onComplete) =>
-  			(roomState.actions[type] = { ...roomState.actions[type], onComplete }),
+  			(useRoomStateManager.getState().actions[type] = { ...useRoomStateManager.getState().actions[type], onComplete }),
 
   		(
   			onProgress: (
@@ -164,6 +163,6 @@ export const buildMakeAction =
           metadata?: Metadata,
         ) => void
   		) =>
-  			(roomState.actions[type] = { ...roomState.actions[type], onProgress })
+  			(useRoomStateManager.getState().actions[type] = { ...useRoomStateManager.getState().actions[type], onProgress })
   	] as [ActionSender<T>, ActionReceiver<T>, ActionProgress]; //
-  };
+};

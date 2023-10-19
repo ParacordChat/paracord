@@ -1,9 +1,9 @@
 import { funAnimalName } from "fun-animal-names";
 import { create } from "zustand";
 import { selfId } from "../../Distra";
-import { generateKeyPair } from "../../helpers/cryptoSuite";
+import { generateKeyPair } from "../../helpers/cryptography/cryptoSuite";
 import { randomName } from "../../helpers/helpers";
-import { Persona } from "../../helpers/types";
+import { Persona } from "../../helpers/types/types";
 
 interface PersonaStore {
   persona: Persona;

@@ -1,19 +1,18 @@
-import { base64ToBytes } from "../helpers/b64util";
-import { oneByteMax } from "../helpers/consts";
-import { EncryptDecryptObj } from "../helpers/types";
-import { combineChunks, decodeBytes, mkErr } from "../helpers/utils";
-import { RoomStateManager } from "./stateManager";
+import { base64ToBytes } from "../../helpers/dataHandling/b64util";
+import { oneByteMax } from "../../helpers/consts/consts";
+import { combineChunks, decodeBytes, mkErr } from "../../helpers/utils";
+import { useUserStore } from "../../stateManagers/userManagers/userStore";
+import { findUserAndDecrypt } from "../../helpers/cryptography/cryptoSuite";
+import { useRoomStateManager } from "./state/stateManager";
 
-export const buildHandleData =
-  (roomState: RoomStateManager, encryptDecrypt: EncryptDecryptObj) =>
+
+export const handleData =
   	async (id: string, data: any) => {
   		try {
   			const buffer = await (async () => {
   				const payloadRaw = new Uint8Array(data);
-  				if (encryptDecrypt && encryptDecrypt?.ecPeerlist()
-  					.includes(id)) {
-  					const dec = await encryptDecrypt
-  						.decrypt(id, payloadRaw)
+  				if (useUserStore.getState().keyedUsers.has(id)) {
+  					const dec = await findUserAndDecrypt(id, payloadRaw)
   						.catch((error) => {
   							throw console.error(error);
   						});
@@ -35,22 +34,22 @@ export const buildHandleData =
   			} = buffer;
   			const payload = base64ToBytes(plenc);
 
-  			if (!roomState.actions[typeBytes]) {
+  			if (!useRoomStateManager.getState().actions[typeBytes]) {
   				throw mkErr(`received message with unregistered type (${typeBytes})`);
   			}
 
-  			if (!roomState.pendingTransmissions[id]) {
-  				roomState.pendingTransmissions[id] = {};
+  			if (!useRoomStateManager.getState().pendingTransmissions[id]) {
+  				useRoomStateManager.getState().pendingTransmissions[id] = {};
   			}
 
-  			if (!roomState.pendingTransmissions[id][typeBytes]) {
-  				roomState.pendingTransmissions[id][typeBytes] = {};
+  			if (!useRoomStateManager.getState().pendingTransmissions[id][typeBytes]) {
+  				useRoomStateManager.getState().pendingTransmissions[id][typeBytes] = {};
   			}
 
-  			let target = roomState.pendingTransmissions[id][typeBytes][nonce];
+  			let target = useRoomStateManager.getState().pendingTransmissions[id][typeBytes][nonce];
 
   			if (!target) {
-  				target = roomState.pendingTransmissions[id][typeBytes][nonce] = {
+  				target = useRoomStateManager.getState().pendingTransmissions[id][typeBytes][nonce] = {
   					chunks: []
   				};
   			}
@@ -61,7 +60,7 @@ export const buildHandleData =
   				target.chunks.push(payload);
   			}
 
-  			roomState.actions[typeBytes].onProgress(
+  			useRoomStateManager.getState().actions[typeBytes].onProgress(
   				progress / oneByteMax,
   				id,
   				target.meta
@@ -74,16 +73,16 @@ export const buildHandleData =
   			const full = combineChunks(target.chunks);
 
   			if (isBinary) {
-  				roomState.actions[typeBytes].onComplete(full, id, target.meta);
+  				useRoomStateManager.getState().actions[typeBytes].onComplete(full, id, target.meta);
   			} else {
   				const text = decodeBytes(full);
-  				roomState.actions[typeBytes].onComplete(
+  				useRoomStateManager.getState().actions[typeBytes].onComplete(
   					isJson ? JSON.parse(text) : text,
   					id
   				);
   			}
 
-  			delete roomState.pendingTransmissions[id][typeBytes][nonce];
+  			delete useRoomStateManager.getState().pendingTransmissions[id][typeBytes][nonce];
   		} catch (error) {
   			console.error(error);
   		}

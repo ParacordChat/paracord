@@ -1,21 +1,17 @@
 /* eslint-disable max-lines-per-function */
 // TODO: codesplitting
-import { decrypt, encrypt, genKey } from "./helpers/crypto.js";
-import { ExtendedInstance, TorrentRoomConfig } from "./helpers/types.js";
+import { events, libName } from "../../helpers/consts/consts.js";
+import { decrypt, encrypt, genKey } from "../../helpers/cryptography/crypto.js";
+import { ExtendedInstance, TorrentRoomConfig } from "../../helpers/types/distraTypes.js";
 import {
 	encodeBytes,
-	entries,
-	events,
-	fromEntries,
 	genId,
 	initGuard,
 	initPeer,
-	libName,
 	noOp,
-	selfId,
-	values
-} from "./helpers/utils.js";
-import room from "./roomManagement/room.js";
+	selfId
+} from "../../helpers/utils.js";
+import room from "../roomManagement/room.js";
 
 const occupiedRooms: { [x: string]: any } = {};
 const sockets: { [x: string]: any } = {};
@@ -61,7 +57,7 @@ export const joinRoom = initGuard(
 			);
 
 		const makeOffers = (howMany: number) =>
-			fromEntries(
+			Object.fromEntries(
 				Array.from({ length: howMany })
 					.fill("")
 					.map(() => {
@@ -210,7 +206,7 @@ export const joinRoom = initGuard(
 					numwant: offerPoolSize,
 					peer_id: selfId,
 					offers: await Promise.all(
-						entries(offerPool)
+						Object.entries(offerPool)
 							.map(async ([id, { offerP }]) => {
 								const offer = await offerP;
 
@@ -240,7 +236,7 @@ export const joinRoom = initGuard(
 					socket.addEventListener("open", res.bind(null, socket));
 					socket.addEventListener("error", console.error);
 					socket.addEventListener("message", (err) => {
-						for (const f of values(socketListeners[url])) f(socket, err);
+						for (const f of Object.values(socketListeners[url])) f(socket, err);
 					});
 				});
 			} else {
@@ -271,7 +267,7 @@ export const joinRoom = initGuard(
 		};
 
 		const cleanPool = () => {
-			for (const [id, { peer }] of entries(offerPool)) {
+			for (const [id, { peer }] of Object.entries(offerPool)) {
 				if (!handledOffers[id] && !connectedPeers[id]) {
 					peer.destroy();
 				}
@@ -333,8 +329,7 @@ export const joinRoom = initGuard(
 				delete occupiedRooms[ns];
 				clearInterval(announceInterval);
 				cleanPool();
-			},
-			config.encryptDecrypt
+			}
 		);
 	}
 );

@@ -2,7 +2,7 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { Box, InfiniteScroll } from "grommet";
 import { selfId } from "../Distra";
-import { Message, Persona } from "../helpers/types";
+import { Message, Persona } from "../helpers/types/types";
 import { useMessageStore } from "../stateManagers/messageStore";
 import { usePersonaStore } from "../stateManagers/userManagers/personaStore";
 import { useUserStore } from "../stateManagers/userManagers/userStore";

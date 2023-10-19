@@ -1,4 +1,4 @@
-import { decodeBytes, encodeBytes } from "./utils.js";
+import { decodeBytes, encodeBytes } from "../utils.js";
 
 const algo = "AES-GCM";
 const IV_LENGTH = 16;

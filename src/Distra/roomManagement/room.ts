@@ -1,111 +1,26 @@
-/* eslint-disable max-lines-per-function */
-// TODO: codesplit this file
 import { SignalData } from "simple-peer";
 import {
-	EncryptDecryptObj,
 	ExtendedInstance,
 	Metadata,
 	Room,
 	TargetPeers
-} from "../helpers/types.js";
+} from "../../helpers/types/distraTypes.js";
 import {
-	entries,
-	events,
-	fromEntries,
 	iterate,
-	keys,
 	mkErr
-} from "../helpers/utils.js";
-import { buildExitPeer } from "./exitPeer.js";
-import { buildHandleData } from "./handleData.js";
-import { buildMakeAction } from "./makeAction.js";
-import { RoomStateManager } from "./stateManager.js";
+} from "../../helpers/utils.js";
+import { useRoomStateManager } from "./state/stateManager.js";
+import { events } from "../../helpers/consts/consts.js";
+import { useHookStateManager } from "./state/hookState.js";
+import { exitPeer } from "./exitPeer.js";
+import { useRoomSignalManager } from "./state/roomSignalManager.js";
+import { makeAction } from "./makeAction.js";
+import { handleData } from "./handleData.js";
 
 export default async (
 	onPeer: (joinHook: (peer: ExtendedInstance, id: string) => void) => void,
-	onSelfLeave: () => void,
-	encryptDecrypt?: EncryptDecryptObj
+	onSelfLeave: () => void
 ): Promise<Room> => {
-	const roomState = new RoomStateManager();
-
-	const exitPeer = buildExitPeer(roomState);
-
-	const makeAction = buildMakeAction(roomState, encryptDecrypt);
-
-	const handleData = buildHandleData(roomState, encryptDecrypt);
-	// 	try {
-	// 		const buffer = await (async () => {
-	// 			const payloadRaw = new Uint8Array(data);
-	// 			if (encryptDecrypt && encryptDecrypt?.ecPeerlist()
-	// 				.includes(id)) {
-	// 				const dec = await encryptDecrypt
-	// 					.decrypt(id, payloadRaw)
-	// 					.catch((error) => {
-	// 						throw console.error(error);
-	// 					});
-	// 				return JSON.parse(decodeBytes(dec));
-	// 			} else {
-	// 				return JSON.parse(decodeBytes(payloadRaw));
-	// 			}
-	// 		})();
-
-	// 		const {
-	// 			typeBytes,
-	// 			nonce,
-	// 			isLast,
-	// 			isMeta,
-	// 			isBinary,
-	// 			isJson,
-	// 			progress,
-	// 			payload: plenc
-	// 		} = buffer;
-	// 		const payload = base64ToBytes(plenc);
-
-	// 		if (!actions[typeBytes]) {
-	// 			throw mkErr(`received message with unregistered type (${typeBytes})`);
-	// 		}
-
-	// 		if (!pendingTransmissions[id]) {
-	// 			pendingTransmissions[id] = {};
-	// 		}
-
-	// 		if (!pendingTransmissions[id][typeBytes]) {
-	// 			pendingTransmissions[id][typeBytes] = {};
-	// 		}
-
-	// 		let target = pendingTransmissions[id][typeBytes][nonce];
-
-	// 		if (!target) {
-	// 			target = pendingTransmissions[id][typeBytes][nonce] = { chunks: [] };
-	// 		}
-
-	// 		if (isMeta) {
-	// 			target.meta = JSON.parse(decodeBytes(payload));
-	// 		} else {
-	// 			target.chunks.push(payload);
-	// 		}
-
-	// 		actions[typeBytes].onProgress(progress / oneByteMax, id, target.meta);
-
-	// 		if (!isLast) {
-	// 			return;
-	// 		}
-
-	// 		const full = combineChunks(target.chunks);
-
-	// 		if (isBinary) {
-	// 			actions[typeBytes].onComplete(full, id, target.meta);
-	// 		} else {
-	// 			const text = decodeBytes(full);
-	// 			actions[typeBytes].onComplete(isJson ? JSON.parse(text) : text, id);
-	// 		}
-
-	// 		delete pendingTransmissions[id][typeBytes][nonce];
-	// 	} catch (error) {
-	// 		console.error(error);
-	// 	}
-	// };
-
 	const [sendPing, getPing] = makeAction<null>("__91n6__", true);
 	const [sendPong, getPong] = makeAction<null>("__90n6__", true);
 	const [sendSignal, getSignal] = makeAction<any>("__516n4L__", true);
@@ -116,30 +31,36 @@ export default async (
 	const [sendTrackMeta, getTrackMeta] = makeAction<Metadata>("__7r4ck__", true);
 
 	onPeer((peer: ExtendedInstance, id: string) => {
-		if (roomState.peerMap[id]) {
+		if (useRoomStateManager.getState().peerMap[id]) {
 			return;
 		}
 
 		const onData = handleData.bind(null, id);
 
-		roomState.peerMap[id] = peer;
+		useRoomStateManager.getState()
+			.addToPeerMap(id, peer);
 
 		peer.on(events.signal, (sdp) => sendSignal(sdp, id));
 		peer.on(events.close, () => exitPeer(id));
 		peer.on(events.data, onData);
 
 		peer.on(events.stream, (stream) => {
-			roomState.onPeerStream(stream, id, roomState.pendingStreamMetas[id]);
-			delete roomState.pendingStreamMetas[id];
+			useHookStateManager.getState()
+				.onPeerStream(stream, id, useRoomSignalManager.getState().pendingStreamMetas[id]);
+			useRoomSignalManager.getState()
+				.removeFromPendingStreamMetas(id);
 		});
 
 		peer.on(events.track, (track, stream) => {
-			roomState.onPeerTrack(track, stream, id, roomState.pendingTrackMetas[id]);
-			delete roomState.pendingTrackMetas[id];
+			useHookStateManager.getState()
+				.onPeerTrack(track, stream, id, useRoomSignalManager.getState().pendingTrackMetas[id]);
+			useRoomSignalManager.getState()
+				.removeFromPendingTrackMetas(id);
 		});
 
 		peer.on(events.error, (e) => {
-			roomState.onPeerError(id, e);
+			useHookStateManager.getState()
+				.onPeerError(id, e);
 			exitPeer(id);
 			if (e.code === "ERR_DATA_CHANNEL") {
 				return;
@@ -147,31 +68,37 @@ export default async (
 			console.error(e);
 		});
 
-		roomState.onPeerJoin(id);
+		useHookStateManager.getState()
+			.onPeerJoin(id);
 		peer.__drainEarlyData(onData);
 	});
 
 	getPing((_: any, id: string) => sendPong(null, id));
 
 	getPong((_: any, id: string) => {
-		if (roomState.pendingPongs[id]) {
-			roomState.pendingPongs[id]();
-			delete roomState.pendingPongs[id];
+		const pongPending = useRoomSignalManager.getState().pendingPongs[id];
+		if (pongPending) {
+			pongPending();
+			useRoomSignalManager.getState()
+				.removeFromPendingPongs(id);
 		}
 	});
 
 	getSignal((sdp: SignalData | string, id: string) => {
-		if (roomState.peerMap[id]) {
-			roomState.peerMap[id].signal(sdp);
+		const peerSig = useRoomStateManager.getState().peerMap[id];
+		if (peerSig) {
+			peerSig.signal(sdp);
 		}
 	});
 
 	getStreamMeta(
-		(meta: any, id: string) => (roomState.pendingStreamMetas[id] = meta)
+		(meta: any, id: string) => (useRoomSignalManager.getState()
+			.addToPendingStreamMetas(id, meta))
 	);
 
 	getTrackMeta(
-		(meta: any, id: string) => (roomState.pendingTrackMetas[id] = meta)
+		(meta: any, id: string) => (useRoomSignalManager.getState()
+			.addToPendingTrackMetas(id, meta))
 	);
 
 	return {
@@ -184,28 +111,31 @@ export default async (
 
 			const start = Date.now();
 			sendPing(null, id);
-			await new Promise((res) => (roomState.pendingPongs[id] = res));
+			await new Promise((res) => (useRoomSignalManager.getState()
+				.addToPendingPongs(id, res)));
 			return Date.now() - start;
 		},
 
 		leave: () => {
-			for (const [id, peer] of entries(roomState.peerMap)) {
+			for (const [id, peer] of Object.entries(useRoomStateManager.getState().peerMap)) {
 				peer.destroy();
-				delete roomState.peerMap[id];
+				useRoomStateManager.getState()
+					.removeFromPeerMap(id);
 			}
 			onSelfLeave();
 		},
 
 		getPeers: () =>
-			fromEntries(
-				entries(roomState.peerMap)
+			Object.fromEntries(
+				Object.entries(useRoomStateManager.getState().peerMap)
 					.map(([id, peer]) => [id, peer._pc])
 			),
 
 		addStream: (stream: MediaStream, targets: TargetPeers, meta: Metadata) => {
-			const peerSendables = targets || keys(roomState.peerMap);
+			const pmap = useRoomStateManager.getState().peerMap;
+			const peerSendables = targets || Object.keys(pmap);
 			if (!peerSendables) return [];
-			return iterate(roomState.peerMap, peerSendables, async (id, peer) => {
+			return iterate(pmap, peerSendables, async (id, peer) => {
 				if (meta) {
 					await sendStreamMeta(meta, id);
 				}
@@ -213,10 +143,11 @@ export default async (
 			});
 		},
 		removeStream: (stream: MediaStream, targets: TargetPeers) => {
-			const peerSendables = targets || keys(roomState.peerMap);
+			const pmap = useRoomStateManager.getState().peerMap;
+			const peerSendables = targets || Object.keys(pmap);
 			peerSendables &&
         iterate(
-        	roomState.peerMap,
+        	pmap,
         	peerSendables,
         	(_, peer) =>
         		new Promise((res) => {
@@ -233,7 +164,7 @@ export default async (
 			meta: Metadata
 		) =>
 			targets
-				? iterate(roomState.peerMap, targets, async (id, peer) => {
+				? iterate(useRoomStateManager.getState().peerMap, targets, async (id, peer) => {
 					if (meta) {
 						await sendTrackMeta(meta, id);
 					}
@@ -249,7 +180,7 @@ export default async (
 		) =>
 			targets &&
       iterate(
-      	roomState.peerMap,
+      	useRoomStateManager.getState().peerMap,
       	targets,
       	(_, peer) =>
       		new Promise((res) => {
@@ -265,7 +196,7 @@ export default async (
 			meta: Metadata
 		) =>
 			targets
-				? iterate(roomState.peerMap, targets, async (id, peer) => {
+				? iterate(useRoomStateManager.getState().peerMap, targets, async (id, peer) => {
 					if (meta) {
 						await sendTrackMeta(meta, id);
 					}
@@ -274,17 +205,22 @@ export default async (
 				})
 				: [],
 
-		onPeerJoin: (f: (peerId: string) => void) => (roomState.onPeerJoin = f),
+		onPeerJoin: (f: (peerId: string) => void) => (useHookStateManager.getState()
+			.setOnPeerJoin(f)),
 
-		onPeerLeave: (f: (peerId: string) => void) => (roomState.onPeerLeave = f),
+		onPeerLeave: (f: (peerId: string) => void) => (useHookStateManager.getState()
+			.setOnPeerLeave(f)),
 
 		onPeerError: (f: (peerId: string, error: any) => void) =>
-			(roomState.onPeerError = f),
+			(useHookStateManager.getState()
+				.setOnPeerError(f)),
 
 		onPeerStream: (f: (arg0: any, arg1: string, arg2: any) => void) =>
-			(roomState.onPeerStream = f),
+			(useHookStateManager.getState()
+				.setOnPeerStream(f)),
 
 		onPeerTrack: (f: (arg0: any, arg1: any, arg2: string, arg3: any) => void) =>
-			(roomState.onPeerTrack = f)
+			(useHookStateManager.getState()
+				.setOnPeerTrack(f))
 	};
 };

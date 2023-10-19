@@ -1,12 +1,18 @@
-import { RoomStateManager } from "./stateManager";
+import { useHookStateManager } from "./state/hookState";
+import { useRoomSignalManager } from "./state/roomSignalManager";
+import { useRoomStateManager } from "./state/stateManager";
 
-export const buildExitPeer = (roomState: RoomStateManager) => (id: string) => {
-	if (!roomState.peerMap[id]) {
+export const exitPeer = (id: string) => {
+	if (!useRoomStateManager.getState().peerMap[id]) {
 		return;
 	}
 
-	delete roomState.peerMap[id];
-	delete roomState.pendingTransmissions[id];
-	delete roomState.pendingPongs[id];
-	roomState.onPeerLeave(id);
+	useRoomStateManager.getState()
+		.removeFromPeerMap(id);
+	useRoomSignalManager.getState()
+		.removeFromPendingPongs(id);
+	useRoomStateManager.getState()
+		.removeFromPendingTransmissions(id);
+	useHookStateManager.getState()
+		.onPeerLeave(id);
 };

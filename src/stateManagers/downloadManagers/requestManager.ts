@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { FileOffer } from "../../helpers/types";
+import { FileOffer } from "../../helpers/types/types";
 
 interface OfferStore {
   requestableDownloads: { [key: string]: FileOffer[] };

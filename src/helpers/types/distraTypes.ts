@@ -14,11 +14,6 @@ export interface BaseRoomConfig {
   appId: string;
   password?: string;
   rtcConfig?: RTCConfiguration;
-  encryptDecrypt?: {
-    encrypt: (toId: string, data: Uint8Array) => Promise<Uint8Array>;
-    decrypt: (fromId: string, data: Uint8Array) => Promise<Uint8Array>;
-    ecPeerlist: () => string[];
-  };
 }
 
 export interface FirebaseRoomConfig extends BaseRoomConfig {
@@ -128,17 +123,7 @@ export interface ExtendedInstance extends Instance {
   _pc: RTCPeerConnection;
 }
 
-export type EncryptDecryptObj =
-  | {
-      encrypt: (toId: string, data: Uint8Array) => Promise<Uint8Array>;
-      decrypt: (fromId: string, data: Uint8Array) => Promise<Uint8Array>;
-      ecPeerlist: () => string[];
-    }
-  | undefined;
-
 export type ActionsType = {
-  [x: string]: {
-    onComplete: (data: any, peerId: string, metadata?: Metadata) => void;
-    onProgress: (percent: number, peerId: string, metadata?: Metadata) => void;
-  };
+    onComplete: (data: any, peerId: string, metadata?: Metadata) => void | (()=>void);
+    onProgress: (percent: number, peerId: string, metadata?: Metadata) => void | (()=>void);
 };

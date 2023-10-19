@@ -1,6 +1,7 @@
 import * as kyber from "pqc-kyber";
-import { useUserStore } from "../stateManagers/userManagers/userStore";
-import { User } from "./types";
+import { useUserStore } from "../../stateManagers/userManagers/userStore";
+import { User } from "../types/types";
+import { decodeBytes, encodeBytes } from "../utils";
 
 // Function to generate a public-private key pair
 export const generateKeyPair = () => kyber.keypair();
@@ -32,12 +33,9 @@ const deriveKey = (
 		keyUsage
 	);
 
-const enc = new TextEncoder();
-const dec = new TextDecoder();
-
 async function encryptData(secretData: Uint8Array, sharedSecret: Uint8Array) {
 	try {
-		const dataEncoded = dec.decode(secretData);
+		const dataEncoded = decodeBytes(secretData);
 		const salt = window.crypto.getRandomValues(new Uint8Array(SALT_LENGTH));
 		const iv = window.crypto.getRandomValues(new Uint8Array(IV_LENGTH));
 		const passwordKey = await getPasswordKey(sharedSecret);
@@ -48,7 +46,7 @@ async function encryptData(secretData: Uint8Array, sharedSecret: Uint8Array) {
 				iv
 			},
 			aesKey,
-			enc.encode(dataEncoded)
+			encodeBytes(dataEncoded)
 		);
 
 		const encryptedContentArr = new Uint8Array(encryptedContent);
@@ -93,7 +91,7 @@ async function decryptData(
 	}
 }
 
-const findUserAndEncrypt = async (toId: string, data: Uint8Array) => {
+export const findUserAndEncrypt = async (toId: string, data: Uint8Array) => {
 	const sendKey = useUserStore
 		.getState()
 		.users.find((user: User) => user.id === toId)?.quantumSend;
@@ -101,18 +99,10 @@ const findUserAndEncrypt = async (toId: string, data: Uint8Array) => {
 	return await encryptData(data, sendKey);
 };
 
-const findUserAndDecrypt = async (fromId: string, data: Uint8Array) => {
+export const findUserAndDecrypt = async (fromId: string, data: Uint8Array) => {
 	const recKey = useUserStore
 		.getState()
 		.users.find((user: User) => user.id === fromId)?.quantumRecv;
 	if (!recKey || data.byteLength < IV_LENGTH + 1) return data;
 	return await decryptData(data, recKey);
-};
-
-export const ecPeerlist = () => [...useUserStore.getState().keyedUsers];
-
-export const encryptDecrypt = {
-	encrypt: findUserAndEncrypt,
-	decrypt: findUserAndDecrypt,
-	ecPeerlist
 };

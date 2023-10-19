@@ -1,21 +1,12 @@
 /* eslint-disable no-underscore-dangle */
 // @ts-ignore
 import Peer from "simple-peer-light";
-import { FirebaseRoomConfig, TorrentRoomConfig } from "..";
-import { ExtendedInstance, Room } from "./types";
+import { FirebaseRoomConfig, TorrentRoomConfig } from "../Distra";
+import { ExtendedInstance, Room } from "./types/distraTypes";
+import { events, libName } from "./consts/consts";
 
 const charSet =
   "0123456789AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz";
-
-export const libName = "distra";
-
-export const { keys, values, entries, fromEntries } = Object;
-
-export const events = fromEntries(
-	["close", "connect", "data", "error", "signal", "stream", "track"].map(
-		(k) => [k, k]
-	)
-);
 
 export const initPeer = (
 	initiator: boolean,
@@ -127,11 +118,6 @@ export const combineChunks = (chunks: any[]) => {
 		c += chunks[i].byteLength;
 	}
 
-	// chunks.reduce((a: number | undefined, c) => {
-	// 	full.set(c, a);
-	// 	return a + c.byteLength;
-	// }, 0);
-
 	return full;
 };
 
@@ -144,7 +130,7 @@ export const iterate = (
 		? (Array.isArray(targets)
 				? targets
 				: [targets])
-		: keys(peerMap)
+		: Object.keys(peerMap)
 	).flatMap((id) => {
 		const peer = peerMap[id];
 

@@ -1,6 +1,5 @@
 import { Box, Button, Meter, Text } from "grommet";
 import { FormClose } from "grommet-icons";
-import { FileUploader } from "react-drag-drop-files";
 import { selfId } from "../Distra";
 import DownloadManager from "../DistraManagers/downloadManager";
 import { fancyBytes } from "../helpers/helpers";
@@ -9,6 +8,7 @@ import { useRealFiles } from "../stateManagers/downloadManagers/realFileManager"
 import { useOfferStore } from "../stateManagers/downloadManagers/requestManager";
 import { useUserStore } from "../stateManagers/userManagers/userStore";
 import CollapsibleContainer from "./helpers/Collapsible";
+import FileUploader from "./helpers/FileUploader";
 
 export function DownloadView(props: {
   downloadManagerInstance: DownloadManager;
@@ -35,22 +35,12 @@ export function DownloadView(props: {
 						title="Send File"
 					>
 						<FileUploader
-							multiple
-							required
-							handleChange={downloadManagerInstance.addRealFiles}
-							name="file"
-							accept="*"
-							disabled={!uiInteractive}
-						>
-							<Box
-								background="dark-3"
-								round="small"
-								pad="medium"
-								border={{ color: "accent-1", size: "medium" }}
-							>
-								<Text>Drag &amp; Drop files here</Text>
-							</Box>
-						</FileUploader>
+							uiInteractive={uiInteractive}
+							addFiles={(files) => {
+								downloadManagerInstance.addRealFiles(files);
+							}}
+						/>
+						
 						<Box
 							background="dark-3"
 							round="small"

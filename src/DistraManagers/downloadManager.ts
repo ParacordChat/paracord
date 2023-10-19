@@ -232,6 +232,7 @@ export default class DownloadManager {
 			.deleteProgress(id);
 		useRealFiles.getState()
 			.deleteRealFile(id);
+		this.offerRequestableFiles();
 	};
 
 	public addRealFiles = (initialList: File[]) => {

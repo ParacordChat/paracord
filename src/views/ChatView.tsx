@@ -4,7 +4,7 @@ import { useRef, useState } from "preact/hooks";
 import ChatManager from "../DistraManagers/chatManager";
 import { useClientSideUserTraits } from "../stateManagers/userManagers/clientSideUserTraits";
 import { useUserStore } from "../stateManagers/userManagers/userStore";
-import Messages from "./messages";
+import Messages from "./Messages";
 
 export function ChatView(props: { chatManagerInstance: ChatManager }) {
 	const { chatManagerInstance } = props;

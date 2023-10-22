@@ -82,8 +82,6 @@ export default class DownloadManager {
 							toUser: userId
 						});
 
-					console.log("getfilereq", fileReq.id);
-
 					await readFileChunk(currentFile, 0)
 						.then((chunk) =>
 							sendFileChunk(
@@ -137,14 +135,6 @@ export default class DownloadManager {
 		getFileAck(async (fileAck, userId) => {
 			const currentFile = useRealFiles.getState().realFiles[fileAck.id];
 			const totalChunks = Math.ceil(currentFile.size / chunkSize);
-
-			console.log(
-				"reqack",
-				fileAck.chunkN,
-				fileAck.uuid,
-				totalChunks,
-				currentFile.name
-			);
 
 			if (fileAck.chunkN < totalChunks) {
 				await readFileChunk(currentFile, fileAck.chunkN)
@@ -201,7 +191,6 @@ export default class DownloadManager {
 				await fwrt.write(fileReceipt)
 					.then(() => {
 						if (processedMeta.last) {
-							console.log("last chunk", processedMeta.uuid);
 							useProgressStore.getState()
 								.removeWritable(processedMeta.uuid);
 						} else {
@@ -210,11 +199,6 @@ export default class DownloadManager {
 								id: processedMeta.id,
 								chunkN: processedMeta.chunkN
 							});
-							console.log(
-								"sent ack",
-								processedMeta.chunkN + 1,
-								processedMeta.uuid
-							);
 						}
 					});
 			// if (processedMeta.last) {

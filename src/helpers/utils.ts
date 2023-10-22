@@ -2,11 +2,11 @@
 // @ts-ignore
 import Peer from "simple-peer-light";
 import { FirebaseRoomConfig, TorrentRoomConfig } from "../Distra";
-import { ExtendedInstance, Room } from "./types/distraTypes";
 import { events, libName } from "./consts/consts";
+import { ExtendedInstance, Room } from "./types/distraTypes";
 
 const charSet =
-  "0123456789AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz";
+  "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 export const initPeer = (
 	initiator: boolean,
@@ -99,27 +99,6 @@ export const firebaseGuard =
 export const selfId = genId(20);
 
 export const noOp = () => {};
-
-export const encodeBytes = (txt: string | undefined) =>
-	new TextEncoder()
-		.encode(txt);
-
-export const decodeBytes = (txt: any | undefined) =>
-	new TextDecoder()
-		.decode(txt);
-
-export const combineChunks = (chunks: any[]) => {
-	const full = new Uint8Array(
-		chunks.reduce((a: any, c: { byteLength: any }) => a + c.byteLength, 0)
-	);
-
-	for (let i = 0, l = chunks.length, c = 0; i < l; i++) {
-		full.set(chunks[i], c);
-		c += chunks[i].byteLength;
-	}
-
-	return full;
-};
 
 export const iterate = (
 	peerMap: { [s: string]: ExtendedInstance },

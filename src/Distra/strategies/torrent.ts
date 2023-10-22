@@ -2,9 +2,9 @@
 // TODO: codesplitting
 import { events, libName } from "../../helpers/consts/consts.js";
 import { decrypt, encrypt, genKey } from "../../helpers/cryptography/crypto.js";
+import { encodeBytes } from "../../helpers/dataHandling/uint8util.js";
 import { ExtendedInstance, TorrentRoomConfig } from "../../helpers/types/distraTypes.js";
 import {
-	encodeBytes,
 	genId,
 	initGuard,
 	initPeer,

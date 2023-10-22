@@ -1,6 +1,6 @@
 import { Room, selfId } from "../Distra";
-import { uuidSource } from "../helpers/helpers";
 import { Message } from "../helpers/types/types";
+import { genId } from "../helpers/utils";
 import { useMessageStore } from "../stateManagers/messageStore";
 import { useClientSideUserTraits } from "../stateManagers/userManagers/clientSideUserTraits";
 import { useUserStore } from "../stateManagers/userManagers/userStore";
@@ -55,7 +55,7 @@ export default class ChatManager {
 		if (message.trim() === "" || this.roomId.trim() === "") return;
 		const newMessage: Message = {
 			sentBy: selfId,
-			id: uuidSource(),
+			id: genId(6),
 			text: message,
 			sentAt: Date.now(),
 			recievedAt: Date.now(),

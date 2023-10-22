@@ -1,8 +1,9 @@
-import { base64ToBytes } from "../../helpers/dataHandling/b64util";
 import { oneByteMax } from "../../helpers/consts/consts";
-import { combineChunks, decodeBytes, mkErr } from "../../helpers/utils";
-import { useUserStore } from "../../stateManagers/userManagers/userStore";
 import { findUserAndDecrypt } from "../../helpers/cryptography/cryptoSuite";
+import { base64ToBytes } from "../../helpers/dataHandling/b64util";
+import { combineChunks, decodeBytes } from "../../helpers/dataHandling/uint8util";
+import { mkErr } from "../../helpers/utils";
+import { useUserStore } from "../../stateManagers/userManagers/userStore";
 import { useRoomStateManager } from "./state/stateManager";
 
 

@@ -3,10 +3,10 @@ import { showSaveFilePicker } from "native-file-system-adapter";
 import { Room, selfId } from "../Distra";
 import {
 	confirmDialog,
-	sendSystemMessage,
-	uuidSource
+	sendSystemMessage
 } from "../helpers/helpers";
 import { FileMetaData, FileOffer, FileRequest } from "../helpers/types/types";
+import { genId } from "../helpers/utils";
 import { useProgressStore } from "../stateManagers/downloadManagers/progressManager";
 import { useRealFiles } from "../stateManagers/downloadManagers/realFileManager";
 import { useOfferStore } from "../stateManagers/downloadManagers/requestManager";
@@ -170,7 +170,7 @@ export default class DownloadManager {
 		const findName =
       requestableFiles && requestableFiles.find((f) => f.id === fileId);
 		if (findName) {
-			const fileUUID = uuidSource();
+			const fileUUID = genId(6);
 			await showSaveFilePicker({
 				suggestedName: findName.name,
 				excludeAcceptAllOption: false // default

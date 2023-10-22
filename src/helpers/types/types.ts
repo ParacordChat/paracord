@@ -49,6 +49,7 @@ export interface FileProgress {
   id: string;
   uuid: string;
   name: string;
+  chunkN: number;
   progress: number;
   toUser: string; // id of user
 }

@@ -38,6 +38,10 @@ export default class DownloadManager {
     files: FileOffer[],
     ids?: string | string[]
   ) => Promise<any[]>;
+	private sendFileAck: (
+	ack: FileAck, 
+	ids?: string | string[]
+	) => Promise<any[]>;
 
 	constructor({ room, roomId }: { room: Room; roomId: string }) {
 		const [sendFileChunk, getFileChunk, onFileProgress] =
@@ -53,6 +57,7 @@ export default class DownloadManager {
 		const [sendFileAck, getFileAck] = room.makeAction<FileAck>("fileAck", true);
 		this.sendFileRequest = sendFileRequest;
 		this.sendFileOffer = sendFileOffer;
+		this.sendFileAck = sendFileAck;
 
 		useUserStore.subscribe((state, prevState) => {
 			if (state.keyedUsers.size > prevState.keyedUsers.size) {
@@ -72,6 +77,7 @@ export default class DownloadManager {
 							id: fileReq.id,
 							uuid: fileReq.uuid,
 							name: currentFile.name,
+							chunkN: 0,
 							progress: 0,
 							toUser: userId
 						});
@@ -163,7 +169,7 @@ export default class DownloadManager {
 								} else {
 									useProgressStore
 										.getState()
-										.updateProgress(fileAck.uuid, { progress });
+										.updateProgress(fileAck.uuid, { progress, chunkN: fileAck.chunkN + 1 });
 								}
 							}
 						)
@@ -244,6 +250,7 @@ export default class DownloadManager {
 							id: findName.id,
 							uuid: fileUUID,
 							name: findName.name,
+							chunkN: 0,
 							progress: 0,
 							toUser: selfId
 						});
@@ -302,6 +309,19 @@ export default class DownloadManager {
 		useRealFiles.getState()
 			.addRealFiles(initialList);
 		this.offerRequestableFiles();
+	};
+
+	public attemptResume = async (uuid: string) => {
+		const progressSeek = useProgressStore.getState()
+			.progressQueue.find((p) => p.uuid === uuid);
+
+		if (progressSeek){
+			this.sendFileAck({
+				uuid,
+				id: progressSeek.id,
+				chunkN: progressSeek.chunkN
+			});
+		}
 	};
 
 	public peerJoinHook = (id: string) =>

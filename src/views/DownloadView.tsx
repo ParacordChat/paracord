@@ -1,5 +1,5 @@
 import { Box, Button, Meter, Text } from "grommet";
-import { FormClose } from "grommet-icons";
+import { FormClose, Refresh } from "grommet-icons";
 import { selfId } from "../Distra";
 import DownloadManager from "../DistraManagers/downloadManager";
 import { fancyBytes } from "../helpers/helpers";
@@ -145,23 +145,32 @@ export function DownloadView(props: {
 								>
 									<Text size="medium" color="brand">
 										{status.toUser === selfId
-											? ` ← ${status.name} (${Math.trunc(
+											? ` ← ${status.name} (${(
 												status.progress * 100
-											)}%)`
-											: `(${Math.trunc(status.progress * 100)}%) ${
+											).toFixed(2)}%)`
+											: `(${(status.progress * 100).toFixed(2)}%) ${
 												status.name
 											} →`}
 									</Text>
-									<Meter
-										values={[
-											{
-												value: status.progress * 100,
-												label: status.name,
-												onClick: () => {}
+									<Box direction="row">
+										<Meter
+											values={[
+												{
+													value: status.progress * 100,
+													label: status.name,
+													onClick: () => {}
+												}
+											]}
+											aria-label="meter"
+										/>
+										<Button
+											style={{ padding: "0.3em" }}
+											onClick={() =>
+												downloadManagerInstance.attemptResume(status.uuid)
 											}
-										]}
-										aria-label="meter"
-									/>
+											icon={<Refresh />}
+										/>
+									</Box>
 								</Box>
 							))}
 						</Box>

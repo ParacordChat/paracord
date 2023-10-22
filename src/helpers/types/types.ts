@@ -34,6 +34,12 @@ export interface FileOffer {
   ownerId: string;
 }
 
+export interface FileAck {
+  uuid: string;
+  id: string;
+  chunkN: number;
+}
+
 export interface FileRequest {
   id: string;
   uuid: string;

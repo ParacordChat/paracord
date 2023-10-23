@@ -10,7 +10,7 @@ import {
 import { Login, Risk } from "grommet-icons";
 import { route } from "preact-router";
 import { useRef, useState } from "preact/hooks";
-import { uuidSource } from "../helpers/helpers";
+import { genId } from "../helpers/utils";
 import GenericHeader from "./helpers/GenericHeader";
 
 export function RoomCreator() {
@@ -39,7 +39,7 @@ export function RoomCreator() {
 					<Button
 						icon={<Risk />}
 						onClick={() =>
-							roomRef.current && (roomRef.current.value = uuidSource())
+							roomRef.current && (roomRef.current.value = genId(6))
 						}
 						label="Random"
 					/>
@@ -72,6 +72,8 @@ export function RoomCreator() {
 				style={{ position: "absolute", bottom: 0, width: "100%" }}
 			>
 				<Text>Copyright 2023 Paracord</Text>
+				{/* @ts-ignore */}
+				<Text size="xsmall">Version: {window.COMMIT_HASH}</Text>
 				<Anchor
 					label="About"
 					onClick={() => {

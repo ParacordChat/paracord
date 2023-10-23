@@ -1,10 +1,9 @@
 /* eslint-disable max-lines-per-function */
-// TODO: codesplitting
 import { events, libName } from "../../helpers/consts/consts.js";
 import { decrypt, encrypt, genKey } from "../../helpers/cryptography/crypto.js";
+import { encodeBytes } from "../../helpers/dataHandling/uint8util.js";
 import { ExtendedInstance, TorrentRoomConfig } from "../../helpers/types/distraTypes.js";
 import {
-	encodeBytes,
 	genId,
 	initGuard,
 	initPeer,
@@ -152,7 +151,6 @@ export const joinRoom = initGuard(
 				peer.signal(
 					key
 						? {
-								// TODO: testme, added type "offer", could be "answer"?
 								...val.offer,
 								sdp: await decrypt(key, val.offer.sdp),
 								type: "offer"
@@ -187,7 +185,6 @@ export const joinRoom = initGuard(
 					peer.signal(
 						key
 							? {
-									// TODO: testme, added type "answer", could be "offer"?
 									...val.answer,
 									sdp: await decrypt(key, val.answer.sdp),
 									type: "answer"

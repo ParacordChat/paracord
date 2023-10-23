@@ -49,7 +49,7 @@ export function ChatView(props: { chatManagerInstance: ChatManager }) {
 					onClick={() => setMultilineInput(!multilineInput)}
 					disabled={!uiInteractive}
 				/>
-				<TextArea // TODO: markdown support
+				<TextArea
 					ref={messageBox}
 					id="userTextBox"
 					style={{ resize: "none" }}

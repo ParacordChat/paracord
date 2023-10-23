@@ -1,7 +1,7 @@
 import * as kyber from "pqc-kyber";
 import { useUserStore } from "../../stateManagers/userManagers/userStore";
+import { decodeBytes, encodeBytes } from "../dataHandling/uint8util";
 import { User } from "../types/types";
-import { decodeBytes, encodeBytes } from "../utils";
 
 // Function to generate a public-private key pair
 export const generateKeyPair = () => kyber.keypair();

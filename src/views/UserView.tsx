@@ -46,11 +46,7 @@ export function UserView(props: {
 					<Text size="large">Peers</Text>
 				</>
 			}
-			// footer={
-
-			// }
 		>
-			{/* TODO: download dialog, screen/video/audio share */}
 			<Nav gap="small">
 				<Box
 					pad="small"

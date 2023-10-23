@@ -149,4 +149,3 @@ export function CallView(props: { rtcManagerInstance: RTCManager }) {
 		</>
 	);
 }
-// TODO: some way to let other people see a list of lurkers

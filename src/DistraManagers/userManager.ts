@@ -70,7 +70,7 @@ export default class UserManager {
 					.updateUser(id, { quantumSend: sharedSecret });
 				sendProcessedKey(ciphertext, id);
 			} catch (error) {
-				console.error(error); // TODO: mystery null error here
+				console.error(error);
 			}
 		});
 

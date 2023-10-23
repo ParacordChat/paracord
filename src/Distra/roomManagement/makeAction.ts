@@ -1,14 +1,15 @@
-import { bytesToBase64 } from "../../helpers/dataHandling/b64util";
 import { chunkSize, oneByteMax } from "../../helpers/consts/consts";
+import { findUserAndEncrypt } from "../../helpers/cryptography/cryptoSuite";
+import { bytesToBase64 } from "../../helpers/dataHandling/b64util";
+import { encodeBytes } from "../../helpers/dataHandling/uint8util";
 import {
 	ActionProgress,
 	ActionReceiver,
 	ActionSender,
 	Metadata
 } from "../../helpers/types/distraTypes";
-import { encodeBytes, iterate, mkErr, noOp } from "../../helpers/utils";
+import { iterate, mkErr, noOp } from "../../helpers/utils";
 import { useUserStore } from "../../stateManagers/userManagers/userStore";
-import { findUserAndEncrypt } from "../../helpers/cryptography/cryptoSuite";
 import { useRoomStateManager } from "./state/stateManager";
 export const makeAction = <T>(type: string, forceEncryption?: boolean | undefined) => {
   	if (!type) {

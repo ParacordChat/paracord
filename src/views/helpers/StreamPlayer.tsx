@@ -28,7 +28,6 @@ export default function StreamPlayer(props: {
 	}, [player, stream, id]);
 
 	const deployEqualizer = (
-		// TODO: no garbage collection for this?
 		mediaStream: MediaStream
 	) => {
 		const container = document.createElement("div");

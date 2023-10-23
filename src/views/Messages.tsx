@@ -18,7 +18,6 @@ export default function Messages() {
 		(state: { persona: Persona }) => state.persona.name
 	);
 
-	// TODO: make it truly lazyload(or, do we even need it?) https://v2.grommet.io/infinitescroll
 	return (
 		<Box
 			direction="column"

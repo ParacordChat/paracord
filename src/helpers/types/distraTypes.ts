@@ -30,7 +30,6 @@ export interface TorrentRoomConfig extends BaseRoomConfig {
 export type TargetPeers = string | string[] | undefined;
 
 export interface ActionSender<T> {
-  // TODO: change to use <T> for data type
   (
     data: T,
     targetPeers?: TargetPeers,
@@ -40,7 +39,6 @@ export interface ActionSender<T> {
 }
 
 export interface ActionReceiver<T> {
-  // TODO: change to use <T> for data type
   (receiver: (data: T, peerId: string, metadata?: Metadata) => void): void;
 }
 
@@ -55,7 +53,6 @@ export interface ActionProgress {
 }
 
 export type MakeAction<T> = (
-  // TODO: change to use <T> for snd/rec
   namespace: string,
   forceEncryption?: boolean,
 ) => [ActionSender<T>, ActionReceiver<T>, ActionProgress];

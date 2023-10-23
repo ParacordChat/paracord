@@ -2,13 +2,13 @@ import { Box, Button, Meter, Text } from "grommet";
 import { FormClose, Refresh } from "grommet-icons";
 import { selfId } from "../Distra";
 import DownloadManager from "../DistraManagers/downloadManager";
+import CollapsibleContainer from "../helpers/components/Collapsible";
+import FileUploader from "../helpers/components/FileUploader";
 import { fancyBytes } from "../helpers/helpers";
 import { useProgressStore } from "../stateManagers/downloadManagers/progressManager";
 import { useRealFiles } from "../stateManagers/downloadManagers/realFileManager";
 import { useOfferStore } from "../stateManagers/downloadManagers/requestManager";
 import { useUserStore } from "../stateManagers/userManagers/userStore";
-import CollapsibleContainer from "./helpers/Collapsible";
-import FileUploader from "./helpers/FileUploader";
 
 export function DownloadView(props: {
   downloadManagerInstance: DownloadManager;

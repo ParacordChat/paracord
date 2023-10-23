@@ -3,7 +3,7 @@ import AudioMotionAnalyzer from "audiomotion-analyzer";
 import { Box, Text } from "grommet";
 import { View } from "grommet-icons";
 import { useEffect, useRef } from "preact/hooks";
-import { generateHexColorFromString } from "../../helpers/helpers";
+import { generateHexColorFromString } from "../helpers";
 
 export default function StreamPlayer(props: {
   stream: MediaStream;

@@ -2,11 +2,11 @@ import { funAnimalName } from "fun-animal-names";
 import { Box, InfiniteScroll, Nav, Sidebar, Text, TextInput } from "grommet";
 import { selfId } from "../Distra";
 import UserManager from "../DistraManagers/userManager";
+import MuteUserButton from "../helpers/components/MuteUserButton";
 import { generateHexColorFromString } from "../helpers/helpers";
 import { useClientSideUserTraits } from "../stateManagers/userManagers/clientSideUserTraits";
 import { usePersonaStore } from "../stateManagers/userManagers/personaStore";
 import { useUserStore } from "../stateManagers/userManagers/userStore";
-import MuteUserButton from "./helpers/MuteUserButton";
 
 export function UserView(props: {
   roomId: string;

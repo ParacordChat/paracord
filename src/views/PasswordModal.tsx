@@ -5,8 +5,8 @@ import { FormView, FormViewHide, Key } from "grommet-icons";
 import { useEffect, useRef, useState } from "preact/hooks";
 import { joinFirebaseRoom, Room } from "../Distra";
 import MainModal from "../MainModal";
+import GenericHeader from "../helpers/components/GenericHeader";
 import { firebaseRoomConfig } from "../helpers/consts/roomConfig";
-import GenericHeader from "./helpers/GenericHeader";
 
 const PasswordModal = (roomId: string, hasPassword: boolean) => () => {
 	const [passwordVisible, setPasswordVisible] = useState<boolean>(false);

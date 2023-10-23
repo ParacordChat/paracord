@@ -1,4 +1,4 @@
-import "../styles/fileUpload.css";
+import "../../views/styles/fileUpload.css";
 
 export default function FileUploader(
 	props: {

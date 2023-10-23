@@ -29,123 +29,127 @@ export function CallView(props: { rtcManagerInstance: RTCManager }) {
 
 	return (
 		<>
-			<Box>
-				{callConsent && (
-					<Box>
-						{myStream ? (
-							<StreamPlayer
-								isMuted={true}
-								stream={myStream}
-								username="You"
-								id={selfId}
-							/>
-						) : (
-							<Box
-								round="small"
-								maxWidth="50em"
-								border={{
-									color: generateHexColorFromString(selfId),
-									size: "medium"
-								}}
-							>
-								<Text color={generateHexColorFromString(selfId)}>You</Text>
-								<View size="xlarge" />
-							</Box>
-						)}
-						<Box>
-							{videoBubbles.map((bubble) => (
+			<div style={{ height: "100%", overflow:"scroll" }}>
+				<Box>
+					{callConsent && (
+						<Box fill="vertical" overflow="scroll">
+							{myStream ? (
 								<StreamPlayer
-									key={bubble.id}
-									stream={bubble.stream}
-									username={
-										userNames.find((p) => p.id === bubble.id)?.name ||
-                    funAnimalName(bubble.id)
-									}
-									id={bubble.id}
+									isMuted={true}
+									stream={myStream}
+									username="You"
+									id={selfId}
 								/>
-							))}
+							) : (
+								<Box
+									round="small"
+									maxWidth="50em"
+									border={{
+										color: generateHexColorFromString(selfId),
+										size: "medium"
+									}}
+								>
+									<Text color={generateHexColorFromString(selfId)}>You</Text>
+									<View size="xlarge" />
+								</Box>
+							)}
+							<Box>
+								{videoBubbles.map((bubble) => (
+									<StreamPlayer
+										key={bubble.id}
+										stream={bubble.stream}
+										username={
+											userNames.find((p) => p.id === bubble.id)?.name ||
+                    funAnimalName(bubble.id)
+										}
+										id={bubble.id}
+									/>
+								))}
+							</Box>
 						</Box>
-					</Box>
-				)}
-				<Footer round="small" background="brand" pad="medium">
-					<Box direction="column" gap="small">
-						{isSharing ? (
+					)}
+				</Box>
+				<Footer style={{
+					position: "fixed",
+					bottom: "0",
+					width: "100%"
+				}} direction="row" round="small" background="brand" pad="medium">
+					{isSharing ? (
+						<Button
+							onClick={() => {
+								rtcManagerInstance
+									.shareMedia("cutStream")
+									.then(() =>
+										useCallPrefsState.getState()
+											.setIsSharing(false)
+									);
+							}}
+							hoverIndicator
+							icon={<Close />}
+							label="Leave Call"
+						/>
+					) : (
+						<Box gap="small">
 							<Button
+								disabled={!uiInteractive}
 								onClick={() => {
 									rtcManagerInstance
-										.shareMedia("cutStream")
+										.shareMedia("phone")
 										.then(() =>
 											useCallPrefsState.getState()
-												.setIsSharing(false)
+												.setIsSharing(true)
 										);
 								}}
 								hoverIndicator
-								icon={<Close />}
-								label="Leave Call"
+								icon={<Phone />}
+								label="Audio Only"
 							/>
-						) : (
-							<Box direction="row" gap="small">
-								<Button
-									disabled={!uiInteractive}
-									onClick={() => {
-										rtcManagerInstance
-											.shareMedia("phone")
-											.then(() =>
-												useCallPrefsState.getState()
-													.setIsSharing(true)
-											);
-									}}
-									hoverIndicator
-									icon={<Phone />}
-									label="Audio Only"
-								/>
-								<Button
-									disabled={!uiInteractive}
-									onClick={() => {
-										rtcManagerInstance
-											.shareMedia("video")
-											.then(() =>
-												useCallPrefsState.getState()
-													.setIsSharing(true)
-											);
-									}}
-									hoverIndicator
-									icon={<Camera />}
-									label="Camera"
-								/>
-								<Button
-									disabled={!uiInteractive}
-									onClick={() => {
-										rtcManagerInstance
-											.shareMedia("screen")
-											.then(() =>
-												useCallPrefsState.getState()
-													.setIsSharing(true)
-											);
-									}}
-									hoverIndicator
-									icon={<Monitor />}
-									label="Desktop share"
-								/>
-								<Button
-									disabled={!uiInteractive}
-									onClick={() => {
-										rtcManagerInstance
-											.shareMedia("view")
-											.then(() =>
-												useCallPrefsState.getState()
-													.setIsSharing(true)
-											);
-									}}
-									hoverIndicator
-									icon={<View />}
-									label="View"
-								/>
-							</Box>
-						)}
-					</Box>
+							<Button
+								disabled={!uiInteractive}
+								onClick={() => {
+									rtcManagerInstance
+										.shareMedia("video")
+										.then(() =>
+											useCallPrefsState.getState()
+												.setIsSharing(true)
+										);
+								}}
+								hoverIndicator
+								icon={<Camera />}
+								label="Camera"
+							/>
+							<Button
+								disabled={!uiInteractive}
+								onClick={() => {
+									rtcManagerInstance
+										.shareMedia("screen")
+										.then(() =>
+											useCallPrefsState.getState()
+												.setIsSharing(true)
+										);
+								}}
+								hoverIndicator
+								icon={<Monitor />}
+								label="Desktop share"
+							/>
+							<Button
+								disabled={!uiInteractive}
+								onClick={() => {
+									rtcManagerInstance
+										.shareMedia("view")
+										.then(() =>
+											useCallPrefsState.getState()
+												.setIsSharing(true)
+										);
+								}}
+								hoverIndicator
+								icon={<View />}
+								label="View"
+							/>
+						</Box>
+					)}
 				</Footer>
-			</Box>
+			</div>
 		</>
 	);
 }

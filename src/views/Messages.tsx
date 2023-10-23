@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import { Box, InfiniteScroll } from "grommet";
+import { InfiniteScroll, Main } from "grommet";
 import { selfId } from "../Distra";
 import RenderMessage from "../helpers/components/RenderMessage";
 import { Message, Persona } from "../helpers/types/types";
@@ -18,9 +18,9 @@ export default function Messages() {
 		(state: { persona: Persona }) => state.persona.name
 	);
 
-	return (
-		<Box
-			direction="column"
+	return (// TODO: fix mbox vert fill and vchat vert fill
+		<Main
+		 direction="column"
 			border={{ color: "brand", size: "small" }}
 			pad="small"
 			round="small"
@@ -31,7 +31,7 @@ export default function Messages() {
 				overflowX: "auto",
 				overflowY: "scroll",
 				// overflow: "auto",
-				height: "30em"
+				height: "90%"
 			}}
 		>
 			<InfiniteScroll
@@ -52,6 +52,6 @@ export default function Messages() {
 					/>
 				)}
 			</InfiniteScroll>
-		</Box>
+		</Main>
 	);
 }

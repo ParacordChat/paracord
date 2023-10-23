@@ -1,5 +1,5 @@
 import { Button } from "grommet";
-import { Volume, VolumeMute } from "grommet-icons";
+import { Radial, RadialSelected } from "grommet-icons";
 
 export default function MuteUserButton(props: {
   isMuted: boolean;
@@ -8,7 +8,7 @@ export default function MuteUserButton(props: {
 	const { isMuted, toggleMuted } = props;
 	return (
 		<Button
-			icon={isMuted ? <VolumeMute /> : <Volume />}
+			icon={isMuted ? <Radial alt="unblock transmission" /> : <RadialSelected alt="block transmission" />}
 			style={{ color: "var(--accent-major)" }}
 			pad="0"
 			onClick={toggleMuted}

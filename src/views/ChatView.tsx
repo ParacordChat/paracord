@@ -74,7 +74,6 @@ export function ChatView(props: { chatManagerInstance: ChatManager }) {
 				<Button
 					onClick={sendMessage}
 					disabled={!uiInteractive}
-					label="Send"
 					primary
 					hoverIndicator
 					icon={<Send />}

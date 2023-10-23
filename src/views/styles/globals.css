@@ -3,3 +3,12 @@
       color-scheme: dark;
     }
 }
+
+@media (max-width: 660px) {
+  .mobileHide {
+    display: none;
+  }
+  .mobileShow {
+    display: block;
+  }
+}

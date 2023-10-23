@@ -102,13 +102,19 @@ const MainModal = ({ roomId, room }: { roomId: string; room: Room }) => {
 				<Box direction="row">
 					<Box fill={true}>
 						<Tabs.Content value="tab1">
-							<ChatView chatManagerInstance={chatManagerInstance} />
+							<Box style={{ height: "84vh", overflow:"hidden" }}>
+								<ChatView chatManagerInstance={chatManagerInstance} />
+							</Box>
 						</Tabs.Content>
 						<Tabs.Content value="tab2">
-							<DownloadView downloadManagerInstance={downloadManagerInstance} />
+							<Box style={{ height: "84vh" }}>
+								<DownloadView downloadManagerInstance={downloadManagerInstance} />
+							</Box>
 						</Tabs.Content>
 						<Tabs.Content value="tab3">
-							<CallView rtcManagerInstance={rtcManagerInstance} />
+							<Box style={{ height: "84vh" }}>
+								<CallView rtcManagerInstance={rtcManagerInstance} />
+							</Box>
 						</Tabs.Content>
 						<Tabs.Content value="tab4">
 							<SettingsView />

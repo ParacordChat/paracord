@@ -55,8 +55,7 @@ export default function StreamPlayer(props: {
 	return (
 		<Box
 			round="small"
-			maxWidth="50em"
-			border={{ color: generateHexColorFromString(id), size: "medium" }}
+			border={{ color: generateHexColorFromString(id),  size: "medium" }}
 		>
 			<Text color={generateHexColorFromString(id)}>{username}</Text>
 			{stream.getVideoTracks().length === 0 ? (
@@ -71,7 +70,7 @@ export default function StreamPlayer(props: {
 							/>
 							<Box
 								ref={eqContainer}
-								style={{ width: "10em", height: "10em" }}
+								style={{ maxHeight:"50vh" }}
 							/>
 						</>
 					) : (
@@ -80,7 +79,9 @@ export default function StreamPlayer(props: {
 				</>
 			) : (
 				<>
-					<video autoPlay={true} muted={isMuted} ref={player} />
+					<video style={{ 
+						maxHeight:"50vh"
+					 }} autoPlay={true} muted={isMuted} ref={player} />
 				</>
 			)}
 		</Box>

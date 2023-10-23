@@ -26,7 +26,7 @@ export function DownloadView(props: {
 	return (
 		<>
 			{downloadManagerInstance && (
-				<>
+				<div style={{ height: "100%", overflow:"scroll" }}>
 					<CollapsibleContainer
 						open={true}
 						style={{
@@ -54,17 +54,18 @@ export function DownloadView(props: {
                 		background="dark-3"
                 		round="small"
                 		pad="medium"
+                			direction="row"
                 		border={{ color: "accent-1", size: "medium" }}
                 		key={id}
                 	>
-                		{file.name} <p>{fancyBytes(file.size)} </p>
+                		<Text size="medium">{file.name} {fancyBytes(file.size)} </Text>
                 		<Button
                 			type="button"
-                			style={{ padding: "0.3em" }}
+                			style={{ marginLeft: "auto" }}
+                			primary
                 			onClick={() => downloadManagerInstance.removeRealFile(id)}
                 			icon={<FormClose />}
                 		/>
-                		<hr />
                 	</Box>
                 	))}
 						</Box>
@@ -175,7 +176,7 @@ export function DownloadView(props: {
 							))}
 						</Box>
 					</CollapsibleContainer>
-				</>
+				</div>
 			)}
 		</>
 	);

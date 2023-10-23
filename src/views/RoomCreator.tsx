@@ -72,6 +72,8 @@ export function RoomCreator() {
 				style={{ position: "absolute", bottom: 0, width: "100%" }}
 			>
 				<Text>Copyright 2023 Paracord</Text>
+				{/* @ts-ignore */}
+				<Text size="xsmall">Version: {window.COMMIT_HASH}</Text>
 				<Anchor
 					label="About"
 					onClick={() => {

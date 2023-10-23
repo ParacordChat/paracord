@@ -55,6 +55,10 @@ jobs:
             ${{ runner.os }}-pnpm-store-
       - name: Install dependencies with pnpm
         run: pnpm i
+      - name: Get version hash as env variable
+        shell: bash
+        run: |
+          echo "VERSION_HASH=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
       - name: Build
         run: pnpm build
       - name: Setup Pages

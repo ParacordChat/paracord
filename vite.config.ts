@@ -6,8 +6,9 @@ import wasm from "vite-plugin-wasm";
 
 import { execSync } from "child_process";
 
-const commitHash = execSync("git rev-parse --short HEAD")
+const commitHash = process.env.VERSION_HASH || execSync("git rev-parse HEAD")
 	.toString()
+	.slice(0, 7)
 	.trim();
 
 // https://vitejs.dev/config/

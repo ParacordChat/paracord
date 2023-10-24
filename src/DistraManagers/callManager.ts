@@ -1,3 +1,4 @@
+import { StateUpdater } from "preact/hooks";
 import { Room } from "../Distra";
 import { useCallPrefsState } from "../stateManagers/RTCManagers/personalCallPrefs";
 
@@ -57,14 +58,14 @@ export default class RTCManager {
 					.removeBubbleWithId(id);
 			}
 			if (useCallPrefsState.getState().myStream) {
+				console.log("adding stream",JSON.stringify(useCallPrefsState.getState().myStream));
 				addStream(useCallPrefsState.getState().myStream!, id); // TODO: refreshing streams in room still dosen't work...
 			}
 		});
 	}
 
-	public shareMedia = async (type: RoomActionType) => {
+	public shareMedia = async (type: RoomActionType, myStream:MediaStream|null, setMyStream:StateUpdater<MediaStream|null>) => {
 		if (type === "cutStream") {
-			const myStream = useCallPrefsState.getState().myStream;
 			const videoBubbles = useCallPrefsState.getState().videoBubbles;
 			if (myStream) {
 				[...videoBubbles.map((vb) => vb.stream), myStream].forEach((stream) => {
@@ -120,10 +121,12 @@ export default class RTCManager {
 			})();
 			if (selfStream) {
 				// send stream to peers currently in the room
+				console.log("dd",selfStream);
 				this.addStream(selfStream);
 				this.joinRoom(type);
-				useCallPrefsState.getState()
-					.setMyStream(selfStream);
+				console.log("adding slftream",myStream);
+				setMyStream(selfStream);
+				console.log("adding slftream",JSON.stringify(myStream));
 			}
 		}
 	};

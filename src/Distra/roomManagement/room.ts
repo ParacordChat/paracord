@@ -1,4 +1,5 @@
 import { SignalData } from "simple-peer";
+import { events } from "../../helpers/consts/consts.js";
 import {
 	ExtendedInstance,
 	Metadata,
@@ -9,13 +10,12 @@ import {
 	iterate,
 	mkErr
 } from "../../helpers/utils.js";
-import { useRoomStateManager } from "./state/stateManager.js";
-import { events } from "../../helpers/consts/consts.js";
-import { useHookStateManager } from "./state/hookState.js";
 import { exitPeer } from "./exitPeer.js";
-import { useRoomSignalManager } from "./state/roomSignalManager.js";
-import { makeAction } from "./makeAction.js";
 import { handleData } from "./handleData.js";
+import { makeAction } from "./makeAction.js";
+import { useHookStateManager } from "./state/hookState.js";
+import { useRoomSignalManager } from "./state/roomSignalManager.js";
+import { useRoomStateManager } from "./state/stateManager.js";
 
 export default async (
 	onPeer: (joinHook: (peer: ExtendedInstance, id: string) => void) => void,
@@ -131,16 +131,20 @@ export default async (
 					.map(([id, peer]) => [id, peer._pc])
 			),
 
-		addStream: (stream: MediaStream, targets: TargetPeers, meta: Metadata) => {
+		addStream: (stream: MediaStream, targets?: TargetPeers, meta?: Metadata) => {
 			const pmap = useRoomStateManager.getState().peerMap;
 			const peerSendables = targets || Object.keys(pmap);
-			if (!peerSendables) return [];
-			return iterate(pmap, peerSendables, async (id, peer) => {
+			const promises = [];
+
+			for (const peerId of peerSendables) {
+				const peer = pmap[peerId];
 				if (meta) {
-					await sendStreamMeta(meta, id);
+					promises.push(sendStreamMeta(meta, peerId));
 				}
-				peer.addStream(stream);
-			});
+				promises.push(peer.addStream(stream));
+			}
+
+			return Promise.all(promises);
 		},
 		removeStream: (stream: MediaStream, targets: TargetPeers) => {
 			const pmap = useRoomStateManager.getState().peerMap;
@@ -151,7 +155,9 @@ export default async (
         	peerSendables,
         	(_, peer) =>
         		new Promise((res) => {
-        			peer.removeStream(stream);
+        			if(peer.streams.some((s) => s.id === stream.id)){
+        				peer.removeStream(stream);
+        			}
         			res();
         		})
         );

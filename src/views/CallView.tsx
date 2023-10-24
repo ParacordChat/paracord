@@ -2,6 +2,7 @@
 import { funAnimalName } from "fun-animal-names";
 import { Box, Button, Footer, Text } from "grommet";
 import { Camera, Close, Monitor, Phone, View } from "grommet-icons";
+import { useState } from "preact/hooks";
 import { selfId } from "../Distra";
 import RTCManager from "../DistraManagers/callManager";
 import StreamPlayer from "../helpers/components/StreamPlayer";
@@ -12,7 +13,9 @@ import { useUserStore } from "../stateManagers/userManagers/userStore";
 export function CallView(props: { rtcManagerInstance: RTCManager }) {
 	const { rtcManagerInstance } = props;
 
-	const userNames = useUserStore((state) =>
+	const [myStream,setMyStream]=useState<MediaStream|null>(null);
+
+	const userNames = useUserStore((state) =>// TODO: this may not update w/ new users
 		state.users.map((p) => {
 			return { id: p.id, name: p.name };
 		})
@@ -23,7 +26,6 @@ export function CallView(props: { rtcManagerInstance: RTCManager }) {
 	);
 
 	const callConsent = useCallPrefsState((state) => state.callConsent);
-	const myStream = useCallPrefsState((state) => state.myStream);
 	const isSharing = useCallPrefsState((state) => state.isSharing);
 	const videoBubbles = useCallPrefsState((state) => state.videoBubbles);
 
@@ -60,7 +62,7 @@ export function CallView(props: { rtcManagerInstance: RTCManager }) {
 										stream={bubble.stream}
 										username={
 											userNames.find((p) => p.id === bubble.id)?.name ||
-                    funAnimalName(bubble.id)
+                    						funAnimalName(bubble.id)
 										}
 										id={bubble.id}
 									/>
@@ -78,7 +80,7 @@ export function CallView(props: { rtcManagerInstance: RTCManager }) {
 						<Button
 							onClick={() => {
 								rtcManagerInstance
-									.shareMedia("cutStream")
+									.shareMedia("cutStream",myStream,setMyStream)
 									.then(() =>
 										useCallPrefsState.getState()
 											.setIsSharing(false)
@@ -94,7 +96,7 @@ export function CallView(props: { rtcManagerInstance: RTCManager }) {
 								disabled={!uiInteractive}
 								onClick={() => {
 									rtcManagerInstance
-										.shareMedia("phone")
+										.shareMedia("phone",myStream,setMyStream)
 										.then(() =>
 											useCallPrefsState.getState()
 												.setIsSharing(true)
@@ -108,7 +110,7 @@ export function CallView(props: { rtcManagerInstance: RTCManager }) {
 								disabled={!uiInteractive}
 								onClick={() => {
 									rtcManagerInstance
-										.shareMedia("video")
+										.shareMedia("video",myStream,setMyStream)
 										.then(() =>
 											useCallPrefsState.getState()
 												.setIsSharing(true)
@@ -122,7 +124,7 @@ export function CallView(props: { rtcManagerInstance: RTCManager }) {
 								disabled={!uiInteractive}
 								onClick={() => {
 									rtcManagerInstance
-										.shareMedia("screen")
+										.shareMedia("screen",myStream,setMyStream)
 										.then(() =>
 											useCallPrefsState.getState()
 												.setIsSharing(true)
@@ -136,7 +138,7 @@ export function CallView(props: { rtcManagerInstance: RTCManager }) {
 								disabled={!uiInteractive}
 								onClick={() => {
 									rtcManagerInstance
-										.shareMedia("view")
+										.shareMedia("view",myStream,setMyStream)
 										.then(() =>
 											useCallPrefsState.getState()
 												.setIsSharing(true)

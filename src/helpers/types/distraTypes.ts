@@ -73,7 +73,7 @@ export interface Room {
     stream: MediaStream,
     targetPeers?: TargetPeers,
     metadata?: Metadata,
-  ) => Promise<void>[];
+  ) => Promise<(void | void[])[]>;
 
   removeStream: (stream: MediaStream, targetPeers?: TargetPeers) => void;
 

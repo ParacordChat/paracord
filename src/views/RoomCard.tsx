@@ -13,7 +13,6 @@ export function RoomCard(props: { roomId: string; children?: any }) {
 					align="center"
 					gap="small"
 					style={{
-						borderBottom: "1px solid #eaeaea",
 						paddingTop: "0",
 						height: "8vh"
 					}}
@@ -28,14 +27,13 @@ export function RoomCard(props: { roomId: string; children?: any }) {
 					/>
 
 					<Image alt="paracord logo" style={{ height: "4em" }} src={pcdLogo} />
-					<Box style={{ width: "100%" }}>
+					<Box style={{
+ 						borderBottom: "1px solid #eaeaea",
+						width: "100%" 
+					}}>
 						<Text size="xxlarge">Paracord</Text>
-						<Box direction="row">
-							<Text size="small" style={{ paddingRight: "1em" }}>
-                Room ID
-							</Text>
-							<Text size="medium">{roomId}</Text>
-						</Box>
+							
+						<Text size="medium">Room ID {roomId}</Text>
 					</Box>
 				</Box>
 			</div>

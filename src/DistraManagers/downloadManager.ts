@@ -31,21 +31,21 @@ const readFileChunk = (data: File, chunkN: number) =>
 
 export default class DownloadManager {
 	private sendFileRequest: (
-    id: FileRequest,
-    ids?: string | string[]
-  ) => Promise<any[]>;
+		id: FileRequest,
+		ids?: string | string[]
+	) => Promise<any[]>;
 	private sendFileOffer: (
-    files: FileOffer[],
-    ids?: string | string[]
-  ) => Promise<any[]>;
+		files: FileOffer[],
+		ids?: string | string[]
+	) => Promise<any[]>;
 	private sendFileAck: (
-    ack: FileAck,
-    ids?: string | string[]
-  ) => Promise<any[]>;
+		ack: FileAck,
+		ids?: string | string[]
+	) => Promise<any[]>;
 
 	constructor({ room, roomId }: { room: Room; roomId: string }) {
 		const [sendFileChunk, getFileChunk, onFileProgress] =
-      room.makeAction<Uint8Array>("transfer", true);
+			room.makeAction<Uint8Array>("transfer", true);
 		const [sendFileRequest, getFileRequest] = room.makeAction<FileRequest>(
 			"fileRequest",
 			true
@@ -152,13 +152,12 @@ export default class DownloadManager {
 							},
 							(chkProgress: number, _fromUser: any) => {
 								const progress =
-                ((fileAck.chunkN + chkProgress) * chunkSize) / currentFile.size;
+								((fileAck.chunkN + chkProgress) * chunkSize) / currentFile.size;
 								if (progress > 1) {
 									useProgressStore.getState()
 										.deleteProgress(fileAck.uuid);
 								} else {
-									useProgressStore
-										.getState()
+									useProgressStore.getState()
 										.updateProgress(fileAck.uuid, {
 											progress,
 											chunkN: fileAck.chunkN + 1
@@ -173,12 +172,12 @@ export default class DownloadManager {
 		onFileProgress((rawProgress, _id, metadata) => {
 			const processedMeta = metadata as FileMetaData;
 			const progress =
-        ((processedMeta.chunkN + rawProgress) * chunkSize) / processedMeta.size;
+				((processedMeta.chunkN + rawProgress) * chunkSize) / processedMeta.size;
 
 			processedMeta.uuid &&
-        useProgressStore
-        	.getState()
-        	.updateProgress(processedMeta.uuid, { progress });
+				useProgressStore
+					.getState()
+					.updateProgress(processedMeta.uuid, { progress });
 			if (processedMeta.last && progress > 1) {
 				useProgressStore.getState()
 					.deleteProgress(processedMeta.uuid);
@@ -222,9 +221,9 @@ export default class DownloadManager {
 
 	public requestFile = async (fromUser: string, fileId: string) => {
 		const requestableFiles =
-      useOfferStore.getState().requestableDownloads[fromUser];
+			useOfferStore.getState().requestableDownloads[fromUser];
 		const findName =
-      requestableFiles && requestableFiles.find((f) => f.id === fileId);
+			requestableFiles && requestableFiles.find((f) => f.id === fileId);
 		if (findName) {
 			const fileUUID = genId(6);
 			await showSaveFilePicker({
@@ -268,7 +267,11 @@ export default class DownloadManager {
 
 	public offerRequestableFiles = async (id?: string | string[]) => {
 		const realFiles = useRealFiles.getState().realFiles;
-		if (!realFiles || Object.keys(realFiles).length === 0) return;
+		if (!realFiles || Object.keys(realFiles).length === 0) {
+			this.sendFileOffer([], id)
+				.catch((error) => console.error(error));
+			return;
+		}
 		const files: FileOffer[] = Object.entries(realFiles)
 			.map(
 				([fileId, file]) => ({

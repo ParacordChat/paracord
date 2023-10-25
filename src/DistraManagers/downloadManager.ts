@@ -316,6 +316,25 @@ export default class DownloadManager {
 		}
 	};
 
+	// public pauseFile = (uuid: string) => {
+	// TODO: add back
+	// };
+
+	public cancelFile = (uuid: string) => {
+		const progressSeek = useProgressStore
+			.getState()
+			.progressQueue.find((p) => p.uuid === uuid);
+
+		if (progressSeek) {
+			useProgressStore.getState()
+				.deleteProgress(uuid);
+			if (progressSeek.toUser === selfId) {
+				useProgressStore.getState()
+					.removeWritable(uuid);
+			}
+		}
+	};
+
 	public peerJoinHook = (id: string) =>
 		setTimeout(() => this.offerRequestableFiles(id), 5000); // TODO: kind of an ugly fix, but it works
 }

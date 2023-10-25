@@ -136,7 +136,6 @@ export function DownloadView(props: {
 							pad="medium"
 							border={{ color: "brand", size: "medium" }}
 						>
-							{/* TODO: add a "stop" button */}
 							{progressQueue.map((status, index) => (
 								<Box
 									key={`${status.id}-${index}`}
@@ -172,6 +171,21 @@ export function DownloadView(props: {
 												downloadManagerInstance.attemptResume(status.uuid)
 											}
 											icon={<Refresh />}
+										/>
+										{/* <Button //TODO: add back
+											style={{ padding: "0.3em" }}
+											onClick={() =>
+												downloadManagerInstance.pauseFile(status.uuid)
+											}
+											icon={<Pause />}
+										/> */}
+										<Button
+											style={{ padding: "0.3em" }}
+											primary
+											onClick={() =>
+												downloadManagerInstance.cancelFile(status.uuid)
+											}
+											icon={<FormClose />}
 										/>
 									</Box>
 								</Box>

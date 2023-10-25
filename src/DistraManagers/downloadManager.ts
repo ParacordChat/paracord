@@ -213,8 +213,9 @@ export default class DownloadManager {
 			if (useClientSideUserTraits.getState().mutedUsers[id] !== true) {
 				useOfferStore.getState()
 					.updateOrAddRequestable(id, data);
-
-				sendSystemMessage(roomId, `${id} offered you files`);
+				if (data.length > 0) {
+					sendSystemMessage(roomId, `${funAnimalName(id)} offered you files`);
+				}
 			}
 		});
 	}

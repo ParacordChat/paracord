@@ -1,14 +1,10 @@
 /* eslint-disable multiline-ternary */
-import dayjs from "dayjs";
-import relativeTime from "dayjs/plugin/relativeTime";
 import DOMPurify from "dompurify";
 import { Box, Button, Text } from "grommet";
 import { Return } from "grommet-icons";
 import { useEffect, useRef } from "preact/hooks";
 import { generateHexColorFromString } from "../helpers";
 import { Message } from "../types/types";
-
-dayjs.extend(relativeTime);
 
 const formatMessage = (message: string) => {
 	const replyRegex = />>(.{9})/gi;
@@ -26,6 +22,23 @@ const formatMessage = (message: string) => {
 	);
 
 	return message;
+};
+
+const getTimeElapsed = (receivedAt: number) => {
+	const now = Date.now();
+	const secondsElapsed = Math.floor((now - receivedAt) / 1000);
+	if (secondsElapsed < 60) {
+		return `${secondsElapsed} seconds ago`;
+	} else if (secondsElapsed < 3600) {
+		const minutesElapsed = Math.floor(secondsElapsed / 60);
+		return `${minutesElapsed} minute${minutesElapsed > 1 ? "s" : ""} ago`;
+	} else if (secondsElapsed < 86_400) {
+		const hoursElapsed = Math.floor(secondsElapsed / 3600);
+		return `${hoursElapsed} hour${hoursElapsed > 1 ? "s" : ""} ago`;
+	} else {
+		const daysElapsed = Math.floor(secondsElapsed / 86_400);
+		return `${daysElapsed} day${daysElapsed > 1 ? "s" : ""} ago`;
+	}
 };
 
 export default function RenderMessage(props: {
@@ -60,8 +73,7 @@ export default function RenderMessage(props: {
 					>
 						{message.text}
 						<Text style={{ color: "grey" }}>
-							{dayjs()
-								.to(dayjs(message.recievedAt))}
+							{getTimeElapsed(message.recievedAt)}
 						</Text>
 					</Box>
 				</div>
@@ -94,8 +106,7 @@ export default function RenderMessage(props: {
 									color: "grey"
 								}}
 							>
-								{dayjs()
-									.to(dayjs(message.recievedAt))}
+								{getTimeElapsed(message.recievedAt)}
 							</Text>
 							<Button
 								style={{

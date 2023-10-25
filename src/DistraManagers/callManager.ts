@@ -6,9 +6,9 @@ type RoomActionType = "phone" | "video" | "screen" | "cutStream" | "view";
 
 export default class RTCManager {
 	private joinRoom: (
-    roomAction: RoomActionType,
-    ids?: string | string[]
-  ) => Promise<any[]>;
+		roomAction: RoomActionType,
+		ids?: string | string[]
+	) => Promise<any[]>;
 	private removeStream: (stream: MediaStream) => void;
 	private addStream: (stream: MediaStream, ids?: string | string[]) => void;
 
@@ -90,6 +90,9 @@ export default class RTCManager {
 
 			useCallPrefsState.getState()
 				.setCallConsent(false);
+
+			useCallPrefsState.getState()
+				.setIsSharing(false);
 		} else if (type === "view") {
 			useCallPrefsState.getState()
 				.setCallConsent(true);
@@ -128,12 +131,13 @@ export default class RTCManager {
 			})();
 			if (selfStream) {
 				// send stream to peers currently in the room
-				console.log("dd", selfStream);
 				this.addStream(selfStream);
-				this.joinRoom(type);
-				console.log("adding slftream", myStream);
+				this.joinRoom(type)
+					.then(() =>
+						useCallPrefsState.getState()
+							.setIsSharing(true)
+					);
 				setMyStream(selfStream);
-				console.log("adding slftream", JSON.stringify(myStream));
 			}
 		}
 	};

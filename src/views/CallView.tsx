@@ -87,12 +87,10 @@ export function CallView(props: { rtcManagerInstance: RTCManager }) {
 				>
 					{isSharing ? (
 						<Button
-							onClick={() => {
+							onClick={() => 
 								rtcManagerInstance
 									.shareMedia("cutStream", myStream, setMyStream)
-									.then(() => useCallPrefsState.getState()
-										.setIsSharing(false));
-							}}
+							}
 							hoverIndicator
 							icon={<Close />}
 							label="Leave Call"
@@ -101,56 +99,36 @@ export function CallView(props: { rtcManagerInstance: RTCManager }) {
 						<Box gap="small">
 							<Button
 								disabled={!uiInteractive}
-								onClick={() => {
+								onClick={() => 
 									rtcManagerInstance
-										.shareMedia("phone", myStream, setMyStream)
-										.then(() =>
-											useCallPrefsState.getState()
-												.setIsSharing(true)
-										);
-								}}
+										.shareMedia("phone", myStream, setMyStream)}
 								hoverIndicator
 								icon={<Phone />}
 								label="Audio Only"
 							/>
 							<Button
 								disabled={!uiInteractive}
-								onClick={() => {
+								onClick={() => 
 									rtcManagerInstance
-										.shareMedia("video", myStream, setMyStream)
-										.then(() =>
-											useCallPrefsState.getState()
-												.setIsSharing(true)
-										);
-								}}
+										.shareMedia("video", myStream, setMyStream)}
 								hoverIndicator
 								icon={<Camera />}
 								label="Camera"
 							/>
 							<Button
 								disabled={!uiInteractive}
-								onClick={() => {
+								onClick={() => 
 									rtcManagerInstance
-										.shareMedia("screen", myStream, setMyStream)
-										.then(() =>
-											useCallPrefsState.getState()
-												.setIsSharing(true)
-										);
-								}}
+										.shareMedia("screen", myStream, setMyStream)}
 								hoverIndicator
 								icon={<Monitor />}
 								label="Desktop share"
 							/>
 							<Button
 								disabled={!uiInteractive}
-								onClick={() => {
+								onClick={() => 
 									rtcManagerInstance
-										.shareMedia("view", myStream, setMyStream)
-										.then(() =>
-											useCallPrefsState.getState()
-												.setIsSharing(true)
-										);
-								}}
+										.shareMedia("view", myStream, setMyStream)}
 								hoverIndicator
 								icon={<View />}
 								label="View"

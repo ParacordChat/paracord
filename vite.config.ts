@@ -4,20 +4,10 @@ import { VitePWA } from "vite-plugin-pwa";
 import topLevelAwait from "vite-plugin-top-level-await";
 import wasm from "vite-plugin-wasm";
 
-import { execSync } from "child_process";
-
-const commitHash =
-  process.env.VERSION_HASH ||
-  execSync("git rev-parse HEAD")
-  	.toString()
-  	.slice(0, 7)
-  	.trim();
-
 // https://vitejs.dev/config/
 export default defineConfig({
 	define: {
 		// global: {},
-		COMMIT_HASH: JSON.stringify(commitHash)
 	},
 	base: "/",
 	plugins: [

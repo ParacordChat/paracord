@@ -10,6 +10,7 @@ import {
 import { Login, Risk } from "grommet-icons";
 import { route } from "preact-router";
 import { useRef, useState } from "preact/hooks";
+import packageJson from "../../package.json";
 import GenericHeader from "../helpers/components/GenericHeader";
 import { genId } from "../helpers/utils";
 
@@ -72,8 +73,7 @@ export function RoomCreator() {
 				style={{ position: "absolute", bottom: 0, width: "100%" }}
 			>
 				<Text>Copyright 2023 Paracord</Text>
-				{/* @ts-ignore */}
-				<Text size="xsmall">Version: {window.COMMIT_HASH}</Text>
+				<Text size="xsmall">Version: {packageJson.version}</Text>
 				<Anchor
 					label="About"
 					onClick={() => {

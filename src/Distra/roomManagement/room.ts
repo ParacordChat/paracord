@@ -6,10 +6,7 @@ import {
 	Room,
 	TargetPeers
 } from "../../helpers/types/distraTypes.js";
-import {
-	iterate,
-	mkErr
-} from "../../helpers/utils.js";
+import { iterate, mkErr } from "../../helpers/utils.js";
 import { exitPeer } from "./exitPeer.js";
 import { handleData } from "./handleData.js";
 import { makeAction } from "./makeAction.js";
@@ -45,15 +42,26 @@ export default async (
 		peer.on(events.data, onData);
 
 		peer.on(events.stream, (stream) => {
-			useHookStateManager.getState()
-				.onPeerStream(stream, id, useRoomSignalManager.getState().pendingStreamMetas[id]);
+			useHookStateManager
+				.getState()
+				.onPeerStream(
+					stream,
+					id,
+					useRoomSignalManager.getState().pendingStreamMetas[id]
+				);
 			useRoomSignalManager.getState()
 				.removeFromPendingStreamMetas(id);
 		});
 
 		peer.on(events.track, (track, stream) => {
-			useHookStateManager.getState()
-				.onPeerTrack(track, stream, id, useRoomSignalManager.getState().pendingTrackMetas[id]);
+			useHookStateManager
+				.getState()
+				.onPeerTrack(
+					track,
+					stream,
+					id,
+					useRoomSignalManager.getState().pendingTrackMetas[id]
+				);
 			useRoomSignalManager.getState()
 				.removeFromPendingTrackMetas(id);
 		});
@@ -91,14 +99,14 @@ export default async (
 		}
 	});
 
-	getStreamMeta(
-		(meta: any, id: string) => (useRoomSignalManager.getState()
-			.addToPendingStreamMetas(id, meta))
+	getStreamMeta((meta: any, id: string) =>
+		useRoomSignalManager.getState()
+			.addToPendingStreamMetas(id, meta)
 	);
 
-	getTrackMeta(
-		(meta: any, id: string) => (useRoomSignalManager.getState()
-			.addToPendingTrackMetas(id, meta))
+	getTrackMeta((meta: any, id: string) =>
+		useRoomSignalManager.getState()
+			.addToPendingTrackMetas(id, meta)
 	);
 
 	return {
@@ -111,13 +119,17 @@ export default async (
 
 			const start = Date.now();
 			sendPing(null, id);
-			await new Promise((res) => (useRoomSignalManager.getState()
-				.addToPendingPongs(id, res)));
+			await new Promise((res) =>
+				useRoomSignalManager.getState()
+					.addToPendingPongs(id, res)
+			);
 			return Date.now() - start;
 		},
 
 		leave: () => {
-			for (const [id, peer] of Object.entries(useRoomStateManager.getState().peerMap)) {
+			for (const [id, peer] of Object.entries(
+				useRoomStateManager.getState().peerMap
+			)) {
 				peer.destroy();
 				useRoomStateManager.getState()
 					.removeFromPeerMap(id);
@@ -128,10 +140,16 @@ export default async (
 		getPeers: () =>
 			Object.fromEntries(
 				Object.entries(useRoomStateManager.getState().peerMap)
-					.map(([id, peer]) => [id, peer._pc])
+					.map(
+						([id, peer]) => [id, peer._pc]
+					)
 			),
 
-		addStream: (stream: MediaStream, targets?: TargetPeers, meta?: Metadata) => {
+		addStream: (
+			stream: MediaStream,
+			targets?: TargetPeers,
+			meta?: Metadata
+		) => {
 			const pmap = useRoomStateManager.getState().peerMap;
 			const peerSendables = targets || Object.keys(pmap);
 			const promises = [];
@@ -155,7 +173,7 @@ export default async (
         	peerSendables,
         	(_, peer) =>
         		new Promise((res) => {
-        			if(peer.streams.some((s) => s.id === stream.id)){
+        			if (peer.streams.some((s) => s.id === stream.id)) {
         				peer.removeStream(stream);
         			}
         			res();
@@ -170,13 +188,17 @@ export default async (
 			meta: Metadata
 		) =>
 			targets
-				? iterate(useRoomStateManager.getState().peerMap, targets, async (id, peer) => {
-					if (meta) {
-						await sendTrackMeta(meta, id);
-					}
+				? iterate(
+					useRoomStateManager.getState().peerMap,
+					targets,
+					async (id, peer) => {
+						if (meta) {
+							await sendTrackMeta(meta, id);
+						}
 
-					peer.addTrack(track, stream);
-				})
+						peer.addTrack(track, stream);
+					}
+				)
 				: [],
 
 		removeTrack: (
@@ -202,31 +224,37 @@ export default async (
 			meta: Metadata
 		) =>
 			targets
-				? iterate(useRoomStateManager.getState().peerMap, targets, async (id, peer) => {
-					if (meta) {
-						await sendTrackMeta(meta, id);
-					}
+				? iterate(
+					useRoomStateManager.getState().peerMap,
+					targets,
+					async (id, peer) => {
+						if (meta) {
+							await sendTrackMeta(meta, id);
+						}
 
-					peer.replaceTrack(oldTrack, newTrack, stream);
-				})
+						peer.replaceTrack(oldTrack, newTrack, stream);
+					}
+				)
 				: [],
 
-		onPeerJoin: (f: (peerId: string) => void) => (useHookStateManager.getState()
-			.setOnPeerJoin(f)),
+		onPeerJoin: (f: (peerId: string) => void) =>
+			useHookStateManager.getState()
+				.setOnPeerJoin(f),
 
-		onPeerLeave: (f: (peerId: string) => void) => (useHookStateManager.getState()
-			.setOnPeerLeave(f)),
+		onPeerLeave: (f: (peerId: string) => void) =>
+			useHookStateManager.getState()
+				.setOnPeerLeave(f),
 
 		onPeerError: (f: (peerId: string, error: any) => void) =>
-			(useHookStateManager.getState()
-				.setOnPeerError(f)),
+			useHookStateManager.getState()
+				.setOnPeerError(f),
 
 		onPeerStream: (f: (arg0: any, arg1: string, arg2: any) => void) =>
-			(useHookStateManager.getState()
-				.setOnPeerStream(f)),
+			useHookStateManager.getState()
+				.setOnPeerStream(f),
 
 		onPeerTrack: (f: (arg0: any, arg1: any, arg2: string, arg3: any) => void) =>
-			(useHookStateManager.getState()
-				.setOnPeerTrack(f))
+			useHookStateManager.getState()
+				.setOnPeerTrack(f)
 	};
 };

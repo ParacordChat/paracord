@@ -1,7 +1,4 @@
-import {
-	FirebaseRoomConfig,
-	TorrentRoomConfig
-} from "../../Distra";
+import { FirebaseRoomConfig, TorrentRoomConfig } from "../../Distra";
 
 export const tradeName = "paracord_chat";
 

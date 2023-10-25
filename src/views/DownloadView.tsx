@@ -26,7 +26,7 @@ export function DownloadView(props: {
 	return (
 		<>
 			{downloadManagerInstance && (
-				<div style={{ height: "100%", overflow:"scroll" }}>
+				<div style={{ height: "100%", overflow: "scroll" }}>
 					<CollapsibleContainer
 						open={true}
 						style={{
@@ -40,7 +40,7 @@ export function DownloadView(props: {
 								downloadManagerInstance.addRealFiles(files);
 							}}
 						/>
-						
+
 						<Box
 							background="dark-3"
 							round="small"
@@ -54,11 +54,13 @@ export function DownloadView(props: {
                 		background="dark-3"
                 		round="small"
                 		pad="medium"
-                			direction="row"
+                		direction="row"
                 		border={{ color: "accent-1", size: "medium" }}
                 		key={id}
                 	>
-                		<Text size="medium">{file.name} {fancyBytes(file.size)} </Text>
+                		<Text size="medium">
+                			{file.name} {fancyBytes(file.size)}{" "}
+                		</Text>
                 		<Button
                 			type="button"
                 			style={{ marginLeft: "auto" }}
@@ -88,7 +90,7 @@ export function DownloadView(props: {
                 	.map(([id, fileOffers]) => {
                 	const userName = useUserStore((state) =>
                 		state.users.find((u) => u.id === id)
-                		)?.name;
+                	)?.name;
 
                 	return fileOffers.map(({ id, name, size, ownerId }) => (
                 		<Box
@@ -146,9 +148,9 @@ export function DownloadView(props: {
 								>
 									<Text size="medium" color="brand">
 										{status.toUser === selfId
-											? ` ← ${status.name} (${(
-												status.progress * 100
-											).toFixed(2)}%)`
+											? ` ← ${status.name} (${(status.progress * 100).toFixed(
+												2
+											)}%)`
 											: `(${(status.progress * 100).toFixed(2)}%) ${
 												status.name
 											} →`}

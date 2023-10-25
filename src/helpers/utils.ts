@@ -17,7 +17,7 @@ export const initPeer = (
 		initiator,
 		trickle,
 		config,
-		streams:[]
+		streams: []
 	}) as ExtendedInstance;
 	const onData = (data: any) => peer.__earlyDataBuffer.push(data); // TODO: find a more standard way to do this, without the inherited simplepeer hacks
 

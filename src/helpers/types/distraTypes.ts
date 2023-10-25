@@ -34,7 +34,7 @@ export interface ActionSender<T> {
     data: T,
     targetPeers?: TargetPeers,
     metadata?: Metadata,
-    progress?: (percent: number, peerId: string, metadata?: Metadata) => void,
+    progress?: (percent: number, peerId: string, metadata?: Metadata) => void
   ): Promise<void[]>;
 }
 
@@ -47,20 +47,20 @@ export interface ActionProgress {
     progressHandler: (
       percent: number,
       peerId: string,
-      metadata?: Metadata,
-    ) => void,
+      metadata?: Metadata
+    ) => void
   ): void;
 }
 
 export type MakeAction<T> = (
   namespace: string,
-  forceEncryption?: boolean,
+  forceEncryption?: boolean
 ) => [ActionSender<T>, ActionReceiver<T>, ActionProgress];
 
 export interface Room {
   makeAction: <T>(
     namespace: string,
-    forceEncryption?: boolean,
+    forceEncryption?: boolean
   ) => [ActionSender<T>, ActionReceiver<T>, ActionProgress];
 
   ping: (id: string) => Promise<number>;
@@ -72,7 +72,7 @@ export interface Room {
   addStream: (
     stream: MediaStream,
     targetPeers?: TargetPeers,
-    metadata?: Metadata,
+    metadata?: Metadata
   ) => Promise<(void | void[])[]>;
 
   removeStream: (stream: MediaStream, targetPeers?: TargetPeers) => void;
@@ -81,13 +81,13 @@ export interface Room {
     track: MediaStreamTrack,
     stream: MediaStream,
     targetPeers?: TargetPeers,
-    metadata?: Metadata,
+    metadata?: Metadata
   ) => Promise<void>[];
 
   removeTrack: (
     track: MediaStreamTrack,
     stream: MediaStream,
-    targetPeers?: TargetPeers,
+    targetPeers?: TargetPeers
   ) => void;
 
   replaceTrack: (
@@ -95,7 +95,7 @@ export interface Room {
     newTrack: MediaStreamTrack,
     stream: MediaStream,
     targetPeers?: TargetPeers,
-    meta?: Metadata,
+    meta?: Metadata
   ) => Promise<void>[];
 
   onPeerJoin: (fn: (peerId: string) => void) => void;
@@ -105,11 +105,11 @@ export interface Room {
   onPeerError: (fn: (peerId: string, error: any) => void) => void;
 
   onPeerStream: (
-    fn: (stream: MediaStream, peerId: string, metadata: Metadata) => void,
+    fn: (stream: MediaStream, peerId: string, metadata: Metadata) => void
   ) => void;
 
   onPeerTrack: (
-    fn: (track: MediaStreamTrack, stream: MediaStream, peerId: string) => void,
+    fn: (track: MediaStreamTrack, stream: MediaStream, peerId: string) => void
   ) => void;
 }
 
@@ -121,6 +121,14 @@ export interface ExtendedInstance extends Instance {
 }
 
 export type ActionsType = {
-    onComplete: (data: any, peerId: string, metadata?: Metadata) => void | (()=>void);
-    onProgress: (percent: number, peerId: string, metadata?: Metadata) => void | (()=>void);
+  onComplete: (
+    data: any,
+    peerId: string,
+    metadata?: Metadata
+  ) => void | (() => void);
+  onProgress: (
+    percent: number,
+    peerId: string,
+    metadata?: Metadata
+  ) => void | (() => void);
 };

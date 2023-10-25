@@ -32,7 +32,7 @@ export function RoomCard(props: { roomId: string; children?: any }) {
 						<Text size="xxlarge">Paracord</Text>
 						<Box direction="row">
 							<Text size="small" style={{ paddingRight: "1em" }}>
-              Room ID
+                Room ID
 							</Text>
 							<Text size="medium">{roomId}</Text>
 						</Box>

@@ -27,9 +27,7 @@ export default function StreamPlayer(props: {
 		}
 	}, [player, stream, id]);
 
-	const deployEqualizer = (
-		mediaStream: MediaStream
-	) => {
+	const deployEqualizer = (mediaStream: MediaStream) => {
 		const container = document.createElement("div");
 		container.style.width = "10em";
 
@@ -55,7 +53,7 @@ export default function StreamPlayer(props: {
 	return (
 		<Box
 			round="small"
-			border={{ color: generateHexColorFromString(id),  size: "medium" }}
+			border={{ color: generateHexColorFromString(id), size: "medium" }}
 		>
 			<Text color={generateHexColorFromString(id)}>{username}</Text>
 			{stream.getVideoTracks().length === 0 ? (
@@ -68,10 +66,7 @@ export default function StreamPlayer(props: {
 								style="display:none"
 								ref={player}
 							/>
-							<Box
-								ref={eqContainer}
-								style={{ maxHeight:"50vh" }}
-							/>
+							<Box ref={eqContainer} style={{ maxHeight: "50vh" }} />
 						</>
 					) : (
 						<View size="xlarge" />
@@ -79,9 +74,14 @@ export default function StreamPlayer(props: {
 				</>
 			) : (
 				<>
-					<video style={{ 
-						maxHeight:"50vh"
-					 }} autoPlay={true} muted={isMuted} ref={player} />
+					<video
+						style={{
+							maxHeight: "50vh"
+						}}
+						autoPlay={true}
+						muted={isMuted}
+						ref={player}
+					/>
 				</>
 			)}
 		</Box>

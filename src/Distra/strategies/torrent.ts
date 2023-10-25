@@ -2,7 +2,10 @@
 import { events, libName } from "../../helpers/consts/consts.js";
 import { decrypt, encrypt, genKey } from "../../helpers/cryptography/crypto.js";
 import { encodeBytes } from "../../helpers/dataHandling/uint8util.js";
-import { ExtendedInstance, TorrentRoomConfig } from "../../helpers/types/distraTypes.js";
+import {
+	ExtendedInstance,
+	TorrentRoomConfig
+} from "../../helpers/types/distraTypes.js";
 import {
 	genId,
 	initGuard,
@@ -302,7 +305,7 @@ export const joinRoom = initGuard(
 		let announceInterval = setInterval(announceAll, announceSecs * 1000);
 		let onPeerConnect: (
       peer: ExtendedInstance,
-      id: string,
+      id: string
     ) => void | (() => void) = noOp;
 		let handledOffers: { [x: string]: any } = {};
 		let offerPool: {

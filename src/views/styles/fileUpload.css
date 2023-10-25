@@ -1,32 +1,32 @@
-  input[type="file"] {
-    position: absolute;
-    left: 0;
-    opacity: 0;
-    top: 0;
-    bottom: 0;
-    width: 100%;
-  }
+input[type="file"] {
+  position: absolute;
+  left: 0;
+  opacity: 0;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+}
 
-  .fileDiv {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #000;
-    border: 3px dotted #4bffac;
-    border-radius: 10px;
-  }
+.fileDiv {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #000;
+  border: 3px dotted #4bffac;
+  border-radius: 10px;
+}
 
-  .fileLabel {
-    display: inline-block;
-    position: relative;
-    height: 6em;
-    width: 100%;
-  }
+.fileLabel {
+  display: inline-block;
+  position: relative;
+  height: 6em;
+  width: 100%;
+}
 
-  .fileDiv.dragover {
-    background-color: #aaa;
-  }
+.fileDiv.dragover {
+  background-color: #aaa;
+}

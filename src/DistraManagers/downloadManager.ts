@@ -39,9 +39,9 @@ export default class DownloadManager {
     ids?: string | string[]
   ) => Promise<any[]>;
 	private sendFileAck: (
-	ack: FileAck, 
-	ids?: string | string[]
-	) => Promise<any[]>;
+    ack: FileAck,
+    ids?: string | string[]
+  ) => Promise<any[]>;
 
 	constructor({ room, roomId }: { room: Room; roomId: string }) {
 		const [sendFileChunk, getFileChunk, onFileProgress] =
@@ -159,7 +159,10 @@ export default class DownloadManager {
 								} else {
 									useProgressStore
 										.getState()
-										.updateProgress(fileAck.uuid, { progress, chunkN: fileAck.chunkN + 1 });
+										.updateProgress(fileAck.uuid, {
+											progress,
+											chunkN: fileAck.chunkN + 1
+										});
 								}
 							}
 						)
@@ -296,10 +299,11 @@ export default class DownloadManager {
 	};
 
 	public attemptResume = async (uuid: string) => {
-		const progressSeek = useProgressStore.getState()
+		const progressSeek = useProgressStore
+			.getState()
 			.progressQueue.find((p) => p.uuid === uuid);
 
-		if (progressSeek){
+		if (progressSeek) {
 			this.sendFileAck({
 				uuid,
 				id: progressSeek.id,

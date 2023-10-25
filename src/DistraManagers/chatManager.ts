@@ -8,11 +8,11 @@ import { useUserStore } from "../stateManagers/userManagers/userStore";
 export default class ChatManager {
 	private sendChatAction: (
     data: Message,
-    ids?: string | string[],
+    ids?: string | string[]
   ) => Promise<any[]>;
 	private sendTyping: (
     data: boolean,
-    ids?: string | string[],
+    ids?: string | string[]
   ) => Promise<any[]>;
 	private roomId: string;
 

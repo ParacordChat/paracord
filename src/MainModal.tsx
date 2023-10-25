@@ -102,13 +102,15 @@ const MainModal = ({ roomId, room }: { roomId: string; room: Room }) => {
 				<Box direction="row">
 					<Box fill={true}>
 						<Tabs.Content value="tab1">
-							<Box style={{ height: "84vh", overflow:"hidden" }}>
+							<Box style={{ height: "84vh", overflow: "hidden" }}>
 								<ChatView chatManagerInstance={chatManagerInstance} />
 							</Box>
 						</Tabs.Content>
 						<Tabs.Content value="tab2">
 							<Box style={{ height: "84vh" }}>
-								<DownloadView downloadManagerInstance={downloadManagerInstance} />
+								<DownloadView
+									downloadManagerInstance={downloadManagerInstance}
+								/>
 							</Box>
 						</Tabs.Content>
 						<Tabs.Content value="tab3">

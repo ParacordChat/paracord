@@ -14,7 +14,10 @@ import {
 	Unsubscribe
 } from "firebase/database";
 import { decrypt, encrypt, genKey } from "../../helpers/cryptography/crypto.js";
-import { ExtendedInstance, FirebaseRoomConfig } from "../../helpers/types/distraTypes.js";
+import {
+	ExtendedInstance,
+	FirebaseRoomConfig
+} from "../../helpers/types/distraTypes.js";
 import {
 	firebaseGuard,
 	initGuard,
@@ -109,7 +112,7 @@ export const joinRoom = initGuard(
 		let didSyncRoom = false;
 		let onPeerConnect: (
       peer: ExtendedInstance,
-      id: string,
+      id: string
     ) => void | (() => void) = noOp;
 
 		occupiedRooms[ns] = true;

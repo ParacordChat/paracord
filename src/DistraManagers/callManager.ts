@@ -7,7 +7,7 @@ type RoomActionType = "phone" | "video" | "screen" | "cutStream" | "view";
 export default class RTCManager {
 	private joinRoom: (
     roomAction: RoomActionType,
-    ids?: string | string[],
+    ids?: string | string[]
   ) => Promise<any[]>;
 	private removeStream: (stream: MediaStream) => void;
 	private addStream: (stream: MediaStream, ids?: string | string[]) => void;
@@ -58,13 +58,20 @@ export default class RTCManager {
 					.removeBubbleWithId(id);
 			}
 			if (useCallPrefsState.getState().myStream) {
-				console.log("adding stream",JSON.stringify(useCallPrefsState.getState().myStream));
+				console.log(
+					"adding stream",
+					JSON.stringify(useCallPrefsState.getState().myStream)
+				);
 				addStream(useCallPrefsState.getState().myStream!, id); // TODO: refreshing streams in room still dosen't work...
 			}
 		});
 	}
 
-	public shareMedia = async (type: RoomActionType, myStream:MediaStream|null, setMyStream:StateUpdater<MediaStream|null>) => {
+	public shareMedia = async (
+		type: RoomActionType,
+		myStream: MediaStream | null,
+		setMyStream: StateUpdater<MediaStream | null>
+	) => {
 		if (type === "cutStream") {
 			const videoBubbles = useCallPrefsState.getState().videoBubbles;
 			if (myStream) {
@@ -121,12 +128,12 @@ export default class RTCManager {
 			})();
 			if (selfStream) {
 				// send stream to peers currently in the room
-				console.log("dd",selfStream);
+				console.log("dd", selfStream);
 				this.addStream(selfStream);
 				this.joinRoom(type);
-				console.log("adding slftream",myStream);
+				console.log("adding slftream", myStream);
 				setMyStream(selfStream);
-				console.log("adding slftream",JSON.stringify(myStream));
+				console.log("adding slftream", JSON.stringify(myStream));
 			}
 		}
 	};

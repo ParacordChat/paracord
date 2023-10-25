@@ -18,9 +18,10 @@ export default function Messages() {
 		(state: { persona: Persona }) => state.persona.name
 	);
 
-	return (// TODO: fix mbox vert fill and vchat vert fill
+	return (
+	// TODO: fix mbox vert fill and vchat vert fill
 		<Main
-		 direction="column"
+			direction="column"
 			border={{ color: "brand", size: "small" }}
 			pad="small"
 			round="small"

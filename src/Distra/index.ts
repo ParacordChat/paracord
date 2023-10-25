@@ -1,4 +1,7 @@
-export { getOccupants, joinRoom as joinFirebaseRoom } from "./strategies/firebase.js";
+export {
+	getOccupants,
+	joinRoom as joinFirebaseRoom
+} from "./strategies/firebase.js";
 export type {
 	BaseRoomConfig,
 	FirebaseRoomConfig,

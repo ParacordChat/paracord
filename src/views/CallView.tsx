@@ -13,12 +13,15 @@ import { useUserStore } from "../stateManagers/userManagers/userStore";
 export function CallView(props: { rtcManagerInstance: RTCManager }) {
 	const { rtcManagerInstance } = props;
 
-	const [myStream,setMyStream]=useState<MediaStream|null>(null);
+	const [myStream, setMyStream] = useState<MediaStream | null>(null);
 
-	const userNames = useUserStore((state) =>// TODO: this may not update w/ new users
-		state.users.map((p) => {
-			return { id: p.id, name: p.name };
-		})
+	const userNames = useUserStore(
+		(
+			state // TODO: this may not update w/ new users
+		) =>
+			state.users.map((p) => {
+				return { id: p.id, name: p.name };
+			})
 	);
 
 	const uiInteractive = useUserStore((state) =>
@@ -31,7 +34,7 @@ export function CallView(props: { rtcManagerInstance: RTCManager }) {
 
 	return (
 		<>
-			<div style={{ height: "100%", overflow:"scroll" }}>
+			<div style={{ height: "100%", overflow: "scroll" }}>
 				<Box>
 					{callConsent && (
 						<Box fill="vertical" overflow="scroll">
@@ -62,7 +65,7 @@ export function CallView(props: { rtcManagerInstance: RTCManager }) {
 										stream={bubble.stream}
 										username={
 											userNames.find((p) => p.id === bubble.id)?.name ||
-                    						funAnimalName(bubble.id)
+                      funAnimalName(bubble.id)
 										}
 										id={bubble.id}
 									/>
@@ -71,20 +74,24 @@ export function CallView(props: { rtcManagerInstance: RTCManager }) {
 						</Box>
 					)}
 				</Box>
-				<Footer style={{
-					position: "fixed",
-					bottom: "0",
-					width: "100%"
-				}} direction="row" round="small" background="brand" pad="medium">
+				<Footer
+					style={{
+						position: "fixed",
+						bottom: "0",
+						width: "100%"
+					}}
+					direction="row"
+					round="small"
+					background="brand"
+					pad="medium"
+				>
 					{isSharing ? (
 						<Button
 							onClick={() => {
 								rtcManagerInstance
-									.shareMedia("cutStream",myStream,setMyStream)
-									.then(() =>
-										useCallPrefsState.getState()
-											.setIsSharing(false)
-									);
+									.shareMedia("cutStream", myStream, setMyStream)
+									.then(() => useCallPrefsState.getState()
+										.setIsSharing(false));
 							}}
 							hoverIndicator
 							icon={<Close />}
@@ -96,7 +103,7 @@ export function CallView(props: { rtcManagerInstance: RTCManager }) {
 								disabled={!uiInteractive}
 								onClick={() => {
 									rtcManagerInstance
-										.shareMedia("phone",myStream,setMyStream)
+										.shareMedia("phone", myStream, setMyStream)
 										.then(() =>
 											useCallPrefsState.getState()
 												.setIsSharing(true)
@@ -110,7 +117,7 @@ export function CallView(props: { rtcManagerInstance: RTCManager }) {
 								disabled={!uiInteractive}
 								onClick={() => {
 									rtcManagerInstance
-										.shareMedia("video",myStream,setMyStream)
+										.shareMedia("video", myStream, setMyStream)
 										.then(() =>
 											useCallPrefsState.getState()
 												.setIsSharing(true)
@@ -124,7 +131,7 @@ export function CallView(props: { rtcManagerInstance: RTCManager }) {
 								disabled={!uiInteractive}
 								onClick={() => {
 									rtcManagerInstance
-										.shareMedia("screen",myStream,setMyStream)
+										.shareMedia("screen", myStream, setMyStream)
 										.then(() =>
 											useCallPrefsState.getState()
 												.setIsSharing(true)
@@ -138,7 +145,7 @@ export function CallView(props: { rtcManagerInstance: RTCManager }) {
 								disabled={!uiInteractive}
 								onClick={() => {
 									rtcManagerInstance
-										.shareMedia("view",myStream,setMyStream)
+										.shareMedia("view", myStream, setMyStream)
 										.then(() =>
 											useCallPrefsState.getState()
 												.setIsSharing(true)

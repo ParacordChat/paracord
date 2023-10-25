@@ -273,10 +273,10 @@ export function base64ToBytes(str: string) {
 	let buffer;
 	for (let i = 0, j = 0; i < n; i += 4, j += 3) {
 		buffer =
-			(getBase64Code(str.codePointAt(i)!) << 18) |
-			(getBase64Code(str.codePointAt(i + 1)!) << 12) |
-			(getBase64Code(str.codePointAt(i + 2)!) << 6) |
-			getBase64Code(str.codePointAt(i + 3)!);
+      (getBase64Code(str.codePointAt(i)!) << 18) |
+      (getBase64Code(str.codePointAt(i + 1)!) << 12) |
+      (getBase64Code(str.codePointAt(i + 2)!) << 6) |
+      getBase64Code(str.codePointAt(i + 3)!);
 		result[j] = buffer >> 16;
 		result[j + 1] = (buffer >> 8) & 0xFF;
 		result[j + 2] = buffer & 0xFF;

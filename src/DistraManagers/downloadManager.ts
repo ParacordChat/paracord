@@ -136,6 +136,9 @@ export default class DownloadManager {
 							if (ok) {
 								sendAction();
 							}
+						})
+						.catch(() => {
+							this.terminateClient(userId, fileReq.uuid);
 						});
 				} else {
 					sendAction();

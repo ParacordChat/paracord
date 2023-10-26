@@ -49,7 +49,7 @@ export const handleData = async (id: string, data: any) => {
 		}
 
 		let target =
-      useRoomStateManager.getState().pendingTransmissions[id][typeBytes][nonce];
+			useRoomStateManager.getState().pendingTransmissions[id][typeBytes][nonce];
 
 		if (!target) {
 			target = useRoomStateManager.getState().pendingTransmissions[id][

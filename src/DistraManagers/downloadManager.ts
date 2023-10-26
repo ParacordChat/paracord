@@ -42,6 +42,7 @@ export default class DownloadManager {
 		ack: FileAck,
 		ids?: string | string[]
 	) => Promise<any[]>;
+	private terminateClient: (toId: string, uuid: string) => void;
 
 	constructor({ room, roomId }: { room: Room; roomId: string }) {
 		const [sendFileChunk, getFileChunk, onFileProgress] =
@@ -58,6 +59,16 @@ export default class DownloadManager {
 		this.sendFileRequest = sendFileRequest;
 		this.sendFileOffer = sendFileOffer;
 		this.sendFileAck = sendFileAck;
+		this.terminateClient = (toId, uuid) =>
+			sendFileChunk(
+				new Uint8Array(),
+				toId,
+				{
+					uuid,
+					chunkN: -1
+				},
+				() => {}
+			);
 
 		useUserStore.subscribe((state, prevState) => {
 			if (state.keyedUsers.size > prevState.keyedUsers.size) {
@@ -136,6 +147,12 @@ export default class DownloadManager {
 			const currentFile = useRealFiles.getState().realFiles[fileAck.id];
 			const totalChunks = Math.ceil(currentFile.size / chunkSize);
 
+			if (fileAck.chunkN === -1) {
+				useProgressStore.getState()
+					.deleteProgress(fileAck.uuid);
+				return;
+			}
+
 			if (fileAck.chunkN < totalChunks) {
 				await readFileChunk(currentFile, fileAck.chunkN)
 					.then((chunk) =>
@@ -170,6 +187,7 @@ export default class DownloadManager {
 		});
 
 		onFileProgress((rawProgress, _id, metadata) => {
+			if (metadata === undefined) return;
 			const processedMeta = metadata as FileMetaData;
 			const progress =
 				((processedMeta.chunkN + rawProgress) * chunkSize) / processedMeta.size;
@@ -186,10 +204,17 @@ export default class DownloadManager {
 
 		getFileChunk(async (fileReceipt, _id, metadata) => {
 			const processedMeta = metadata as FileMetaData;
+			if (processedMeta.chunkN && processedMeta.chunkN === -1) {
+				useProgressStore.getState()
+					.removeWritable(processedMeta.uuid);
+				useProgressStore.getState()
+					.deleteProgress(processedMeta.uuid);
+				return;
+			}
 			const fwrt = useProgressStore
 				.getState()
 				.writablesQueue.find((w) => w.uuid === processedMeta.uuid)?.writable;
-			if (fwrt)
+			if (fwrt) {
 				await fwrt.write(fileReceipt)
 					.then(() => {
 						if (processedMeta.last) {
@@ -203,6 +228,7 @@ export default class DownloadManager {
 							});
 						}
 					});
+			}
 			// if (processedMeta.last) {
 			// 	useProgressStore.getState()
 			// 		.removeWritable(processedMeta.uuid);
@@ -290,7 +316,7 @@ export default class DownloadManager {
 
 	public removeRealFile = (id: string) => {
 		useProgressStore.getState()
-			.deleteProgress(id);
+			.deleteFid(id);
 		useRealFiles.getState()
 			.deleteRealFile(id);
 		this.offerRequestableFiles();
@@ -326,12 +352,20 @@ export default class DownloadManager {
 			.progressQueue.find((p) => p.uuid === uuid);
 
 		if (progressSeek) {
-			useProgressStore.getState()
-				.deleteProgress(uuid);
 			if (progressSeek.toUser === selfId) {
 				useProgressStore.getState()
 					.removeWritable(uuid);
+				this.sendFileAck({
+					// TODO: this is a hack man!
+					uuid,
+					id: progressSeek.id,
+					chunkN: -1
+				});
+			} else {
+				this.terminateClient(progressSeek.toUser, uuid);
 			}
+			useProgressStore.getState()
+				.deleteProgress(uuid);
 		}
 	};
 

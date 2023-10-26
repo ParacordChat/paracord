@@ -39,21 +39,13 @@ export const makeAction = <T>(
 			throw mkErr("action meta argument must be an object");
 		}
 
-		// if (data === undefined) {
-		// 	throw mkErr("action data cannot be undefined");
-		// }
-
-		// if (!data || Object.keys(data).length === 0) {
-		// 	throw mkErr("data is undefined");
-		// }
-
 		if (!targets) {
 			targets = Object.keys(useRoomStateManager.getState().peerMap);
 		}
 
 		const isBlob = data instanceof Blob;
 		const isBinary =
-      isBlob || data instanceof ArrayBuffer || data instanceof Uint8Array;
+			isBlob || data instanceof ArrayBuffer || data instanceof Uint8Array;
 		const isJson = typeof data !== "string" && !isBinary && !isBlob;
 
 		if (meta && !isBinary) {
@@ -65,31 +57,33 @@ export const makeAction = <T>(
 			: encodeBytes(isJson ? JSON.stringify(data) : (data as string));
 
 		const chunkTotal =
-      Math.ceil(buffer.byteLength / chunkSize) + (meta ? 1 : 0);
+			Math.ceil(buffer.byteLength / chunkSize) + (meta ? 1 : 0);
 
-		const metaEncoded = encodeBytes(JSON.stringify(meta));
 		const formatChunk = (
-			chkValue: Uint8Array,
+			chkValue: Uint8Array | Metadata,
 			chkIndex: number,
 			isMeta: boolean
 		) => {
 			const isLast = chkIndex === chunkTotal - 1;
-
 			const chkTmp = JSON.stringify({
 				typeBytes: type,
-				nonce,
+				// @ts-ignore
+				nonce: meta && meta.uuid ? `${meta.uuid}${nonce}` : nonce, // TODO: ARRGH DACH STAHP
 				isLast,
 				isMeta,
 				isBinary,
 				isJson,
 				progress: Math.round(((chkIndex + 1) / chunkTotal) * oneByteMax),
-				payload: bytesToBase64(chkValue)
+				payload: bytesToBase64(
+					// @ts-ignore
+					isMeta ? encodeBytes(JSON.stringify(meta)) : chkValue
+				)
 			});
 
 			return encodeBytes(chkTmp);
 		};
 
-		nonce = (nonce + 1) & oneByteMax;
+		nonce += 1;
 		return Promise.all(
 			iterate(
 				useRoomStateManager.getState().peerMap,
@@ -101,7 +95,7 @@ export const makeAction = <T>(
 					while (chunkN < chunkTotal) {
 						const chunk = (() => {
 							if (chunkN === 0 && meta) {
-								return formatChunk(metaEncoded, chunkN, true);
+								return formatChunk(meta, chunkN, true);
 							} else {
 								return meta
 									? formatChunk(
@@ -111,7 +105,7 @@ export const makeAction = <T>(
 										),
 										chunkN,
 										false
-									)
+									  )
 									: formatChunk(
 										buffer.subarray(
 											chunkN * chunkSize,
@@ -119,7 +113,7 @@ export const makeAction = <T>(
 										),
 										chunkN,
 										false
-									);
+									  );
 							}
 						})();
 

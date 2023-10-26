@@ -58,10 +58,6 @@ export default class RTCManager {
 					.removeBubbleWithId(id);
 			}
 			if (useCallPrefsState.getState().myStream) {
-				console.log(
-					"adding stream",
-					JSON.stringify(useCallPrefsState.getState().myStream)
-				);
 				addStream(useCallPrefsState.getState().myStream!, id); // TODO: refreshing streams in room still dosen't work...
 			}
 		});

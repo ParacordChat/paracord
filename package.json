@@ -1,7 +1,7 @@
 {
   "name": "paracord",
   "private": true,
-  "version": "8.4.4",
+  "version": "8.4.6",
   "type": "module",
   "scripts": {
     "preinstall": "npx only-allow pnpm",
@@ -16,7 +16,6 @@
   "dependencies": {
     "@radix-ui/react-tabs": "^1.0.4",
     "audiomotion-analyzer": "^4.3.0",
-    "dayjs": "^1.11.10",
     "dompurify": "^3.0.6",
     "firebase": "10.5.0",
     "fun-animal-names": "^0.1.1",

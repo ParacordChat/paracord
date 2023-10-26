@@ -1,5 +1,5 @@
 import { Box, Button, Meter, Text } from "grommet";
-import { FormClose, Refresh } from "grommet-icons";
+import { Download, FormClose, Refresh } from "grommet-icons";
 import { selfId } from "../Distra";
 import DownloadManager from "../DistraManagers/downloadManager";
 import CollapsibleContainer from "../helpers/components/Collapsible";
@@ -115,7 +115,9 @@ export function DownloadView(props: {
                 					onClick={() =>
                 						downloadManagerInstance.requestFile(ownerId, id)
                 					}
-                					label="Request"
+                						primary
+                						icon={<Download />}
+                					title="Request"
                 				/>
                 			</Box>
                 		</Box>

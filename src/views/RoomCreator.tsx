@@ -75,6 +75,12 @@ export function RoomCreator() {
 				<Text>Copyright 2023 Paracord</Text>
 				<Text size="xsmall">Version: {packageJson.version}</Text>
 				<Anchor
+					label="Desktop App"
+					onClick={() => {
+						window.location.href = "https://github.com/ParacordChat/paracord/releases/tag/allplatforms";
+					}}
+				/>
+				<Anchor
 					label="About"
 					onClick={() => {
 						route(`/About`, true);

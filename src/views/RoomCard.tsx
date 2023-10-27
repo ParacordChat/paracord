@@ -7,6 +7,9 @@ export function RoomCard(props: { roomId: string; children?: any }) {
 	const { roomId, children } = props;
 	return (
 		<Header background="brand" pad="medium">
+			<div className="mobileShow">
+				<Image alt="paracord logo" style={{ height: "4em" }} src={pcdLogo} />
+			</div>
 			<div className="mobileHide">
 				<Box
 					direction="row"

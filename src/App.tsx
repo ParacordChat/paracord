@@ -1,28 +1,28 @@
-import { Box, Button, Image, PageHeader, Text } from "grommet";
+import { Image, PageHeader, Text } from "grommet";
 import AsyncRoute from "preact-async-route";
-import { route, Route, Router } from "preact-router";
+import { Router } from "preact-router";
 import { isRtcSupported } from "./helpers/helpers";
 import pcdLogo from "/logo.svg";
 
 const RTCSupport = isRtcSupported();
 
-const Component404 = () => (
-	<Box direction="column">
-		<Text size="xlarge">404</Text>
-		<Text size="medium">Page not found</Text>
-		<Button label="Go home" onClick={() => route("/", true)} />
-	</Box>
-);
+const loadingComponent = () => 
+	<div style={{
+		height: "100%",
+		margin: "0",
+		display: "flex",
+		justifyContent: "center",
+		alignItems: "center"
+	}}>Loading...</div>;
 
 function App() {
 	return (
 		<>
 			{RTCSupport ? (
 				<Router>
-					<Route path="*" component={Component404} />
-					<Route path="/404" component={Component404} />
 					<AsyncRoute
 						path={`/`}
+						default
 						getComponent={() =>
 							import("./views/RoomCreator").then((module) => module.RoomCreator)
 						}
@@ -34,19 +34,29 @@ function App() {
 						}
 					/>
 					<AsyncRoute
-						path={`/:id/:pwd?`}
+						path={`/p/:id`}
 						getComponent={(url) =>
 							import("./views/PasswordModal").then(async (module) => {
 								const cleanUrl = url.split("/");
 								if (cleanUrl.length < 2) alert("Invalid URL");
 								const roomId = cleanUrl[1].trim();
-								const password = cleanUrl[2]?.trim();
-								if (password && password !== "a") route("/404", true);
-
-								return module.default(roomId, password === "a");
+								return module.default(roomId, false);
 							})
 						}
-						loading={() => <div>loading...</div>}
+						loading={loadingComponent}
+					/>
+					<AsyncRoute
+						path={`/s/:id`}
+						getComponent={(url) =>
+							import("./views/PasswordModal").then(async (module) => {
+								const cleanUrl = url.split("/");
+								if (cleanUrl.length < 2) alert("Invalid URL");
+								const roomId = cleanUrl[1].trim();
+
+								return module.default(roomId, true);
+							})
+						}
+						loading={loadingComponent}
 					/>
 				</Router>
 			) : (

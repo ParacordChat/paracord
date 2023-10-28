@@ -60,7 +60,7 @@ export function RoomCreator() {
 				</Box>
 				<Button
 					onClick={() =>
-						route(`/${roomRef.current?.value}/${usePassword ? "a" : ""}`, true)
+						route(`/${usePassword ? "s" : "p"}/${roomRef.current?.value}`, true)
 					}
 					label="Go"
 					primary

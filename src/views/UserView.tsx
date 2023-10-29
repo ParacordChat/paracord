@@ -46,40 +46,54 @@ export function UserView(props: {
 			style={{ height: "84vh" }}
 			header={
 				<>
-					<Button
-						icon={<FormNext />}
-						color="theme"
-						style={{ marginLeft: "auto" }}
-						onClick={() => setShowSidebar(!showSidebar)}
-					/>
-					<Text
-						size="large"
-						style={{ color: generateHexColorFromString(selfId) }}
+					
+					<Box 
+						round="small"
+						pad="small"
+						background="dark-1"
 					>
+						<Box direction="row" gap="medium">
+							<Text
+								size="large"
+								style={{ color: generateHexColorFromString(selfId) }}
+							>
             You
-					</Text>
-					<TextInput
-						type="text"
-						value={activePersona?.name}
-						autocapitalize={"off"}
-						autoComplete={"off"}
-						style={{ width: "100%" }}
-						onBlur={(e: { currentTarget: { value: string } }) =>
-							e.currentTarget.value.trim() !== "" &&
+							</Text>
+							<Button
+								icon={<FormNext />}
+								color="theme"
+								style={{ marginLeft: "auto" }}
+								onClick={() => setShowSidebar(!showSidebar)}
+							/>
+							
+						</Box>
+						<TextInput
+							type="text"
+							value={activePersona?.name}
+							autocapitalize={"off"}
+							autoComplete={"off"}
+							style={{ width: "100%" }}
+							onBlur={(e: { currentTarget: { value: string } }) =>
+								e.currentTarget.value.trim() !== "" &&
               userManagerInstance.setMyName(e.currentTarget.value)
-						}
-					/>
-					<Text size="small" style={{ color: "grey" }}>
-						{funAnimalName(selfId)}
-					</Text>
-					<hr />
-					<Text size="large">Peers</Text>
+							}
+						/>
+						<Text size="small" style={{ color: "grey" }}>
+							{funAnimalName(selfId)}
+						</Text>
+					</Box>
+					
+					
 				</>
 			}
 		>
 			<Nav gap="small">
+				<Text size="large">Peers</Text>
 				<Box
 					pad="small"
+					border={{ color: "brand", size: "small" }}
+					round="small"
+					background="dark-1"
 					style={{
 						whiteSpace: "pre-line",
 						// fill space with height
@@ -92,6 +106,10 @@ export function UserView(props: {
 					{activePeers.length > 0 ? (
 						<InfiniteScroll
 							items={activePeers.filter((p) => p.roomId === roomId && p.active)}
+							pad="small"
+							style={{
+								scrollbars: "hidden"
+							}}
 						>
 							{({ name, id }: { name: string; id: string }) => (
 								<div>
@@ -123,6 +141,7 @@ export function UserView(props: {
 		</Sidebar>
 	) : (
 		<Button
+			primary
 			icon={<FormPrevious />}
 			onClick={() => setShowSidebar(!showSidebar)}
 		/>

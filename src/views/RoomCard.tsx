@@ -36,7 +36,7 @@ export function RoomCard(props: { roomId: string; children?: any }) {
 					}}>
 						<Text size="xxlarge">Paracord</Text>
 							
-						<Text size="medium">Room ID {roomId}</Text>
+						<Text size="medium">Room ID {decodeURI(roomId)}</Text>
 					</Box>
 				</Box>
 			</div>

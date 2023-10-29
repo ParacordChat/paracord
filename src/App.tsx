@@ -39,7 +39,7 @@ function App() {
 							import("./views/PasswordModal").then(async (module) => {
 								const cleanUrl = url.split("/");
 								if (cleanUrl.length < 2) alert("Invalid URL");
-								const roomId = cleanUrl[1].trim();
+								const roomId = cleanUrl[2].trim();
 								return module.default(roomId, false);
 							})
 						}
@@ -51,7 +51,7 @@ function App() {
 							import("./views/PasswordModal").then(async (module) => {
 								const cleanUrl = url.split("/");
 								if (cleanUrl.length < 2) alert("Invalid URL");
-								const roomId = cleanUrl[1].trim();
+								const roomId = cleanUrl[2].trim();
 
 								return module.default(roomId, true);
 							})

@@ -8,7 +8,10 @@ export function RoomCard(props: { roomId: string; children?: any }) {
 	return (
 		<Header background="brand" pad="medium">
 			<div className="mobileShow">
-				<Image alt="paracord logo" style={{ height: "4em" }} src={pcdLogo} />
+				<Image alt="paracord logo" style={{ height: "4em" }} src={pcdLogo} onClick={() => {
+					route(`/`, true);
+					location.reload();
+				}} />
 			</div>
 			<div className="mobileHide">
 				<Box

@@ -7,11 +7,23 @@
 @media (max-width: 660px) {
 	.mobileHide {
 		display: none;
+		width: 0px;
 	}
 	.mobileShow {
 		display: block;
 	}
 }
+
+@media (min-width: 660px) {
+	.mobileHide {
+		display: block;
+	}
+	.mobileShow {
+		display: none;
+		width: 0px;
+	}
+}
+
 ::-webkit-scrollbar {
 	background-color: transparent;
 	width: 0.8vh;

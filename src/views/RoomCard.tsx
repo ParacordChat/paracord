@@ -7,12 +7,6 @@ export function RoomCard(props: { roomId: string; children?: any }) {
 	const { roomId, children } = props;
 	return (
 		<Header background="brand" pad="medium">
-			<div className="mobileShow">
-				<Image alt="paracord logo" style={{ height: "4em" }} src={pcdLogo} onClick={() => {
-					route(`/`, true);
-					location.reload();
-				}} />
-			</div>
 			<div className="mobileHide">
 				<Box
 					direction="row"
@@ -42,6 +36,12 @@ export function RoomCard(props: { roomId: string; children?: any }) {
 						<Text size="medium">Room ID {decodeURI(roomId)}</Text>
 					</Box>
 				</Box>
+			</div>
+			<div className="mobileShow">
+				<Image alt="paracord logo" style={{ height: "4em" }} src={pcdLogo} onClick={() => {
+					route(`/`, true);
+					location.reload();
+				}} />
 			</div>
 			{children}
 			<div className="mobileHide">

@@ -1,4 +1,4 @@
-import { Image, PageHeader, Text } from "grommet";
+import { Button, Image, PageHeader, Text } from "grommet";
 import AsyncRoute from "preact-async-route";
 import { Router } from "preact-router";
 import { isRtcSupported } from "./helpers/helpers";
@@ -13,7 +13,10 @@ const loadingComponent = () =>
 		display: "flex",
 		justifyContent: "center",
 		alignItems: "center"
-	}}>Loading...</div>;
+	}}>
+		Loading...
+		<Button onClick={()=>location.reload()}>Stuck? Click here</Button>
+	</div>;
 
 function App() {
 	return (

@@ -1,7 +1,8 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable react/display-name */
 import { Box, Button, Text, TextInput } from "grommet";
-import { FormView, FormViewHide, Key } from "grommet-icons";
+import { CaretLeftFill, FormView, FormViewHide, Key } from "grommet-icons";
+import { route } from "preact-router";
 import { useEffect, useRef, useState } from "preact/hooks";
 import { joinFirebaseRoom, Room } from "../Distra";
 import MainModal from "../MainModal";
@@ -37,8 +38,7 @@ const PasswordModal = (roomId: string, hasPassword: boolean) => () => {
 			) : (
 				<GenericHeader>
 					<Text color="red">
-            Please set the password if you are creating this room, or enter
-            password to join room
+            Enter room password:
 					</Text>
 					<Box direction="row">
 						<TextInput
@@ -59,13 +59,24 @@ const PasswordModal = (roomId: string, hasPassword: boolean) => () => {
 							onClick={() => setPasswordVisible(!passwordVisible)}
 						/>
 					</Box>
-					<Button
-						onClick={() => {
-							roomSet(passwordRef.current?.value);
-						}}
-						label="Go"
-						primary
-					/>
+					<Box direction="row">
+						<Button
+							label="home"
+							onClick={() => {
+								route(`/`, true);
+								location.reload();
+							}}
+							icon={<CaretLeftFill />}
+						/>
+						<Button
+							onClick={() => {
+								roomSet(passwordRef.current?.value);
+							}}
+							style={{ marginLeft: "auto", width:"100%" }}
+							label="Go"
+							primary
+						/>
+					</Box>
 				</GenericHeader>
 			)}
 		</>

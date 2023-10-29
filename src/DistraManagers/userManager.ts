@@ -51,7 +51,7 @@ export default class UserManager {
 			useClientSideUserTraits.getState()
 				.removeUser(id);
 
-			sendSystemMessage(roomId, `${id} left the room`);
+			sendSystemMessage(roomId, `${funAnimalName(id)} left the room`);
 		});
 
 		getName((name: string, id: string) => {

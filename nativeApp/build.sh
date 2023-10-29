@@ -2,14 +2,14 @@ rm -rf ./build/*
 
 globalenv="{\"paracordDesktop\":\"true\"}"
 
-nativefier 'https://paracordchat.com' ./build  -a "x64" --portable --process-envs $globalenv --disable-context-menu --disable-dev-tools --min-width 400 --min-height 600 -i ./icons/logo.icns --app-copyright 'Jacob Trock' -p "mac" --verbose
-nativefier 'https://paracordchat.com' ./build  -a "arm64" --portable --process-envs $globalenv --disable-context-menu --disable-dev-tools --min-width 400 --min-height 600 -i ./icons/logo.icns --app-copyright 'Jacob Trock' -p "mac" --verbose
+nativefier 'https://paracordchat.com' ./build  -a "x64" --portable --process-envs $globalenv --disable-context-menu --min-width 400 --min-height 600 -i ./icons/logo.icns --app-copyright 'Jacob Trock' -p "mac" --verbose
+nativefier 'https://paracordchat.com' ./build  -a "arm64" --portable --process-envs $globalenv --disable-context-menu --min-width 400 --min-height 600 -i ./icons/logo.icns --app-copyright 'Jacob Trock' -p "mac" --verbose
 
-nativefier 'https://paracordchat.com' ./build  -a "x64" --portable --process-envs $globalenv --disable-context-menu --disable-dev-tools --min-width 400 --min-height 600 -i ./icons/logo.png -p "linux" --verbose
-nativefier 'https://paracordchat.com' ./build  -a "arm64" --portable --process-envs $globalenv --disable-context-menu --disable-dev-tools --min-width 400 --min-height 600 -i ./icons/logo.png -p "linux" --verbose
+nativefier 'https://paracordchat.com' ./build  -a "x64" --portable --process-envs $globalenv --disable-context-menu --min-width 400 --min-height 600 -i ./icons/logo.png -p "linux" --verbose
+nativefier 'https://paracordchat.com' ./build  -a "arm64" --portable --process-envs $globalenv --disable-context-menu --min-width 400 --min-height 600 -i ./icons/logo.png -p "linux" --verbose
 
 win32metadatastring="{\"CompanyName\":\"Edisys\"}"
-nativefier 'https://paracordchat.com' ./build  -a "x64" --portable --process-envs $globalenv --disable-context-menu --disable-dev-tools --min-width 400 --min-height 600 -i ./icons/logo.ico --app-copyright 'Jacob Trock' -p "windows" --verbose --win32metadata $win32metadatastring
+nativefier 'https://paracordchat.com' ./build  -a "x64" --portable --process-envs $globalenv --disable-context-menu --min-width 400 --min-height 600 -i ./icons/logo.ico --app-copyright 'Jacob Trock' -p "windows" --verbose --win32metadata $win32metadatastring
 
 cd build
 

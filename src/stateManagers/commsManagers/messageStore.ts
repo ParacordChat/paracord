@@ -1,10 +1,10 @@
 import { create } from "zustand";
-import { Message } from "../helpers/types/types";
+import { Message } from "../../helpers/types/types";
 
 interface MessageStore {
-  messages: Message[];
-  addMessage: (message: Message, maxLen?: number) => void;
-  deleteMessagesBefore: (roomId: string, before: number) => void;
+	messages: Message[];
+	addMessage: (message: Message, maxLen?: number) => void;
+	deleteMessagesBefore: (roomId: string, before: number) => void;
 }
 
 export const useMessageStore = create<MessageStore>((set) => ({

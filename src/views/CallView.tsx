@@ -7,7 +7,7 @@ import { selfId } from "../Distra";
 import RTCManager from "../DistraManagers/callManager";
 import StreamPlayer from "../helpers/components/StreamPlayer";
 import { generateHexColorFromString } from "../helpers/helpers";
-import { useCallPrefsState } from "../stateManagers/RTCManagers/personalCallPrefs";
+import { useCallPrefsState } from "../stateManagers/commsManagers/personalCallPrefs";
 import { useUserStore } from "../stateManagers/userManagers/userStore";
 
 export function CallView(props: { rtcManagerInstance: RTCManager }) {

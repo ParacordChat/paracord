@@ -1,6 +1,6 @@
 import { StateUpdater } from "preact/hooks";
 import { Room } from "../Distra";
-import { useCallPrefsState } from "../stateManagers/RTCManagers/personalCallPrefs";
+import { useCallPrefsState } from "../stateManagers/commsManagers/personalCallPrefs";
 
 type RoomActionType = "phone" | "video" | "screen" | "cutStream" | "view";
 

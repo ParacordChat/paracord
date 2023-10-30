@@ -1,5 +1,5 @@
 import { funAnimalName } from "fun-animal-names";
-import { useMessageStore } from "../stateManagers/messageStore";
+import { useMessageStore } from "../stateManagers/commsManagers/messageStore";
 import { genId } from "./utils";
 
 export const fancyBytes = (bytes: number) => {

@@ -1,7 +1,7 @@
 import { Room, selfId } from "../Distra";
 import { Message } from "../helpers/types/types";
 import { genId } from "../helpers/utils";
-import { useMessageStore } from "../stateManagers/messageStore";
+import { useMessageStore } from "../stateManagers/commsManagers/messageStore";
 import { useClientSideUserTraits } from "../stateManagers/userManagers/clientSideUserTraits";
 import { useUserStore } from "../stateManagers/userManagers/userStore";
 

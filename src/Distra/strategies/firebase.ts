@@ -13,6 +13,7 @@ import {
 	set,
 	Unsubscribe
 } from "firebase/database";
+import { events, libName } from "../../helpers/consts/consts.js";
 import { decrypt, encrypt, genKey } from "../../helpers/cryptography/crypto.js";
 import {
 	ExtendedInstance,
@@ -26,7 +27,6 @@ import {
 	selfId
 } from "../../helpers/utils.js";
 import room from "../roomManagement/room.js";
-import { events, libName } from "../../helpers/consts/consts.js";
 
 const presencePath = "_";
 const defaultRootPath = `__${libName.toLowerCase()}__`;
@@ -111,9 +111,9 @@ export const joinRoom = initGuard(
 
 		let didSyncRoom = false;
 		let onPeerConnect: (
-      peer: ExtendedInstance,
-      id: string
-    ) => void | (() => void) = noOp;
+			peer: ExtendedInstance,
+			id: string
+		) => void | (() => void) = noOp;
 
 		occupiedRooms[ns] = true;
 
@@ -146,8 +146,9 @@ export const joinRoom = initGuard(
 							val = JSON.parse(
 								cryptoKey ? await decrypt(cryptoKey, data.val()) : data.val()
 							);
-						} catch {
+						} catch (error) {
 							console.error(`${libName}: received malformed SDP JSON`);
+							console.error(error);
 							return;
 						}
 

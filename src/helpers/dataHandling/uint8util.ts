@@ -1,19 +1,17 @@
-export const encodeBytes = (txt: string | undefined) =>
-	new TextEncoder()
-		.encode(txt);
+const encoder = new TextEncoder();
+const decoder = new TextDecoder();
 
-export const decodeBytes = (txt: any | undefined) =>
-	new TextDecoder()
-		.decode(txt);
+export const encodeBytes = (txt: string | undefined) => encoder.encode(txt);
 
-export const combineChunks = (chunks: any[]) => {
-	const full = new Uint8Array(
-		chunks.reduce((a: any, c: { byteLength: any }) => a + c.byteLength, 0)
-	);
+export const decodeBytes = (txt: any | undefined) => decoder.decode(txt);
 
-	for (let i = 0, l = chunks.length, c = 0; i < l; i++) {
-		full.set(chunks[i], c);
-		c += chunks[i].byteLength;
+export const combineChunks = (chunks: Uint8Array[]) => {
+	const full = new Uint8Array(chunks.reduce((a, c) => a + c.byteLength, 0));
+
+	let offset = 0;
+	for (const chunk of chunks) {
+		full.set(chunk, offset);
+		offset += chunk.byteLength;
 	}
 
 	return full;

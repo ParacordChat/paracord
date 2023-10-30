@@ -6,14 +6,8 @@ import { useClientSideUserTraits } from "../stateManagers/userManagers/clientSid
 import { useUserStore } from "../stateManagers/userManagers/userStore";
 
 export default class ChatManager {
-	private sendChatAction: (
-    data: Message,
-    ids?: string | string[]
-  ) => Promise<any[]>;
-	private sendTyping: (
-    data: boolean,
-    ids?: string | string[]
-  ) => Promise<any[]>;
+	private sendChatAction;
+	private sendTyping;
 	private roomId: string;
 
 	constructor({ room, roomId }: { room: Room; roomId: string }) {
@@ -37,7 +31,7 @@ export default class ChatManager {
 					roomId: chatData.roomId
 				};
 				const maxLen =
-          useClientSideUserTraits.getState().disappearingMessagesLength;
+					useClientSideUserTraits.getState().disappearingMessagesLength;
 				useMessageStore.getState()
 					.addMessage(newMessage, maxLen);
 			}
@@ -72,7 +66,7 @@ export default class ChatManager {
 		this.sendChatAction(newMessage, users);
 
 		const maxLen =
-      useClientSideUserTraits.getState().disappearingMessagesLength;
+			useClientSideUserTraits.getState().disappearingMessagesLength;
 		useMessageStore.getState()
 			.addMessage(newMessage, maxLen);
 	};

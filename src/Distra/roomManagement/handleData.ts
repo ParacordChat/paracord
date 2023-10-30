@@ -13,11 +13,9 @@ export const handleData = async (id: string, data: any) => {
 	try {
 		const buffer = await (async () => {
 			const payloadRaw = new Uint8Array(data);
-			if (useUserStore.getState().keyedUsers.has(id)) {
-				const dec = await findUserAndDecrypt(id, payloadRaw)
-					.catch((error) => {
-						throw console.error(error);
-					});
+			const keyedUsers = useUserStore.getState().keyedUsers;
+			if (keyedUsers.has(id)) {
+				const dec = await findUserAndDecrypt(id, payloadRaw);
 				return JSON.parse(decodeBytes(dec));
 			} else {
 				return JSON.parse(decodeBytes(payloadRaw));
@@ -36,28 +34,27 @@ export const handleData = async (id: string, data: any) => {
 		} = buffer;
 		const payload = base64ToBytes(plenc);
 
-		if (!useRoomStateManager.getState().actions[typeBytes]) {
+		const actions = useRoomStateManager.getState().actions;
+		const pendingTransmissions =
+			useRoomStateManager.getState().pendingTransmissions;
+
+		if (!(typeBytes in actions)) {
 			throw mkErr(`received message with unregistered type (${typeBytes})`);
 		}
 
-		if (!useRoomStateManager.getState().pendingTransmissions[id]) {
-			useRoomStateManager.getState().pendingTransmissions[id] = {};
+		if (!pendingTransmissions[id]) {
+			pendingTransmissions[id] = {};
 		}
 
-		if (!useRoomStateManager.getState().pendingTransmissions[id][typeBytes]) {
-			useRoomStateManager.getState().pendingTransmissions[id][typeBytes] = {};
+		if (!pendingTransmissions[id][typeBytes]) {
+			pendingTransmissions[id][typeBytes] = {};
 		}
 
-		let target =
-			useRoomStateManager.getState().pendingTransmissions[id][typeBytes][nonce];
-
-		if (!target) {
-			target = useRoomStateManager.getState().pendingTransmissions[id][
-				typeBytes
-			][nonce] = {
+		const target =
+			pendingTransmissions[id][typeBytes][nonce] ||
+			(pendingTransmissions[id][typeBytes][nonce] = {
 				chunks: []
-			};
-		}
+			});
 
 		if (isMeta) {
 			target.meta = JSON.parse(decodeBytes(payload));
@@ -65,9 +62,7 @@ export const handleData = async (id: string, data: any) => {
 			target.chunks.push(payload);
 		}
 
-		useRoomStateManager
-			.getState()
-			.actions[typeBytes].onProgress(progress / oneByteMax, id, target.meta);
+		actions[typeBytes].onProgress(progress / oneByteMax, id, target.meta);
 
 		if (!isLast) {
 			return;
@@ -76,19 +71,13 @@ export const handleData = async (id: string, data: any) => {
 		const full = combineChunks(target.chunks);
 
 		if (isBinary) {
-			useRoomStateManager
-				.getState()
-				.actions[typeBytes].onComplete(full, id, target.meta);
+			actions[typeBytes].onComplete(full, id, target.meta);
 		} else {
 			const text = decodeBytes(full);
-			useRoomStateManager
-				.getState()
-				.actions[typeBytes].onComplete(isJson ? JSON.parse(text) : text, id);
+			actions[typeBytes].onComplete(isJson ? JSON.parse(text) : text, id);
 		}
 
-		delete useRoomStateManager.getState().pendingTransmissions[id][typeBytes][
-			nonce
-		];
+		delete pendingTransmissions[id][typeBytes][nonce];
 	} catch (error) {
 		console.error(error);
 	}

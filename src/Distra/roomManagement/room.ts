@@ -168,17 +168,17 @@ export default async (
 			const pmap = useRoomStateManager.getState().peerMap;
 			const peerSendables = targets || Object.keys(pmap);
 			peerSendables &&
-        iterate(
-        	pmap,
-        	peerSendables,
-        	(_, peer) =>
-        		new Promise((res) => {
-        			if (peer.streams.some((s) => s.id === stream.id)) {
-        				peer.removeStream(stream);
-        			}
-        			res();
-        		})
-        );
+				iterate(
+					pmap,
+					(_, peer) =>
+						new Promise((res) => {
+							if (peer.streams.some((s) => s.id === stream.id)) {
+								peer.removeStream(stream);
+							}
+							res();
+						}),
+					peerSendables
+				);
 		},
 
 		addTrack: (
@@ -190,15 +190,15 @@ export default async (
 			targets
 				? iterate(
 					useRoomStateManager.getState().peerMap,
-					targets,
 					async (id, peer) => {
 						if (meta) {
 							await sendTrackMeta(meta, id);
 						}
 
 						peer.addTrack(track, stream);
-					}
-				)
+					},
+					targets
+				  )
 				: [],
 
 		removeTrack: (
@@ -207,15 +207,15 @@ export default async (
 			targets: TargetPeers
 		) =>
 			targets &&
-      iterate(
-      	useRoomStateManager.getState().peerMap,
-      	targets,
-      	(_, peer) =>
-      		new Promise((res) => {
-      			peer.removeTrack(track, stream);
-      			res();
-      		})
-      ),
+			iterate(
+				useRoomStateManager.getState().peerMap,
+				(_, peer) =>
+					new Promise((res) => {
+						peer.removeTrack(track, stream);
+						res();
+					}),
+				targets
+			),
 		replaceTrack: (
 			oldTrack: MediaStreamTrack,
 			newTrack: MediaStreamTrack,
@@ -226,15 +226,15 @@ export default async (
 			targets
 				? iterate(
 					useRoomStateManager.getState().peerMap,
-					targets,
 					async (id, peer) => {
 						if (meta) {
 							await sendTrackMeta(meta, id);
 						}
 
 						peer.replaceTrack(oldTrack, newTrack, stream);
-					}
-				)
+					},
+					targets
+				  )
 				: [],
 
 		onPeerJoin: (f: (peerId: string) => void) =>

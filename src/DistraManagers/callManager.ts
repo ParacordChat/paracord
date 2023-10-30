@@ -5,10 +5,7 @@ import { useCallPrefsState } from "../stateManagers/RTCManagers/personalCallPref
 type RoomActionType = "phone" | "video" | "screen" | "cutStream" | "view";
 
 export default class RTCManager {
-	private joinRoom: (
-		roomAction: RoomActionType,
-		ids?: string | string[]
-	) => Promise<any[]>;
+	private joinRoom;
 	private removeStream: (stream: MediaStream) => void;
 	private addStream: (stream: MediaStream, ids?: string | string[]) => void;
 

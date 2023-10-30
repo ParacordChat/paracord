@@ -1,7 +1,3 @@
-export {
-	getOccupants,
-	joinRoom as joinFirebaseRoom
-} from "./strategies/firebase.js";
 export type {
 	BaseRoomConfig,
 	FirebaseRoomConfig,
@@ -9,4 +5,8 @@ export type {
 	TorrentRoomConfig
 } from "../helpers/types/distraTypes.js";
 export { selfId } from "../helpers/utils.js";
+export {
+	getOccupants,
+	joinRoom as joinFirebaseRoom
+} from "./strategies/firebase";
 export { joinRoom } from "./strategies/torrent.js";

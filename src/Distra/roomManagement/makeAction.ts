@@ -84,70 +84,68 @@ export const makeAction = <T>(
 		};
 
 		nonce += 1;
-		return Promise.all(
-			iterate(
-				useRoomStateManager.getState().peerMap,
-				targets,
-				async (id, peer) => {
-					const chan = peer._channel;
-					let chunkN = 0;
+		return await iterate(
+			useRoomStateManager.getState().peerMap,
+			async (id, peer) => {
+				const chan = peer._channel;
+				let chunkN = 0;
 
-					while (chunkN < chunkTotal) {
-						const chunk = (() => {
-							if (chunkN === 0 && meta) {
-								return formatChunk(meta, chunkN, true);
-							} else {
-								return meta
-									? formatChunk(
-										buffer.subarray(
-											(chunkN - 1) * chunkSize,
-											chunkN * chunkSize
-										),
-										chunkN,
-										false
-									  )
-									: formatChunk(
-										buffer.subarray(
-											chunkN * chunkSize,
-											(chunkN + 1) * chunkSize
-										),
-										chunkN,
-										false
-									  );
-							}
-						})();
-
-						if (chan.bufferedAmount > chan.bufferedAmountLowThreshold) {
-							await new Promise<void>((res) => {
-								const next = () => {
-									chan.removeEventListener("bufferedamountlow", next);
-									res();
-								};
-
-								chan.addEventListener("bufferedamountlow", next);
-							});
-						}
-
-						if (!useRoomStateManager.getState().peerMap[id]) {
-							break;
-						}
-
-						if (forceEncryption) {
-							if (useUserStore.getState().keyedUsers.has(id)) {
-								const encChunk = await findUserAndEncrypt(id, chunk);
-								peer.send(encChunk);
-							} // fail if chunk cannot be encrypted
+				while (chunkN < chunkTotal) {
+					const chunk = (() => {
+						if (chunkN === 0 && meta) {
+							return formatChunk(meta, chunkN, true);
 						} else {
-							peer.send(chunk);
+							return meta
+								? formatChunk(
+									buffer.subarray(
+										(chunkN - 1) * chunkSize,
+										chunkN * chunkSize
+									),
+									chunkN,
+									false
+								  )
+								: formatChunk(
+									buffer.subarray(
+										chunkN * chunkSize,
+										(chunkN + 1) * chunkSize
+									),
+									chunkN,
+									false
+								  );
 						}
-						chunkN++;
+					})();
 
-						if (onProgress) {
-							onProgress(chunkN / chunkTotal, id, meta);
-						}
+					if (chan.bufferedAmount > chan.bufferedAmountLowThreshold) {
+						await new Promise<void>((res) => {
+							const next = () => {
+								chan.removeEventListener("bufferedamountlow", next);
+								res();
+							};
+
+							chan.addEventListener("bufferedamountlow", next);
+						});
+					}
+
+					if (!useRoomStateManager.getState().peerMap[id]) {
+						break;
+					}
+
+					if (forceEncryption) {
+						if (useUserStore.getState().keyedUsers.has(id)) {
+							const encChunk = await findUserAndEncrypt(id, chunk);
+							peer.send(encChunk);
+						} // fail if chunk cannot be encrypted
+					} else {
+						peer.send(chunk);
+					}
+					chunkN++;
+
+					if (onProgress) {
+						onProgress(chunkN / chunkTotal, id, meta);
 					}
 				}
-			)
+			},
+			targets
 		);
 	};
 

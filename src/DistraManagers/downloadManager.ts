@@ -30,18 +30,9 @@ const readFileChunk = (data: File, chunkN: number) =>
 	});
 
 export default class DownloadManager {
-	private sendFileRequest: (
-		id: FileRequest,
-		ids?: string | string[]
-	) => Promise<any[]>;
-	private sendFileOffer: (
-		files: FileOffer[],
-		ids?: string | string[]
-	) => Promise<any[]>;
-	private sendFileAck: (
-		ack: FileAck,
-		ids?: string | string[]
-	) => Promise<any[]>;
+	private sendFileRequest;
+	private sendFileOffer;
+	private sendFileAck;
 	private terminateClient: (toId: string, uuid: string) => void;
 
 	constructor({ room, roomId }: { room: Room; roomId: string }) {

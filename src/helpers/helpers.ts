@@ -14,34 +14,37 @@ export const fancyBytes = (bytes: number) => {
 
 export const isRtcSupported = () => {
 	const peerConn =
-    window.RTCPeerConnection ||
-    // @ts-ignore
-    window.mozRTCPeerConnection ||
-    // @ts-ignore
-    window.webkitRTCPeerConnection;
-	const canDataChannel = Boolean(
-		peerConn && peerConn.prototype && peerConn.prototype.createDataChannel
-	);
+		window.RTCPeerConnection ||
+		// @ts-ignore
+		window.mozRTCPeerConnection ||
+		// @ts-ignore
+		window.webkitRTCPeerConnection;
+	const canDataChannel = Boolean(peerConn?.prototype?.createDataChannel);
 	return Boolean(peerConn) && canDataChannel;
 };
 
-export const sendSystemMessage = (roomId: string, text: string) =>
+export const sendSystemMessage = (roomId: string, text: string) => {
+	const now = Date.now();
 	useMessageStore.getState()
 		.addMessage({
 			id: genId(6),
 			text,
-			sentAt: Date.now(),
+			sentAt: now,
 			roomId,
 			sentBy: "system",
-			recievedAt: Date.now()
+			recievedAt: now
 		});
+};
 
 export const generateHexColorFromString = (str: string) => {
 	let hash = 0;
-	for (let i = 0; i < str.length; i++) {
-		hash = str.codePointAt(i)! + ((hash << 5) - hash);
-	}
-	const color = (hash & 0x00_FF_FF_FF).toString(16);
+	[...str].forEach((char) => {
+		hash = char.codePointAt(0)! + ((hash << 5) - hash);
+	});
+	const red = ((hash >> 16) & 0xFF) + 128;
+	const green = ((hash >> 8) & 0xFF) + 128;
+	const blue = (hash & 0xFF) + 128;
+	const color = ((red << 16) | (green << 8) | blue).toString(16);
 	return `#${"00000".slice(0, Math.max(0, 6 - color.length))}${color}`;
 };
 

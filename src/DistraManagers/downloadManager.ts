@@ -235,6 +235,10 @@ export default class DownloadManager {
 					.updateOrAddRequestable(id, data);
 				if (data.length > 0) {
 					sendSystemMessage(roomId, `${funAnimalName(id)} offered you files`);
+					if (useClientSideUserTraits.getState().activeTab !== "downloads") {
+						useClientSideUserTraits.getState()
+							.addtoNotifyTabs("downloads");
+					}
 				}
 			}
 		});

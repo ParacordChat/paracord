@@ -34,6 +34,10 @@ export default class ChatManager {
 					useClientSideUserTraits.getState().disappearingMessagesLength;
 				useMessageStore.getState()
 					.addMessage(newMessage, maxLen);
+				if (useClientSideUserTraits.getState().activeTab !== "chat") {
+					useClientSideUserTraits.getState()
+						.addtoNotifyTabs("chat");
+				}
 			}
 		});
 

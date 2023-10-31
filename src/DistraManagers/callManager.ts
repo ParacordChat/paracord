@@ -1,6 +1,7 @@
 import { StateUpdater } from "preact/hooks";
 import { Room } from "../Distra";
 import { useCallPrefsState } from "../stateManagers/commsManagers/personalCallPrefs";
+import { useClientSideUserTraits } from "../stateManagers/userManagers/clientSideUserTraits";
 
 type RoomActionType = "phone" | "video" | "screen" | "cutStream" | "view";
 
@@ -41,6 +42,10 @@ export default class RTCManager {
 			useCallPrefsState
 				.getState()
 				.addVideoBubble({ id: peerId, stream, isAudioOnly });
+			if (useClientSideUserTraits.getState().activeTab !== "call") {
+				useClientSideUserTraits.getState()
+					.addtoNotifyTabs("call");
+			}
 		});
 		getRoomJoined((type, id) => {
 			if (type === "view") {

@@ -1,11 +1,12 @@
 import { create } from "zustand";
 
 interface ClientSideUserTraitsStore {
-	unreadMessages: number;
-	incrementUnreadMessages: () => void;
-	resetUnreadMessages: () => void;
 	activeTab: string;
 	setActiveTab: (tab: string) => void;
+	notifyTabs: Set<string>;
+	addtoNotifyTabs: (tab: string) => void;
+	removeFromNotifyTabs: (tab: string) => void;
+
 	roomPassword: string | undefined;
 	setPassword: (password: string) => void;
 	disappearingMessagesLength: number;
@@ -21,13 +22,21 @@ interface ClientSideUserTraitsStore {
 
 export const useClientSideUserTraits = create<ClientSideUserTraitsStore>(
 	(set, get) => ({
-		unreadMessages: 0,
-		incrementUnreadMessages: () =>
-			set((state) => ({ unreadMessages: state.unreadMessages + 1 })),
-		resetUnreadMessages: () => set({ unreadMessages: 0 }),
-
 		activeTab: "chat",
 		setActiveTab: (tab: string) => set({ activeTab: tab }),
+
+		notifyTabs: new Set(),
+		addtoNotifyTabs: (tab: string) => {
+			console.log("adding to notify tabs", tab);
+			return set((state) => ({
+				notifyTabs: new Set([...state.notifyTabs, tab])
+			}));
+		},
+		removeFromNotifyTabs: (tab: string) =>
+			set((state) => {
+				state.notifyTabs.delete(tab);
+				return { notifyTabs: state.notifyTabs };
+			}),
 
 		roomPassword: undefined,
 		setPassword: (password: string) => set({ roomPassword: password }),

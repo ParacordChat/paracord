@@ -36,7 +36,7 @@ export const handleData = async (id: string, data: any) => {
 
 		const actions = useRoomStateManager.getState().actions;
 		const pendingTransmissions =
-			useRoomStateManager.getState().pendingTransmissions;
+      useRoomStateManager.getState().pendingTransmissions;
 
 		if (!(typeBytes in actions)) {
 			throw mkErr(`received message with unregistered type (${typeBytes})`);
@@ -51,10 +51,10 @@ export const handleData = async (id: string, data: any) => {
 		}
 
 		const target =
-			pendingTransmissions[id][typeBytes][nonce] ||
-			(pendingTransmissions[id][typeBytes][nonce] = {
-				chunks: []
-			});
+      pendingTransmissions[id][typeBytes][nonce] ||
+      (pendingTransmissions[id][typeBytes][nonce] = {
+      	chunks: []
+      });
 
 		if (isMeta) {
 			target.meta = JSON.parse(decodeBytes(payload));

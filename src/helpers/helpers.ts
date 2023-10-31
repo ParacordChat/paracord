@@ -14,11 +14,11 @@ export const fancyBytes = (bytes: number) => {
 
 export const isRtcSupported = () => {
 	const peerConn =
-		window.RTCPeerConnection ||
-		// @ts-ignore
-		window.mozRTCPeerConnection ||
-		// @ts-ignore
-		window.webkitRTCPeerConnection;
+    window.RTCPeerConnection ||
+    // @ts-ignore
+    window.mozRTCPeerConnection ||
+    // @ts-ignore
+    window.webkitRTCPeerConnection;
 	const canDataChannel = Boolean(peerConn?.prototype?.createDataChannel);
 	return Boolean(peerConn) && canDataChannel;
 };

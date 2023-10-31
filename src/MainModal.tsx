@@ -57,22 +57,26 @@ const MainModal = ({ roomId, room }: { roomId: string; room: Room }) => {
 			<RoomCard roomId={roomId}>
 				<TabBar
 					tabs={[
-						{ label:"chat", icon: <Chat /> },
-						
-						{ label:"downloads", icon: <Download /> },
-	
-						{ label:"call", icon: <Phone /> },
-								
-						{ label:"settings", icon: <SettingsOption /> }
+						{ label: "chat", icon: <Chat /> },
+
+						{ label: "downloads", icon: <Download /> },
+
+						{ label: "call", icon: <Phone /> },
+
+						{ label: "settings", icon: <SettingsOption /> }
 					]}
 				/>
 			</RoomCard>
 			<Box direction="row">
 				<Box fill={true}>
-					<TabViewport 
+					<TabViewport
 						tabs={{
 							chat: <ChatView chatManagerInstance={chatManagerInstance} />,
-							downloads: <DownloadView downloadManagerInstance={downloadManagerInstance} />,
+							downloads: (
+								<DownloadView
+									downloadManagerInstance={downloadManagerInstance}
+								/>
+							),
 							call: <CallView rtcManagerInstance={rtcManagerInstance} />,
 							settings: <SettingsView />
 						}}

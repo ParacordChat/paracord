@@ -2,7 +2,7 @@ import { Box, Image, Main, Page, PageHeader } from "grommet";
 import pcdLogo from "/logo.svg";
 
 interface Props {
-	children: React.ReactNode;
+  children: React.ReactNode;
 }
 
 export default function CollapsibleContainer({ children }: Props) {

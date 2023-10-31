@@ -10,10 +10,10 @@ export default function StreamPlayer({
 	id,
 	isMuted = false
 }: {
-	stream: MediaStream;
-	username: string;
-	id: string;
-	isMuted?: boolean;
+  stream: MediaStream;
+  username: string;
+  id: string;
+  isMuted?: boolean;
 }) {
 	const player = useRef<HTMLVideoElement>(null);
 	const eqContainer = useRef<HTMLDivElement>(null);
@@ -22,7 +22,10 @@ export default function StreamPlayer({
 		if (player.current) {
 			player.current.srcObject = stream;
 		}
-		if (stream.getVideoTracks()?.length === 0 && stream.getAudioTracks()?.length > 0) {
+		if (
+			stream.getVideoTracks()?.length === 0 &&
+      stream.getAudioTracks()?.length > 0
+		) {
 			deployEqualizer(stream);
 		}
 	}, [player, stream, id]);
@@ -52,7 +55,10 @@ export default function StreamPlayer({
 	}, []);
 
 	return (
-		<Box round="small" border={{ color: generateHexColorFromString(id), size: "medium" }}>
+		<Box
+			round="small"
+			border={{ color: generateHexColorFromString(id), size: "medium" }}
+		>
 			<Text color={generateHexColorFromString(id)}>{username}</Text>
 			{stream.getVideoTracks()?.length === 0 ? (
 				<>

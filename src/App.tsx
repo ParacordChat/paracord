@@ -6,17 +6,20 @@ import pcdLogo from "/logo.svg";
 
 const RTCSupport = isRtcSupported();
 
-const loadingComponent = () => 
-	<div style={{
-		height: "100%",
-		margin: "0",
-		display: "flex",
-		justifyContent: "center",
-		alignItems: "center"
-	}}>
-		Loading...
-		<Button onClick={()=>location.reload()}>Stuck? Click here</Button>
-	</div>;
+const loadingComponent = () => (
+	<div
+		style={{
+			height: "100%",
+			margin: "0",
+			display: "flex",
+			justifyContent: "center",
+			alignItems: "center"
+		}}
+	>
+    Loading...
+		<Button onClick={() => location.reload()}>Stuck? Click here</Button>
+	</div>
+);
 
 function App() {
 	return (

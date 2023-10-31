@@ -4,8 +4,8 @@ import { HTMLAttributes } from "preact/compat";
 import { useState } from "preact/hooks";
 
 interface CollapsibleProps extends HTMLAttributes<HTMLDivElement> {
-	title: string;
-	open?: boolean;
+  title: string;
+  open?: boolean;
 }
 
 export default function CollapsibleContainer(props: CollapsibleProps) {

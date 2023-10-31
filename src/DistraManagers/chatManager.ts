@@ -31,7 +31,7 @@ export default class ChatManager {
 					roomId: chatData.roomId
 				};
 				const maxLen =
-					useClientSideUserTraits.getState().disappearingMessagesLength;
+          useClientSideUserTraits.getState().disappearingMessagesLength;
 				useMessageStore.getState()
 					.addMessage(newMessage, maxLen);
 				if (useClientSideUserTraits.getState().activeTab !== "chat") {
@@ -70,7 +70,7 @@ export default class ChatManager {
 		this.sendChatAction(newMessage, users);
 
 		const maxLen =
-			useClientSideUserTraits.getState().disappearingMessagesLength;
+      useClientSideUserTraits.getState().disappearingMessagesLength;
 		useMessageStore.getState()
 			.addMessage(newMessage, maxLen);
 	};

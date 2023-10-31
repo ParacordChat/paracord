@@ -77,7 +77,8 @@ export function RoomCreator() {
 				<Anchor
 					label="Desktop App"
 					onClick={() => {
-						window.location.href = "https://github.com/ParacordChat/paracord/releases/tag/allplatforms";
+						window.location.href =
+              "https://github.com/ParacordChat/paracord/releases/tag/allplatforms";
 					}}
 				/>
 				<Anchor

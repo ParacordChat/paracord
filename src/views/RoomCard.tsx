@@ -28,21 +28,28 @@ export function RoomCard(props: { roomId: string; children?: any }) {
 					/>
 
 					<Image alt="paracord logo" style={{ height: "4em" }} src={pcdLogo} />
-					<Box style={{
- 						borderBottom: "1px solid #eaeaea",
-						width: "100%" 
-					}}>
+					<Box
+						style={{
+							borderBottom: "1px solid #eaeaea",
+							width: "100%"
+						}}
+					>
 						<Text size="xxlarge">Paracord</Text>
-							
+
 						<Text size="medium">Room ID {decodeURI(roomId)}</Text>
 					</Box>
 				</Box>
 			</div>
 			<div className="mobileShow">
-				<Image alt="paracord logo" style={{ height: "4em" }} src={pcdLogo} onClick={() => {
-					route(`/`, true);
-					location.reload();
-				}} />
+				<Image
+					alt="paracord logo"
+					style={{ height: "4em" }}
+					src={pcdLogo}
+					onClick={() => {
+						route(`/`, true);
+						location.reload();
+					}}
+				/>
 			</div>
 			{children}
 			<div className="mobileHide">

@@ -37,9 +37,7 @@ const PasswordModal = (roomId: string, hasPassword: boolean) => () => {
 				<MainModal roomId={roomId} room={currentRoom} />
 			) : (
 				<GenericHeader>
-					<Text color="red">
-            Enter room password:
-					</Text>
+					<Text color="red">Enter room password:</Text>
 					<Box direction="row">
 						<TextInput
 							icon={<Key />}
@@ -73,7 +71,7 @@ const PasswordModal = (roomId: string, hasPassword: boolean) => () => {
 							onClick={() => {
 								roomSet(passwordRef.current?.value);
 							}}
-							style={{ marginLeft: "auto", width:"100%" }}
+							style={{ marginLeft: "auto", width: "100%" }}
 							label="Go"
 							primary
 						/>

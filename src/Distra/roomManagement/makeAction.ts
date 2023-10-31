@@ -45,7 +45,7 @@ export const makeAction = <T>(
 
 		const isBlob = data instanceof Blob;
 		const isBinary =
-			isBlob || data instanceof ArrayBuffer || data instanceof Uint8Array;
+      isBlob || data instanceof ArrayBuffer || data instanceof Uint8Array;
 		const isJson = typeof data !== "string" && !isBinary && !isBlob;
 
 		if (meta && !isBinary) {
@@ -57,7 +57,7 @@ export const makeAction = <T>(
 			: encodeBytes(isJson ? JSON.stringify(data) : (data as string));
 
 		const chunkTotal =
-			Math.ceil(buffer.byteLength / chunkSize) + (meta ? 1 : 0);
+      Math.ceil(buffer.byteLength / chunkSize) + (meta ? 1 : 0);
 
 		const formatChunk = (
 			chkValue: Uint8Array | Metadata,
@@ -103,7 +103,7 @@ export const makeAction = <T>(
 									),
 									chunkN,
 									false
-								  )
+								)
 								: formatChunk(
 									buffer.subarray(
 										chunkN * chunkSize,
@@ -111,7 +111,7 @@ export const makeAction = <T>(
 									),
 									chunkN,
 									false
-								  );
+								);
 						}
 					})();
 

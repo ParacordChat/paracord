@@ -5,10 +5,10 @@ import { useClientSideUserTraits } from "../../../stateManagers/userManagers/cli
 const Tabs = ({
 	tabs
 }: {
-	tabs: {
-		label: string;
-		icon: VNode;
-	}[];
+  tabs: {
+    label: string;
+    icon: VNode;
+  }[];
 }) => {
 	const activeTab = useClientSideUserTraits((state) => state.activeTab);
 	const notifyTabs = useClientSideUserTraits((state) => state.notifyTabs);

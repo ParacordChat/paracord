@@ -2,8 +2,8 @@ import { ChangeEvent, useState } from "preact/compat";
 import "../../views/styles/fileUpload.css";
 
 export default function FileUploader(props: {
-	addFiles: (files: File[]) => void;
-	uiInteractive: boolean;
+  addFiles: (files: File[]) => void;
+  uiInteractive: boolean;
 }) {
 	const { addFiles, uiInteractive } = props;
 	const [fileInputKey, setFileInputKey] = useState(0);

@@ -16,9 +16,9 @@ export default class UserManager {
 	constructor({ room, roomId }: { room: Room; roomId: string }) {
 		const [sendName, getName] = room.makeAction<string>("name", true);
 		const [sendEncryptionInfo, getEncryptionInfo] =
-			room.makeAction<Uint8Array>("encReq");
+      room.makeAction<Uint8Array>("encReq");
 		const [sendProcessedKey, getProcessedKey] =
-			room.makeAction<Uint8Array>("encProc");
+      room.makeAction<Uint8Array>("encProc");
 
 		this.sendName = sendName;
 		this.sendEncryptionInfo = sendEncryptionInfo;

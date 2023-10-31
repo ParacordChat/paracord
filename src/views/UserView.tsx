@@ -46,18 +46,13 @@ export function UserView(props: {
 			style={{ height: "84vh" }}
 			header={
 				<>
-					
-					<Box 
-						round="small"
-						pad="small"
-						background="dark-1"
-					>
+					<Box round="small" pad="small" background="dark-1">
 						<Box direction="row" gap="medium">
 							<Text
 								size="large"
 								style={{ color: generateHexColorFromString(selfId) }}
 							>
-            You
+                You
 							</Text>
 							<Button
 								icon={<FormNext />}
@@ -65,7 +60,6 @@ export function UserView(props: {
 								style={{ marginLeft: "auto" }}
 								onClick={() => setShowSidebar(!showSidebar)}
 							/>
-							
 						</Box>
 						<TextInput
 							type="text"
@@ -75,15 +69,13 @@ export function UserView(props: {
 							style={{ width: "100%" }}
 							onBlur={(e: { currentTarget: { value: string } }) =>
 								e.currentTarget.value.trim() !== "" &&
-              userManagerInstance.setMyName(e.currentTarget.value)
+                userManagerInstance.setMyName(e.currentTarget.value)
 							}
 						/>
 						<Text size="small" style={{ color: "grey" }}>
 							{funAnimalName(selfId)}
 						</Text>
 					</Box>
-					
-					
 				</>
 			}
 		>

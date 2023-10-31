@@ -168,17 +168,17 @@ export default async (
 			const pmap = useRoomStateManager.getState().peerMap;
 			const peerSendables = targets || Object.keys(pmap);
 			peerSendables &&
-				iterate(
-					pmap,
-					(_, peer) =>
-						new Promise((res) => {
-							if (peer.streams.some((s) => s.id === stream.id)) {
-								peer.removeStream(stream);
-							}
-							res();
-						}),
-					peerSendables
-				);
+        iterate(
+        	pmap,
+        	(_, peer) =>
+        		new Promise((res) => {
+        			if (peer.streams.some((s) => s.id === stream.id)) {
+        				peer.removeStream(stream);
+        			}
+        			res();
+        		}),
+        	peerSendables
+        );
 		},
 
 		addTrack: (
@@ -198,7 +198,7 @@ export default async (
 						peer.addTrack(track, stream);
 					},
 					targets
-				  )
+				)
 				: [],
 
 		removeTrack: (
@@ -207,15 +207,15 @@ export default async (
 			targets: TargetPeers
 		) =>
 			targets &&
-			iterate(
-				useRoomStateManager.getState().peerMap,
-				(_, peer) =>
-					new Promise((res) => {
-						peer.removeTrack(track, stream);
-						res();
-					}),
-				targets
-			),
+      iterate(
+      	useRoomStateManager.getState().peerMap,
+      	(_, peer) =>
+      		new Promise((res) => {
+      			peer.removeTrack(track, stream);
+      			res();
+      		}),
+      	targets
+      ),
 		replaceTrack: (
 			oldTrack: MediaStreamTrack,
 			newTrack: MediaStreamTrack,
@@ -234,7 +234,7 @@ export default async (
 						peer.replaceTrack(oldTrack, newTrack, stream);
 					},
 					targets
-				  )
+				)
 				: [],
 
 		onPeerJoin: (f: (peerId: string) => void) =>

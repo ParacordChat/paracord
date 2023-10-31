@@ -3,7 +3,10 @@ import { VNode } from "preact";
 import { useClientSideUserTraits } from "../../../stateManagers/userManagers/clientSideUserTraits";
 
 
-const Tabs = ({ tabs }:{tabs:{label:string, icon:VNode}[]}) => {
+const Tabs = ({ tabs }:{tabs: { 
+		label:string,
+		icon:VNode
+	}[]}) => {
 	const activeTab = useClientSideUserTraits((state) =>
 		state.activeTab
 	);
@@ -17,11 +20,10 @@ const Tabs = ({ tabs }:{tabs:{label:string, icon:VNode}[]}) => {
 						className={entry.label === activeTab ? "active" : ""}
 						 primary={entry.label === activeTab}
 						 icon={entry.icon}
-						 title={entry.label}
+						 tip={entry.label}
 						 onClick={() => useClientSideUserTraits.getState()
 							.setActiveTab(entry.label)}
 						 />
-						
 				))}
 			</div>
 		</div>

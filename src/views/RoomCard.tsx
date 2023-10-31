@@ -24,6 +24,7 @@ export function RoomCard(props: { roomId: string; children?: any }) {
 							location.reload();
 						}}
 						icon={<CaretLeftFill />}
+						tip="Go back to home"
 					/>
 
 					<Image alt="paracord logo" style={{ height: "4em" }} src={pcdLogo} />

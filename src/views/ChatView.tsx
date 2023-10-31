@@ -48,6 +48,7 @@ export function ChatView(props: { chatManagerInstance: ChatManager }) {
 					icon={multilineInput ? <FormDown /> : <FormUp />}
 					onClick={() => setMultilineInput(!multilineInput)}
 					disabled={!uiInteractive}
+					tip="Toggle multiline input"
 				/>
 				<TextArea
 					ref={messageBox}
@@ -76,6 +77,7 @@ export function ChatView(props: { chatManagerInstance: ChatManager }) {
 					disabled={!uiInteractive}
 					primary
 					hoverIndicator
+					tip="Send message"
 					icon={<Send />}
 				/>
 			</Box>

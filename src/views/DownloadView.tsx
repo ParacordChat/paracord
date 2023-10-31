@@ -67,6 +67,7 @@ export function DownloadView(props: {
                 			primary
                 			onClick={() => downloadManagerInstance.removeRealFile(id)}
                 			icon={<FormClose />}
+                			tip="Stop offering file"
                 		/>
                 	</Box>
                 	))}
@@ -115,9 +116,9 @@ export function DownloadView(props: {
                 					onClick={() =>
                 						downloadManagerInstance.requestFile(ownerId, id)
                 					}
-                						primary
-                						icon={<Download />}
-                					title="Request"
+                					primary
+                					icon={<Download />}
+                					tip="Request"
                 				/>
                 			</Box>
                 		</Box>
@@ -173,6 +174,7 @@ export function DownloadView(props: {
 												downloadManagerInstance.attemptResume(status.uuid)
 											}
 											icon={<Refresh />}
+											tip="Attempt Resume"
 										/>
 										{/* <Button //TODO: add back
 											style={{ padding: "0.3em" }}
@@ -188,6 +190,7 @@ export function DownloadView(props: {
 												downloadManagerInstance.cancelFile(status.uuid)
 											}
 											icon={<FormClose />}
+											tip="Cancel Transfer"
 										/>
 									</Box>
 								</Box>

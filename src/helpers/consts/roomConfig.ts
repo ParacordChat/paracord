@@ -36,6 +36,6 @@ export const defaultRoomConfig: TorrentRoomConfig = {
 };
 
 export const firebaseRoomConfig: FirebaseRoomConfig = {
-	appId: "paracord-d5594-default-rtdb"
-	// rtcConfig
+	appId: "paracord-d5594-default-rtdb",
+	rtcConfig
 };

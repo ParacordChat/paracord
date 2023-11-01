@@ -1,42 +1,59 @@
 @media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
+	html {
+		color-scheme: dark;
+	}
 }
 
 @media (max-width: 660px) {
-  .mobileHide {
-    display: none;
-    width: 0px;
-  }
-  .mobileShow {
-    display: block;
-  }
+	.mobileHide {
+		display: none;
+		width: 0px;
+	}
+	.mobileShow {
+		display: block;
+	}
 }
 
 @media (min-width: 660px) {
-  .mobileHide {
-    display: block;
-  }
-  .mobileShow {
-    display: none;
-    width: 0px;
-  }
+	.mobileHide {
+		display: block;
+	}
+	.mobileShow {
+		display: none;
+		width: 0px;
+	}
 }
 
 ::-webkit-scrollbar {
-  background-color: transparent;
-  width: 0.8vh;
-  height: 0.8vh;
+	background-color: transparent;
+	width: 0.8vh;
+	height: 0.8vh;
 }
 * {
-  scrollbar-width: thin;
-  scrollbar-color: #4bffac;
+	scrollbar-width: thin;
+	scrollbar-color: #4bffac;
 }
 *::-webkit-scrollbar-track {
-  background-color: transparent;
+	background-color: transparent;
 }
 *::-webkit-scrollbar-thumb {
-  background-color: #4bffac;
-  border-radius: 20px;
+	background-color: #4bffac;
+	border-radius: 20px;
+}
+
+.bouncing-letters {
+	display: inline-block;
+	animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+	0% {
+		transform: translateY(0);
+	}
+	50% {
+		transform: translateY(-10px);
+	}
+	100% {
+		transform: translateY(0);
+	}
 }

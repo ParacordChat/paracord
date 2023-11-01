@@ -103,22 +103,25 @@ export function UserView(props: {
 								scrollbars: "hidden"
 							}}
 						>
-							{({ name, id }: { name: string; id: string }) => (
-								<div>
-									<Box key={id} direction="row" gap="small">
-										<MuteUserButton
-											toggleMuted={() => mutedPeers.toggleMute(id)}
-											isMuted={mutedPeers.mutedUsers[id] || false}
-										/>
-										<Text style={{ color: generateHexColorFromString(id) }}>
-											{name}
+							{({ name, id }: { name: string; id: string }) => {
+								const isTyping = useClientSideUserTraits.getState().typingUsers.includes(id);
+								return(
+									<div>
+										<Box key={id} direction="row" gap="small">
+											<MuteUserButton
+												toggleMuted={() => mutedPeers.toggleMute(id)}
+												isMuted={mutedPeers.mutedUsers[id] || false}
+											/>
+											<Text style={{ color: generateHexColorFromString(id) }} className={isTyping && "bouncing-letters"}>
+												{name}
+											</Text>
+										</Box>
+										<Text size="small" style={{ color: "grey" }}>
+											{funAnimalName(id)}
 										</Text>
-									</Box>
-									<Text size="small" style={{ color: "grey" }}>
-										{funAnimalName(id)}
-									</Text>
-								</div>
-							)}
+									</div>
+								);
+							}}
 						</InfiniteScroll>
 					) : (
 						<>

@@ -17,6 +17,8 @@ import { genId } from "../helpers/utils";
 export function RoomCreator() {
 	const [usePassword, setUsePassword] = useState(true);
 	const roomRef = useRef<HTMLInputElement>(null);
+	const loadRoom = () =>
+		route(`/${usePassword ? "s" : "p"}/${roomRef.current?.value}`, true);
 	return (
 		<>
 			<GenericHeader>
@@ -30,10 +32,7 @@ export function RoomCreator() {
 						placeholder="Room ID"
 						onKeyUp={(e: { key: string }) => {
 							if (e.key === "Enter") {
-								route(
-									`/${roomRef.current?.value}/${usePassword ? "a" : ""}`,
-									true
-								);
+								loadRoom();
 							}
 						}}
 					/>
@@ -59,9 +58,7 @@ export function RoomCreator() {
 					/>
 				</Box>
 				<Button
-					onClick={() =>
-						route(`/${usePassword ? "s" : "p"}/${roomRef.current?.value}`, true)
-					}
+					onClick={loadRoom}
 					label="Go"
 					primary
 				/>

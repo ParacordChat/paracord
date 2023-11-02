@@ -7,7 +7,7 @@ import { useEffect, useRef, useState } from "preact/hooks";
 import { joinFirebaseRoom, Room } from "../Distra";
 import MainModal from "../MainModal";
 import GenericHeader from "../helpers/components/GenericHeader";
-import { firebaseRoomConfig } from "../helpers/consts/roomConfig";
+import { firebaseRoomConfig, turnAPI } from "../helpers/consts/roomConfig";
 
 const PasswordModal = (roomId: string, hasPassword: boolean) => () => {
 	const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
@@ -16,13 +16,18 @@ const PasswordModal = (roomId: string, hasPassword: boolean) => () => {
 
 	const roomSet = async (password = "") => {
 		if (!currentRoom) {
-			const room = await joinFirebaseRoom(
-				{
-					...firebaseRoomConfig,
-					password: password === "" ? undefined : password
-				},
-				roomId
-			);
+			const room = await fetch(turnAPI)
+				.then(response=>response.json())
+				.then(iceServers=>joinFirebaseRoom(
+					{
+						...firebaseRoomConfig,
+						rtcConfig:{
+							iceServers
+						},
+						password: password === "" ? undefined : password
+					},
+					roomId
+				));
 			setCurrentRoom(room);
 		}
 	};

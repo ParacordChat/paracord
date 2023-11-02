@@ -1,23 +1,23 @@
 import { create } from "zustand";
 
 interface ClientSideUserTraitsStore {
-  activeTab: string;
-  setActiveTab: (tab: string) => void;
-  notifyTabs: Set<string>;
-  addtoNotifyTabs: (tab: string) => void;
-  removeFromNotifyTabs: (tab: string) => void;
+	activeTab: string;
+	setActiveTab: (tab: string) => void;
+	notifyTabs: Set<string>;
+	addtoNotifyTabs: (tab: string) => void;
+	removeFromNotifyTabs: (tab: string) => void;
 
-  roomPassword: string | undefined;
-  setPassword: (password: string) => void;
-  disappearingMessagesLength: number;
-  setDisappearingMessagesLength: (length: number) => void;
-  mutedUsers: { [userId: string]: boolean };
-  toggleMute: (userId: string) => void;
-  addUser: (userId: string) => void;
-  removeUser: (userId: string) => void;
-  typingUsers: string[];
-  addTypingUser: (userId: string) => void;
-  removeTypingUser: (userId: string) => void;
+	roomPassword: string | undefined;
+	setPassword: (password: string) => void;
+	disappearingMessagesLength: number;
+	setDisappearingMessagesLength: (length: number) => void;
+	mutedUsers: { [userId: string]: boolean };
+	toggleMute: (userId: string) => void;
+	addUser: (userId: string) => void;
+	removeUser: (userId: string) => void;
+	typingUsers: string[];
+	addTypingUser: (userId: string) => void;
+	removeTypingUser: (userId: string) => void;
 }
 
 export const useClientSideUserTraits = create<ClientSideUserTraitsStore>(
@@ -26,12 +26,10 @@ export const useClientSideUserTraits = create<ClientSideUserTraitsStore>(
 		setActiveTab: (tab: string) => set({ activeTab: tab }),
 
 		notifyTabs: new Set(),
-		addtoNotifyTabs: (tab: string) => {
-			console.log("adding to notify tabs", tab);
-			return set((state) => ({
+		addtoNotifyTabs: (tab: string) =>
+			set((state) => ({
 				notifyTabs: new Set([...state.notifyTabs, tab])
-			}));
-		},
+			})),
 		removeFromNotifyTabs: (tab: string) =>
 			set((state) => {
 				state.notifyTabs.delete(tab);

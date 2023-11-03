@@ -46,10 +46,10 @@ const MainModal = ({ roomId, room }: { roomId: string; room: Room }) => {
 
 	useEffect(() => {
 		userManagerInstance.createPersona();
-		room.onPeerJoin((peerId) => {
-			userManagerInstance.peerJoinHook(peerId);
-			downloadManagerInstance.peerJoinHook(peerId);
-		});
+		room.onPeerJoin(async (peerId) => 
+			userManagerInstance.peerJoinHook(peerId)
+				.then(()=>downloadManagerInstance.peerJoinHook(peerId))
+		);
 	}, [downloadManagerInstance, room, userManagerInstance]);
 
 	return (

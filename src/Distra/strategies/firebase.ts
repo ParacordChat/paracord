@@ -111,9 +111,9 @@ export const joinRoom = initGuard(
 
 		let didSyncRoom = false;
 		let onPeerConnect: (
-      peer: ExtendedInstance,
-      id: string
-    ) => void | (() => void) = noOp;
+			peer: ExtendedInstance,
+			id: string
+		) => void | (() => void) = noOp;
 
 		occupiedRooms[ns] = true;
 
@@ -193,5 +193,3 @@ export const getOccupants = firebaseGuard(
 			)
 		)
 );
-
-export { selfId } from "../../helpers/utils.js";

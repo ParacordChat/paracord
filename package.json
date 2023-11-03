@@ -1,12 +1,12 @@
 {
   "name": "paracord",
   "private": true,
-  "version": "8.5.7",
+  "version": "8.5.9",
   "type": "module",
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "dev": "vite",
-    "build": "tsc && vite build && cat sw-appended.js >> ./dist/sw.js",
+    "build": "tsc && vite build && cat sw-appended.js >> ./dist/sw.js && cp ./dist/index.html ./dist/404.html",
     "preview": "vite preview",
     "format": "eslint --ext .ts,.tsx . --fix",
     "lint": "eslint --ext .ts,.tsx .",

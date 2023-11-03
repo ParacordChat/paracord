@@ -1,8 +1,8 @@
 import { Box, Button, TextArea } from "grommet";
 import { FormDown, FormUp, Send } from "grommet-icons";
 import { useRef, useState } from "preact/hooks";
-import ChatManager from "../DistraManagers/chatManager";
-import { useUserStore } from "../stateManagers/userManagers/userStore";
+import ChatManager from "../../DistraManagers/chatManager";
+import { useUserStore } from "../../stateManagers/userManagers/userStore";
 import Messages from "./Messages";
 
 export function ChatView(props: { chatManagerInstance: ChatManager }) {

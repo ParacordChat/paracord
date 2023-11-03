@@ -1,10 +1,10 @@
 import { InfiniteScroll, Main } from "grommet";
-import { selfId } from "../Distra";
-import RenderMessage from "../helpers/components/RenderMessage";
-import { Message, Persona } from "../helpers/types/types";
-import { useMessageStore } from "../stateManagers/commsManagers/messageStore";
-import { usePersonaStore } from "../stateManagers/userManagers/personaStore";
-import { useUserStore } from "../stateManagers/userManagers/userStore";
+import { selfId } from "../../Distra";
+import RenderMessage from "../../helpers/components/RenderMessage";
+import { Message, Persona } from "../../helpers/types/types";
+import { useMessageStore } from "../../stateManagers/commsManagers/messageStore";
+import { usePersonaStore } from "../../stateManagers/userManagers/personaStore";
+import { useUserStore } from "../../stateManagers/userManagers/userStore";
 
 export default function Messages() {
 	const messageQueue = useMessageStore(

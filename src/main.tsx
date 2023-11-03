@@ -1,7 +1,7 @@
 import { defaultProps, Grommet } from "grommet";
 import { render } from "preact";
 import "webrtc-adapter"; // polyfilling webrtc
-import App from "./App";
+import App from "./views/Router";
 import "./views/styles/globals.css";
 
 const theme = {

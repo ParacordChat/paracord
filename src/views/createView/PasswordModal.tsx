@@ -4,10 +4,10 @@ import { Box, Button, Text, TextInput } from "grommet";
 import { CaretLeftFill, FormView, FormViewHide, Key } from "grommet-icons";
 import { route } from "preact-router";
 import { useEffect, useRef, useState } from "preact/hooks";
-import { joinFirebaseRoom, Room } from "../Distra";
-import MainModal from "../MainModal";
-import GenericHeader from "../helpers/components/GenericHeader";
-import { firebaseRoomConfig, turnAPI } from "../helpers/consts/roomConfig";
+import { joinFirebaseRoom, Room } from "../../Distra";
+import GenericHeader from "../../helpers/components/GenericHeader";
+import { firebaseRoomConfig, turnAPI } from "../../helpers/consts/roomConfig";
+import MainModal from "../paneView/PaneModal";
 
 const PasswordModal = (roomId: string, hasPassword: boolean) => () => {
 	const [passwordVisible, setPasswordVisible] = useState<boolean>(false);

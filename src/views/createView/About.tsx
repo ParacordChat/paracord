@@ -1,5 +1,5 @@
 import { Box, Heading, InfiniteScroll, Paragraph } from "grommet";
-import CollapsibleContainer from "../helpers/components/Collapsible";
+import CollapsibleContainer from "../../helpers/components/Collapsible";
 
 const abouts = [
 	{

@@ -10,13 +10,13 @@ import {
 } from "grommet";
 import { FormNext, FormPrevious } from "grommet-icons";
 import { useEffect, useState } from "preact/hooks";
-import { selfId } from "../Distra";
-import UserManager from "../DistraManagers/userManager";
-import MuteUserButton from "../helpers/components/MuteUserButton";
-import { generateHexColorFromString } from "../helpers/helpers";
-import { useClientSideUserTraits } from "../stateManagers/userManagers/clientSideUserTraits";
-import { usePersonaStore } from "../stateManagers/userManagers/personaStore";
-import { useUserStore } from "../stateManagers/userManagers/userStore";
+import { selfId } from "../../Distra";
+import UserManager from "../../DistraManagers/userManager";
+import MuteUserButton from "../../helpers/components/MuteUserButton";
+import { generateHexColorFromString } from "../../helpers/helpers";
+import { useClientSideUserTraits } from "../../stateManagers/userManagers/clientSideUserTraits";
+import { usePersonaStore } from "../../stateManagers/userManagers/personaStore";
+import { useUserStore } from "../../stateManagers/userManagers/userStore";
 
 export function UserView(props: {
   roomId: string;

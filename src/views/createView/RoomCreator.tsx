@@ -10,9 +10,9 @@ import {
 import { Login, Risk } from "grommet-icons";
 import { route } from "preact-router";
 import { useRef, useState } from "preact/hooks";
-import packageJson from "../../package.json";
-import GenericHeader from "../helpers/components/GenericHeader";
-import { genId } from "../helpers/utils";
+import packageJson from "../../../package.json";
+import GenericHeader from "../../helpers/components/GenericHeader";
+import { genId } from "../../helpers/utils";
 
 export function RoomCreator() {
 	const [usePassword, setUsePassword] = useState(true);

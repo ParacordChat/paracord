@@ -1,7 +1,7 @@
 import { Button, Image, PageHeader, Text } from "grommet";
 import AsyncRoute from "preact-async-route";
 import { Router } from "preact-router";
-import { isRtcSupported } from "./helpers/helpers";
+import { isRtcSupported } from "../helpers/helpers";
 import pcdLogo from "/logo.svg";
 
 const RTCSupport = isRtcSupported();
@@ -30,19 +30,19 @@ function App() {
 						path={`/`}
 						default
 						getComponent={() =>
-							import("./views/RoomCreator").then((module) => module.RoomCreator)
+							import("./createView/RoomCreator").then((module) => module.RoomCreator)
 						}
 					/>
 					<AsyncRoute
 						path={`/About`}
 						getComponent={() =>
-							import("./views/About").then((module) => module.default)
+							import("./createView/About").then((module) => module.default)
 						}
 					/>
 					<AsyncRoute
 						path={`/p/:id`}
 						getComponent={(url) =>
-							import("./views/PasswordModal").then(async (module) => {
+							import("./createView/PasswordModal").then(async (module) => {
 								const cleanUrl = url.split("/");
 								if (cleanUrl.length < 2) alert("Invalid URL");
 								const roomId = cleanUrl[2].trim();
@@ -54,7 +54,7 @@ function App() {
 					<AsyncRoute
 						path={`/s/:id`}
 						getComponent={(url) =>
-							import("./views/PasswordModal").then(async (module) => {
+							import("./createView/PasswordModal").then(async (module) => {
 								const cleanUrl = url.split("/");
 								if (cleanUrl.length < 2) alert("Invalid URL");
 								const roomId = cleanUrl[2].trim();

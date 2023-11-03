@@ -1,5 +1,5 @@
 import { Box, CheckBox, TextInput } from "grommet";
-import { useClientSideUserTraits } from "../stateManagers/userManagers/clientSideUserTraits";
+import { useClientSideUserTraits } from "../../stateManagers/userManagers/clientSideUserTraits";
 
 export function SettingsView() {
 	const [disappearingMessagesCount, setDisappearingMessagesCount] =

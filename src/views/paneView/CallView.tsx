@@ -3,12 +3,12 @@ import { funAnimalName } from "fun-animal-names";
 import { Box, Button, Footer, Text } from "grommet";
 import { Camera, Close, Monitor, Phone, View } from "grommet-icons";
 import { useState } from "preact/hooks";
-import { selfId } from "../Distra";
-import RTCManager from "../DistraManagers/callManager";
-import StreamPlayer from "../helpers/components/StreamPlayer";
-import { generateHexColorFromString } from "../helpers/helpers";
-import { useCallPrefsState } from "../stateManagers/commsManagers/personalCallPrefs";
-import { useUserStore } from "../stateManagers/userManagers/userStore";
+import { selfId } from "../../Distra";
+import RTCManager from "../../DistraManagers/callManager";
+import StreamPlayer from "../../helpers/components/StreamPlayer";
+import { generateHexColorFromString } from "../../helpers/helpers";
+import { useCallPrefsState } from "../../stateManagers/commsManagers/personalCallPrefs";
+import { useUserStore } from "../../stateManagers/userManagers/userStore";
 
 export function CallView(props: { rtcManagerInstance: RTCManager }) {
 	const { rtcManagerInstance } = props;

@@ -3,12 +3,12 @@ import { funAnimalName } from "fun-animal-names";
 import { Box, Button, Footer, Text } from "grommet";
 import { Camera, Close, Monitor, Phone, View } from "grommet-icons";
 import { useState } from "preact/hooks";
-import { selfId } from "../../Distra";
-import RTCManager from "../../DistraManagers/callManager";
-import StreamPlayer from "../../helpers/components/StreamPlayer";
-import { generateHexColorFromString } from "../../helpers/helpers";
-import { useCallPrefsState } from "../../stateManagers/commsManagers/personalCallPrefs";
-import { useUserStore } from "../../stateManagers/userManagers/userStore";
+import { selfId } from "../../../Distra";
+import RTCManager from "../../../DistraManagers/callManager";
+import StreamPlayer from "../../../helpers/components/StreamPlayer";
+import { generateHexColorFromString } from "../../../helpers/helpers";
+import { useCallPrefsState } from "../../../stateManagers/commsManagers/personalCallPrefs";
+import { useUserStore } from "../../../stateManagers/userManagers/userStore";
 
 export function CallView(props: { rtcManagerInstance: RTCManager }) {
 	const { rtcManagerInstance } = props;
@@ -34,10 +34,10 @@ export function CallView(props: { rtcManagerInstance: RTCManager }) {
 
 	return (
 		<>
-			<div style={{ height: "100%", overflow: "scroll" }}>
+			<div style={{ height: "75vh", overflow: "scroll" }}>
 				<Box>
 					{callConsent && (
-						<Box fill="vertical" overflow="scroll">
+						<Box fill="vertical">
 							{myStream ? (
 								<StreamPlayer
 									isMuted={true}
@@ -48,10 +48,10 @@ export function CallView(props: { rtcManagerInstance: RTCManager }) {
 							) : (
 								<Box
 									round="small"
-									maxWidth="50em"
 									border={{
 										color: generateHexColorFromString(selfId),
-										size: "medium"
+										size: "medium",
+										width:"30vh"
 									}}
 								>
 									<Text color={generateHexColorFromString(selfId)}>You</Text>

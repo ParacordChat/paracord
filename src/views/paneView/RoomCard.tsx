@@ -27,7 +27,7 @@ export function RoomCard(props: { roomId: string; children?: any }) {
 						tip="Go back to home"
 					/>
 
-					<Image alt="paracord logo" style={{ height: "4em" }} src={pcdLogo} />
+					<Image alt="paracord logo" style={{ height: "10vh" }} src={pcdLogo} />
 					<Box
 						style={{
 							borderBottom: "1px solid #eaeaea",
@@ -43,7 +43,7 @@ export function RoomCard(props: { roomId: string; children?: any }) {
 			<div className="mobileShow">
 				<Image
 					alt="paracord logo"
-					style={{ height: "4em" }}
+					style={{ height: "10vh" }}
 					src={pcdLogo}
 					onClick={() => {
 						route(`/`, true);

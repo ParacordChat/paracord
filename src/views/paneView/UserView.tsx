@@ -92,7 +92,7 @@ export function UserView(props: {
 						overflowX: "auto",
 						overflowY: "scroll",
 						// overflow: "auto",
-						height: "20em"
+						height: "30vh"
 					}}
 				>
 					{activePeers.length > 0 ? (

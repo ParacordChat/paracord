@@ -1,14 +1,14 @@
 import { Box, Button, Meter, Text } from "grommet";
 import { Download, FormClose, Refresh } from "grommet-icons";
-import { selfId } from "../../Distra";
-import DownloadManager from "../../DistraManagers/downloadManager";
-import CollapsibleContainer from "../../helpers/components/Collapsible";
-import FileUploader from "../../helpers/components/FileUploader";
-import { fancyBytes } from "../../helpers/helpers";
-import { useProgressStore } from "../../stateManagers/downloadManagers/progressManager";
-import { useRealFiles } from "../../stateManagers/downloadManagers/realFileManager";
-import { useOfferStore } from "../../stateManagers/downloadManagers/requestManager";
-import { useUserStore } from "../../stateManagers/userManagers/userStore";
+import { selfId } from "../../../Distra";
+import DownloadManager from "../../../DistraManagers/downloadManager";
+import CollapsibleContainer from "../../../helpers/components/Collapsible";
+import FileUploader from "../../../helpers/components/FileUploader";
+import { fancyBytes } from "../../../helpers/helpers";
+import { useProgressStore } from "../../../stateManagers/downloadManagers/progressManager";
+import { useRealFiles } from "../../../stateManagers/downloadManagers/realFileManager";
+import { useOfferStore } from "../../../stateManagers/downloadManagers/requestManager";
+import { useUserStore } from "../../../stateManagers/userManagers/userStore";
 
 export function DownloadView(props: {
   downloadManagerInstance: DownloadManager;

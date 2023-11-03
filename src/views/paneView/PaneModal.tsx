@@ -8,12 +8,12 @@ import DownloadManager from "../../DistraManagers/downloadManager";
 import UserManager from "../../DistraManagers/userManager";
 import TabBar from "../../helpers/components/tabbedview/TabBar";
 import TabViewport from "../../helpers/components/tabbedview/TabViewport";
-import { CallView } from "./CallView";
-import { ChatView } from "./ChatView";
-import { DownloadView } from "./DownloadView";
 import { RoomCard } from "./RoomCard";
-import { SettingsView } from "./SettingsView";
 import { UserView } from "./UserView";
+import { CallView } from "./panes/CallView";
+import { ChatView } from "./panes/ChatView";
+import { DownloadView } from "./panes/DownloadView";
+import { SettingsView } from "./panes/SettingsView";
 
 const MainModal = ({ roomId, room }: { roomId: string; room: Room }) => {
 	const [userManagerInstance] = useState(

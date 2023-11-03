@@ -103,7 +103,7 @@ export default function RenderMessage(props: {
 							<Text
 								size="small"
 								style={{
-									paddingLeft: "1em",
+									paddingLeft: "1vh",
 									color: "grey"
 								}}
 							>
@@ -111,7 +111,7 @@ export default function RenderMessage(props: {
 							</Text>
 							<Button
 								style={{
-									paddingLeft: "1em",
+									paddingLeft: "1vh",
 									cursor: "pointer"
 								}}
 								icon={<Return />}

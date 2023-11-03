@@ -32,7 +32,7 @@ export default function StreamPlayer({
 
 	const deployEqualizer = useCallback((mediaStream: MediaStream) => {
 		const container = document.createElement("div");
-		container.style.width = "10em";
+		container.style.width = "15vh";
 
 		const audioMotion = new AudioMotionAnalyzer(container, {
 			height: 150,
@@ -58,18 +58,22 @@ export default function StreamPlayer({
 		<Box
 			round="small"
 			border={{ color: generateHexColorFromString(id), size: "medium" }}
+			className="handle"
+			style={{
+				height: "20em",
+				width: "30em",
+				resize: "both",
+				overflow: "hidden"
+			}}
 		>
 			<Text color={generateHexColorFromString(id)}>{username}</Text>
 			{stream.getVideoTracks()?.length === 0 ? (
 				<>
 					<video autoPlay muted={isMuted} hidden ref={player} />
-					<Box ref={eqContainer} style={{ maxHeight: "50vh" }} />
+					<Box ref={eqContainer} />
 				</>
 			) : (
 				<video
-					style={{
-						maxHeight: "50vh"
-					}}
 					autoPlay
 					muted={isMuted}
 					ref={player}

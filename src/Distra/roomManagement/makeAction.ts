@@ -1,16 +1,17 @@
 import { chunkSize, oneByteMax } from "../../helpers/consts/consts";
-import { findUserAndEncrypt } from "../../helpers/cryptography/cryptoSuite";
+import { encryptData } from "../../helpers/cryptography/cryptoSuite";
 import { bytesToBase64 } from "../../helpers/dataHandling/b64util";
 import { encodeBytes } from "../../helpers/dataHandling/uint8util";
 import {
 	ActionProgress,
 	ActionReceiver,
 	ActionSender,
-	Metadata
+	StrictMetadata
 } from "../../helpers/types/distraTypes";
-import { iterate, mkErr, noOp } from "../../helpers/utils";
+import { mkErr, noOp } from "../../helpers/utils";
 import { useUserStore } from "../../stateManagers/userManagers/userStore";
 import { useRoomStateManager } from "./state/stateManager";
+
 export const makeAction = <T>(
 	type: string,
 	forceEncryption?: boolean | undefined
@@ -29,6 +30,8 @@ export const makeAction = <T>(
 		.getState()
 		.setActions(type, { onComplete: noOp, onProgress: noOp });
 
+	const getPeerMap = () => Object.keys(useRoomStateManager.getState().peerMap);
+
 	const actionSender: ActionSender<T> = async (
 		data,
 		targets,
@@ -40,12 +43,12 @@ export const makeAction = <T>(
 		}
 
 		if (!targets) {
-			targets = Object.keys(useRoomStateManager.getState().peerMap);
+			targets = getPeerMap();
 		}
 
 		const isBlob = data instanceof Blob;
 		const isBinary =
-      isBlob || data instanceof ArrayBuffer || data instanceof Uint8Array;
+			isBlob || data instanceof ArrayBuffer || data instanceof Uint8Array;
 		const isJson = typeof data !== "string" && !isBinary && !isBlob;
 
 		if (meta && !isBinary) {
@@ -57,17 +60,16 @@ export const makeAction = <T>(
 			: encodeBytes(isJson ? JSON.stringify(data) : (data as string));
 
 		const chunkTotal =
-      Math.ceil(buffer.byteLength / chunkSize) + (meta ? 1 : 0);
+			Math.ceil(buffer.byteLength / chunkSize) + (meta ? 1 : 0);
 
 		const formatChunk = (
-			chkValue: Uint8Array | Metadata,
+			chkValue: Uint8Array | StrictMetadata,
 			chkIndex: number,
 			isMeta: boolean
 		) => {
 			const isLast = chkIndex === chunkTotal - 1;
 			const chkTmp = JSON.stringify({
 				typeBytes: type,
-				// @ts-ignore
 				nonce: meta && meta.uuid ? `${meta.uuid}${nonce}` : nonce, // TODO: ARRGH DACH STAHP
 				isLast,
 				isMeta,
@@ -84,9 +86,17 @@ export const makeAction = <T>(
 		};
 
 		nonce += 1;
-		return await iterate(
-			useRoomStateManager.getState().peerMap,
-			async (id, peer) => {
+		const fixedTgts = typeof targets === "string" ? [targets] : targets;
+		await Promise.all(
+			fixedTgts.map(async (iterable) => {
+				const peer =
+					typeof iterable === "string"
+						? useRoomStateManager.getState().peerMap[iterable]
+						: useRoomStateManager.getState().peerMap[iterable.id];
+				if (!peer) {
+					return;
+				}
+
 				const chan = peer._channel;
 				let chunkN = 0;
 
@@ -103,7 +113,7 @@ export const makeAction = <T>(
 									),
 									chunkN,
 									false
-								)
+								  )
 								: formatChunk(
 									buffer.subarray(
 										chunkN * chunkSize,
@@ -111,7 +121,7 @@ export const makeAction = <T>(
 									),
 									chunkN,
 									false
-								);
+								  );
 						}
 					})();
 
@@ -126,26 +136,39 @@ export const makeAction = <T>(
 						});
 					}
 
-					if (!useRoomStateManager.getState().peerMap[id]) {
-						break;
-					}
-
 					if (forceEncryption) {
-						if (useUserStore.getState().keyedUsers.has(id)) {
-							const encChunk = await findUserAndEncrypt(id, chunk);
-							peer.send(encChunk);
-						} // fail if chunk cannot be encrypted
+						if (typeof iterable === "string") {
+							const sendKey = useUserStore
+								.getState()
+								.users.find((user) => user.id === iterable)?.quantumSend;
+							if (sendKey) {
+								encryptData(chunk, sendKey)
+									.then((encryptedChunk) =>
+										peer.send(encryptedChunk)
+									);
+							}
+						} else {
+							if (iterable.quantumSend) {
+								encryptData(chunk, iterable.quantumSend)
+									.then(
+										(encryptedChunk) => peer.send(encryptedChunk)
+									);
+							}
+						}
 					} else {
 						peer.send(chunk);
 					}
 					chunkN++;
 
 					if (onProgress) {
-						onProgress(chunkN / chunkTotal, id, meta);
+						onProgress(
+							chunkN / chunkTotal,
+							typeof iterable === "string" ? iterable : iterable.id,
+							meta
+						);
 					}
 				}
-			},
-			targets
+			})
 		);
 	};
 
@@ -160,7 +183,11 @@ export const makeAction = <T>(
 			}),
 
 		(
-			onProgress: (percent: number, peerId: string, metadata?: Metadata) => void
+			onProgress: (
+				percent: number,
+				peerId: string,
+				metadata?: StrictMetadata
+			) => void
 		) =>
 			(useRoomStateManager.getState().actions[type] = {
 				...useRoomStateManager.getState().actions[type],

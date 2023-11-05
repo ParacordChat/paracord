@@ -33,71 +33,76 @@ const deriveKey = (
 		keyUsage
 	);
 
-async function encryptData(secretData: Uint8Array, sharedSecret: Uint8Array) {
-	try {
-		const dataEncoded = decodeBytes(secretData);
-		const salt = window.crypto.getRandomValues(new Uint8Array(SALT_LENGTH));
-		const iv = window.crypto.getRandomValues(new Uint8Array(IV_LENGTH));
-		const passwordKey = await getPasswordKey(sharedSecret);
-		const aesKey = await deriveKey(passwordKey, salt, ["encrypt"]);
-		const encryptedContent = await window.crypto.subtle.encrypt(
-			{
-				name: algo,
-				iv
-			},
-			aesKey,
-			encodeBytes(dataEncoded)
-		);
+export function encryptData(secretData: Uint8Array, sharedSecret: Uint8Array) {
+	const dataEncoded = decodeBytes(secretData);
+	const salt = window.crypto.getRandomValues(new Uint8Array(SALT_LENGTH));
 
-		const encryptedContentArr = new Uint8Array(encryptedContent);
-		const buff = new Uint8Array(
-			salt.byteLength + iv.byteLength + encryptedContentArr.byteLength
-		);
-		buff.set(salt, 0);
-		buff.set(iv, salt.byteLength);
-		buff.set(encryptedContentArr, salt.byteLength + iv.byteLength);
-		return buff;
-	} catch (error) {
-		console.error(error);
-		throw error;
-	}
+	return getPasswordKey(sharedSecret)
+		.then((passwordKey) => {
+			const iv = window.crypto.getRandomValues(new Uint8Array(IV_LENGTH));
+			return deriveKey(passwordKey, salt, ["encrypt"])
+				.then((aesKey) => {
+					return window.crypto.subtle.encrypt(
+						{
+							name: algo,
+							iv
+						},
+						aesKey,
+						encodeBytes(dataEncoded)
+					);
+				})
+				.then((encryptedContent) => {
+					const encryptedContentArr = new Uint8Array(encryptedContent);
+					const buff = new Uint8Array(
+						salt.byteLength + iv.byteLength + encryptedContentArr.byteLength
+					);
+					buff.set(salt, 0);
+					buff.set(iv, salt.byteLength);
+					buff.set(encryptedContentArr, salt.byteLength + iv.byteLength);
+					return buff;
+				});
+		})
+		.catch((error) => {
+			console.error(error);
+			throw error;
+		});
 }
 
-async function decryptData(
+export function decryptData(
 	encryptedDataBuff: Uint8Array,
 	sharedSecret: Uint8Array
 ) {
-	try {
-		const salt = encryptedDataBuff.slice(0, SALT_LENGTH);
-		const iv = new Uint8Array(
-			encryptedDataBuff.slice(SALT_LENGTH, SALT_LENGTH + IV_LENGTH)
-		);
-		const data = encryptedDataBuff.slice(SALT_LENGTH + IV_LENGTH);
-		const passwordKey = await getPasswordKey(sharedSecret);
-		const aesKey = await deriveKey(passwordKey, salt, ["decrypt"]);
-		const decryptedContent = await window.crypto.subtle.decrypt(
-			{
-				name: algo,
-				iv
-			},
-			aesKey,
-			data
-		);
-		const res = new Uint8Array(decryptedContent);
-		return res;
-	} catch (error) {
-		console.error(error);
-		throw error;
-	}
+	const salt = encryptedDataBuff.slice(0, SALT_LENGTH);
+	const iv = new Uint8Array(
+		encryptedDataBuff.slice(SALT_LENGTH, SALT_LENGTH + IV_LENGTH)
+	);
+	const data = encryptedDataBuff.slice(SALT_LENGTH + IV_LENGTH);
+	return getPasswordKey(sharedSecret)
+		.then((passwordKey) => deriveKey(passwordKey, salt, ["decrypt"]))
+		.then((aesKey) =>
+			window.crypto.subtle.decrypt(
+				{
+					name: algo,
+					iv
+				},
+				aesKey,
+				data
+			)
+		)
+		.then((decryptedContent) => new Uint8Array(decryptedContent))
+		.catch((error) => {
+			console.error(error);
+			throw error;
+		});
 }
 
-export const findUserAndEncrypt = async (toId: string, data: Uint8Array) => {
-	const sendKey = useUserStore
-		.getState()
-		.users.find((user: User) => user.id === toId)?.quantumSend;
-	if (!sendKey || data.byteLength === 0) return data;
-	return await encryptData(data, sendKey);
-};
+// export const findUserAndEncrypt = async (toId: string, data: Uint8Array) => {
+// 	const sendKey = useUserStore
+// 		.getState()
+// 		.users.find((user: User) => user.id === toId)?.quantumSend;
+// 	if (!sendKey || data.byteLength === 0) return data;
+// 	return await encryptData(data, sendKey);
+// };
 
 export const findUserAndDecrypt = async (fromId: string, data: Uint8Array) => {
 	const recKey = useUserStore

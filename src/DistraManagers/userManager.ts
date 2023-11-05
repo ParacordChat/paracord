@@ -68,7 +68,7 @@ export default class UserManager {
 				const { ciphertext, sharedSecret } = await kyber.encapsulate(key);
 				useUserStore.getState()
 					.updateUser(id, { quantumSend: sharedSecret });
-				sendProcessedKey(ciphertext, id);
+				sendProcessedKey(ciphertext, [id]);
 			} catch (error) {
 				console.error(error);
 			}
@@ -111,11 +111,11 @@ export default class UserManager {
 		if (activePersona) {
 			if (id) {
 				if (activePersona.keyPair) {
-					await this.sendEncryptionInfo(activePersona.keyPair.pubkey, id);
+					await this.sendEncryptionInfo(activePersona.keyPair.pubkey, [id]);
 				}
 				const allowedSendNames = useUserStore.getState().keyedUsers;
 				if (allowedSendNames.has(id)) {
-					this.sendName(activePersona.name, id);
+					this.sendName(activePersona.name, [id]);
 				}
 			} else {
 				if (useClientSideUserTraits.getState().roomPassword) {

@@ -7,8 +7,8 @@ type RoomActionType = "phone" | "video" | "screen" | "cutStream" | "view";
 
 export default class RTCManager {
 	private joinRoom;
-	private removeStream: (stream: MediaStream) => void;
-	private addStream: (stream: MediaStream, ids?: string | string[]) => void;
+	private removeStream;
+	private addStream;
 
 	constructor({ room }: { room: Room; roomId: string }) {
 		const [joinRoom, getRoomJoined] = room.makeAction<RoomActionType>(
@@ -60,7 +60,7 @@ export default class RTCManager {
 					.removeBubbleWithId(id);
 			}
 			if (useCallPrefsState.getState().myStream) {
-				addStream(useCallPrefsState.getState().myStream!, id); // TODO: refreshing streams in room still dosen't work...
+				addStream(useCallPrefsState.getState().myStream!, [id]); // TODO: refreshing streams in room still dosen't work...
 			}
 		});
 	}

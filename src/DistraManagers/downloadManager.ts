@@ -15,19 +15,13 @@ import { useOfferStore } from "../stateManagers/downloadManagers/requestManager"
 import { useClientSideUserTraits } from "../stateManagers/userManagers/clientSideUserTraits";
 import { useUserStore } from "../stateManagers/userManagers/userStore";
 
-const chunkSize = 1_000_000 * 20; // 20MB
+const chunkSize = 1_000_000 * 5; // 5MB
 
 const readFileChunk = (data: File, chunkN: number) =>
-	new Promise<Uint8Array>((res, rej) => {
-		const dataStart = chunkN * chunkSize;
-		const dataEnd = (chunkN + 1) * chunkSize;
-
-		data
-			.slice(dataStart, dataEnd)
-			.arrayBuffer()
-			.then((buffer: ArrayBuffer) => res(new Uint8Array(buffer)))
-			.catch((error: Error) => rej(error));
-	});
+	data
+		.slice(chunkN * chunkSize, (chunkN + 1) * chunkSize)
+		.arrayBuffer()
+		.then((buffer: ArrayBuffer) => new Uint8Array(buffer));
 
 export default class DownloadManager {
 	private sendFileRequest;
@@ -37,7 +31,7 @@ export default class DownloadManager {
 
 	constructor({ room, roomId }: { room: Room; roomId: string }) {
 		const [sendFileChunk, getFileChunk, onFileProgress] =
-      room.makeAction<Uint8Array>("transfer", true);
+			room.makeAction<Uint8Array>("transfer", true);
 		const [sendFileRequest, getFileRequest] = room.makeAction<FileRequest>(
 			"fileRequest",
 			true
@@ -53,7 +47,7 @@ export default class DownloadManager {
 		this.terminateClient = (toId, uuid) =>
 			sendFileChunk(
 				new Uint8Array(),
-				toId,
+				[toId],
 				{
 					uuid,
 					chunkN: -1
@@ -71,9 +65,7 @@ export default class DownloadManager {
 			const realFiles = useRealFiles.getState().realFiles;
 			const mutedUsers = useClientSideUserTraits.getState().mutedUsers;
 			if (realFiles && fileReq.id in realFiles && mutedUsers[userId] !== true) {
-				const sendAction = async () => {
-					const currentFile = realFiles[fileReq.id];
-
+				const sendAction = (currentFile: File) => {
 					useProgressStore.getState()
 						.addProgress({
 							id: fileReq.id,
@@ -84,32 +76,41 @@ export default class DownloadManager {
 							toUser: userId
 						});
 
-					await readFileChunk(currentFile, 0)
-						.then((chunk) =>
-							sendFileChunk(
-								chunk,
-								userId,
-								{
-									id: fileReq.id,
-									uuid: fileReq.uuid,
-									chunkN: 0,
-									name: currentFile.name,
-									size: currentFile.size,
-									last: false
-								},
-								(chkProgress: number, _fromUser: any) => {
-									const progress = (chkProgress * chunkSize) / currentFile.size;
-									if (progress > 1) {
-										useProgressStore.getState()
-											.deleteProgress(fileReq.uuid);
-									} else {
-										useProgressStore
-											.getState()
-											.updateProgress(fileReq.uuid, { progress });
+					const targetUser = useUserStore
+						.getState()
+						.users.find((user) => user.id === userId);
+
+					return targetUser === undefined
+						? undefined
+						: readFileChunk(currentFile, 0)
+							.then((chunk) =>
+								sendFileChunk(
+									chunk,
+									[targetUser],
+									{
+										id: fileReq.id,
+										uuid: fileReq.uuid,
+										chunkN: 0,
+										name: currentFile.name,
+										size: currentFile.size,
+										last: false
+									},
+									(chkProgress: number, _fromUser: any) => {
+										const progress =
+												(chkProgress * chunkSize) / currentFile.size;
+										if (progress > 1) {
+											useProgressStore
+												.getState()
+												.deleteProgress(fileReq.uuid);
+										} else {
+											useProgressStore
+												.getState()
+												.updateProgress(fileReq.uuid, { progress });
+										}
 									}
-								}
+								)
 							)
-						);
+							.catch((error: Error) => console.error(error));
 				};
 				if (
 					useProgressStore
@@ -125,14 +126,16 @@ export default class DownloadManager {
 					)
 						.then((ok) => {
 							if (ok) {
-								sendAction();
+								sendAction(realFiles[fileReq.id]);
+							} else {
+								alert("other user rejected your download request!");
 							}
 						})
 						.catch(() => {
 							this.terminateClient(userId, fileReq.uuid);
 						});
 				} else {
-					sendAction();
+					sendAction(realFiles[fileReq.id]);
 				}
 			}
 		});
@@ -152,7 +155,7 @@ export default class DownloadManager {
 					.then((chunk) =>
 						sendFileChunk(
 							chunk,
-							userId,
+							[userId],
 							{
 								id: fileAck.id,
 								uuid: fileAck.uuid,
@@ -163,7 +166,8 @@ export default class DownloadManager {
 							},
 							(chkProgress: number, _fromUser: any) => {
 								const progress =
-                ((fileAck.chunkN + chkProgress) * chunkSize) / currentFile.size;
+									((fileAck.chunkN + chkProgress) * chunkSize) /
+									currentFile.size;
 								if (progress > 1) {
 									useProgressStore.getState()
 										.deleteProgress(fileAck.uuid);
@@ -176,7 +180,8 @@ export default class DownloadManager {
 								}
 							}
 						)
-					);
+					)
+					.catch((error: Error) => console.error(error));
 			}
 		});
 
@@ -184,12 +189,12 @@ export default class DownloadManager {
 			if (metadata === undefined) return;
 			const processedMeta = metadata as FileMetaData;
 			const progress =
-        ((processedMeta.chunkN + rawProgress) * chunkSize) / processedMeta.size;
+				((processedMeta.chunkN + rawProgress) * chunkSize) / processedMeta.size;
 
 			processedMeta.uuid &&
-        useProgressStore
-        	.getState()
-        	.updateProgress(processedMeta.uuid, { progress });
+				useProgressStore
+					.getState()
+					.updateProgress(processedMeta.uuid, { progress });
 			if (processedMeta.last && progress > 1) {
 				useProgressStore.getState()
 					.deleteProgress(processedMeta.uuid);
@@ -215,7 +220,7 @@ export default class DownloadManager {
 							useProgressStore.getState()
 								.removeWritable(processedMeta.uuid);
 						} else {
-							sendFileAck({
+							return sendFileAck({
 								uuid: processedMeta.uuid,
 								id: processedMeta.id,
 								chunkN: processedMeta.chunkN
@@ -246,9 +251,9 @@ export default class DownloadManager {
 
 	public requestFile = async (fromUser: string, fileId: string) => {
 		const requestableFiles =
-      useOfferStore.getState().requestableDownloads[fromUser];
+			useOfferStore.getState().requestableDownloads[fromUser];
 		const findName =
-      requestableFiles && requestableFiles.find((f) => f.id === fileId);
+			requestableFiles && requestableFiles.find((f) => f.id === fileId);
 		if (findName) {
 			const fileUUID = genId(6);
 			await showSaveFilePicker({
@@ -282,7 +287,7 @@ export default class DownloadManager {
 							id: findName.id,
 							uuid: fileUUID
 						},
-						fromUser
+						[fromUser]
 					)
 				);
 		} else {
@@ -290,10 +295,10 @@ export default class DownloadManager {
 		}
 	};
 
-	public offerRequestableFiles = async (id?: string | string[]) => {
+	public offerRequestableFiles = async (ids?: string[]) => {
 		const realFiles = useRealFiles.getState().realFiles;
 		if (!realFiles || Object.keys(realFiles).length === 0) {
-			this.sendFileOffer([], id)
+			this.sendFileOffer([], ids)
 				.catch((error) => console.error(error));
 			return;
 		}
@@ -308,7 +313,7 @@ export default class DownloadManager {
 			);
 
 		// await
-		this.sendFileOffer(files, id)
+		this.sendFileOffer(files, ids)
 			.catch((error) => console.error(error));
 	};
 
@@ -368,5 +373,5 @@ export default class DownloadManager {
 	};
 
 	public peerJoinHook = (id: string) =>
-		setTimeout(() => this.offerRequestableFiles(id), 5000); // TODO: kind of an ugly fix, but it works
+		setTimeout(() => this.offerRequestableFiles([id]), 5000); // TODO: kind of an ugly fix, but it works
 }

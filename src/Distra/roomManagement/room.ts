@@ -2,17 +2,17 @@ import { SignalData } from "simple-peer";
 import { events } from "../../helpers/consts/consts.js";
 import {
 	ExtendedInstance,
-	Metadata,
 	Room,
+	StrictMetadata,
 	TargetPeers
-} from "../../helpers/types/distraTypes.js";
-import { iterate, mkErr } from "../../helpers/utils.js";
-import { exitPeer } from "./exitPeer.js";
-import { handleData } from "./handleData.js";
-import { makeAction } from "./makeAction.js";
-import { useHookStateManager } from "./state/hookState.js";
-import { useRoomSignalManager } from "./state/roomSignalManager.js";
-import { useRoomStateManager } from "./state/stateManager.js";
+} from "../../helpers/types/distraTypes";
+import { mkErr } from "../../helpers/utils";
+import { exitPeer } from "./exitPeer";
+import { handleData } from "./handleData";
+import { makeAction } from "./makeAction";
+import { useHookStateManager } from "./state/hookState";
+import { useRoomSignalManager } from "./state/roomSignalManager";
+import { useRoomStateManager } from "./state/stateManager";
 
 export default async (
 	onPeer: (joinHook: (peer: ExtendedInstance, id: string) => void) => void,
@@ -21,23 +21,26 @@ export default async (
 	const [sendPing, getPing] = makeAction<null>("__91n6__", true);
 	const [sendPong, getPong] = makeAction<null>("__90n6__", true);
 	const [sendSignal, getSignal] = makeAction<any>("__516n4L__", true);
-	const [sendStreamMeta, getStreamMeta] = makeAction<Metadata>(
+	const [sendStreamMeta, getStreamMeta] = makeAction<StrictMetadata>(
 		"__57r34m__",
 		true
 	);
-	const [sendTrackMeta, getTrackMeta] = makeAction<Metadata>("__7r4ck__", true);
+	const [sendTrackMeta, getTrackMeta] = makeAction<StrictMetadata>(
+		"__7r4ck__",
+		true
+	);
 
 	onPeer((peer: ExtendedInstance, id: string) => {
 		if (useRoomStateManager.getState().peerMap[id]) {
 			return;
 		}
 
-		const onData = handleData.bind(null, id);
+		const onData = handleData.bind(null, id); // TODO: perhaps passthru st8 here, sender assumes higher ram burden, why?
 
 		useRoomStateManager.getState()
 			.addToPeerMap(id, peer);
 
-		peer.on(events.signal, (sdp) => sendSignal(sdp, id));
+		peer.on(events.signal, (sdp) => sendSignal(sdp, [id]));
 		peer.on(events.close, () => exitPeer(id));
 		peer.on(events.data, onData);
 
@@ -81,7 +84,7 @@ export default async (
 		peer.__drainEarlyData(onData);
 	});
 
-	getPing((_: any, id: string) => sendPong(null, id));
+	getPing((_: any, id: string) => sendPong(null, [id]));
 
 	getPong((_: any, id: string) => {
 		const pongPending = useRoomSignalManager.getState().pendingPongs[id];
@@ -118,7 +121,7 @@ export default async (
 			}
 
 			const start = Date.now();
-			sendPing(null, id);
+			sendPing(null, [id]);
 			await new Promise((res) =>
 				useRoomSignalManager.getState()
 					.addToPendingPongs(id, res)
@@ -148,7 +151,7 @@ export default async (
 		addStream: (
 			stream: MediaStream,
 			targets?: TargetPeers,
-			meta?: Metadata
+			meta?: StrictMetadata
 		) => {
 			const pmap = useRoomStateManager.getState().peerMap;
 			const peerSendables = targets || Object.keys(pmap);
@@ -157,7 +160,7 @@ export default async (
 			for (const peerId of peerSendables) {
 				const peer = pmap[peerId];
 				if (meta) {
-					promises.push(sendStreamMeta(meta, peerId));
+					promises.push(sendStreamMeta(meta, [peerId]));
 				}
 				promises.push(peer.addStream(stream));
 			}
@@ -167,75 +170,70 @@ export default async (
 		removeStream: (stream: MediaStream, targets: TargetPeers) => {
 			const pmap = useRoomStateManager.getState().peerMap;
 			const peerSendables = targets || Object.keys(pmap);
-			peerSendables &&
-        iterate(
-        	pmap,
-        	(_, peer) =>
-        		new Promise((res) => {
-        			if (peer.streams.some((s) => s.id === stream.id)) {
-        				peer.removeStream(stream);
-        			}
-        			res();
-        		}),
-        	peerSendables
-        );
+			for (const peerId of peerSendables) {
+				const peer = pmap[peerId];
+				if (peer.streams.some((s) => s.id === stream.id)) {
+					peer.removeStream(stream);
+				}
+			}
 		},
 
 		addTrack: (
 			track: MediaStreamTrack,
 			stream: MediaStream,
-			targets: TargetPeers,
-			meta: Metadata
-		) =>
-			targets
-				? iterate(
-					useRoomStateManager.getState().peerMap,
-					async (id, peer) => {
-						if (meta) {
-							await sendTrackMeta(meta, id);
-						}
+			targets?: TargetPeers,
+			meta?: StrictMetadata
+		) => {
+			if (targets) {
+				return Promise.all(
+					Object.entries(useRoomStateManager.getState().peerMap)
+						.filter(([id]) => targets.includes(id))
+						.map(async ([id, peer]) => {
+							if (meta) {
+								await sendTrackMeta(meta, [id]);
+							}
 
-						peer.addTrack(track, stream);
-					},
-					targets
-				)
-				: [],
-
+							peer.addTrack(track, stream);
+						})
+				);
+			}
+		},
 		removeTrack: (
 			track: MediaStreamTrack,
 			stream: MediaStream,
 			targets: TargetPeers
-		) =>
-			targets &&
-      iterate(
-      	useRoomStateManager.getState().peerMap,
-      	(_, peer) =>
-      		new Promise((res) => {
-      			peer.removeTrack(track, stream);
-      			res();
-      		}),
-      	targets
-      ),
+		) => {
+			if (targets) {
+				const tgs = typeof targets === "string" ? [targets] : targets;
+				return tgs.forEach((peerId) => {
+					const peer = useRoomStateManager.getState().peerMap[peerId];
+					if (peer) {
+						peer.removeTrack(track, stream);
+					}
+				});
+			}
+		},
 		replaceTrack: (
 			oldTrack: MediaStreamTrack,
 			newTrack: MediaStreamTrack,
 			stream: MediaStream,
-			targets: TargetPeers,
-			meta: Metadata
-		) =>
-			targets
-				? iterate(
-					useRoomStateManager.getState().peerMap,
-					async (id, peer) => {
-						if (meta) {
-							await sendTrackMeta(meta, id);
-						}
+			targets?: TargetPeers,
+			meta?: StrictMetadata
+		) => {
+			if (targets) {
+				return Promise.all(
+					Object.entries(useRoomStateManager.getState().peerMap)
+						.filter(([id]) => targets.includes(id))
+						.map(async ([id, peer]) => {
+							if (meta) {
+								await sendTrackMeta(meta, [id]);
+							}
 
-						peer.replaceTrack(oldTrack, newTrack, stream);
-					},
-					targets
-				)
-				: [],
+							peer.replaceTrack(oldTrack, newTrack, stream);
+						})
+				);
+			}
+		},
 
 		onPeerJoin: (f: (peerId: string) => void) =>
 			useHookStateManager.getState()

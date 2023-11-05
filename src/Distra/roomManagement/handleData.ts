@@ -9,76 +9,88 @@ import { mkErr } from "../../helpers/utils";
 import { useUserStore } from "../../stateManagers/userManagers/userStore";
 import { useRoomStateManager } from "./state/stateManager";
 
+interface DistraPacket {
+	typeBytes: string;
+	nonce: number | string;
+	isLast: boolean;
+	isMeta: boolean;
+	isBinary: boolean;
+	isJson: boolean;
+	progress: number;
+	payload: string;
+}
+
+const getBuffer = (id: string, data: any) =>
+	new Promise<DistraPacket>((res) => {
+		const payloadRaw = new Uint8Array(data);
+		const keyedUsers = useUserStore.getState().keyedUsers;
+		return keyedUsers.has(id)
+			? findUserAndDecrypt(id, payloadRaw)
+				.then((dec) =>
+					res(JSON.parse(decodeBytes(dec)))
+			  )
+			: res(JSON.parse(decodeBytes(payloadRaw)));
+	});
+
 export const handleData = async (id: string, data: any) => {
-	try {
-		const buffer = await (async () => {
-			const payloadRaw = new Uint8Array(data);
-			const keyedUsers = useUserStore.getState().keyedUsers;
-			if (keyedUsers.has(id)) {
-				const dec = await findUserAndDecrypt(id, payloadRaw);
-				return JSON.parse(decodeBytes(dec));
-			} else {
-				return JSON.parse(decodeBytes(payloadRaw));
+	getBuffer(id, data)
+		.then((buffer) => {
+			const {
+				typeBytes,
+				nonce,
+				isLast,
+				isMeta,
+				isBinary,
+				isJson,
+				progress,
+				payload: plenc
+			} = buffer;
+			const payload = base64ToBytes(plenc);
+
+			const actions = useRoomStateManager.getState().actions;
+			const pendingTransmissions =
+				useRoomStateManager.getState().pendingTransmissions;
+
+			if (!(typeBytes in actions)) {
+				throw mkErr(`received message with unregistered type (${typeBytes})`);
 			}
-		})();
 
-		const {
-			typeBytes,
-			nonce,
-			isLast,
-			isMeta,
-			isBinary,
-			isJson,
-			progress,
-			payload: plenc
-		} = buffer;
-		const payload = base64ToBytes(plenc);
+			if (!pendingTransmissions[id]) {
+				pendingTransmissions[id] = {};
+			}
 
-		const actions = useRoomStateManager.getState().actions;
-		const pendingTransmissions =
-      useRoomStateManager.getState().pendingTransmissions;
+			if (!pendingTransmissions[id][typeBytes]) {
+				pendingTransmissions[id][typeBytes] = {};
+			}
 
-		if (!(typeBytes in actions)) {
-			throw mkErr(`received message with unregistered type (${typeBytes})`);
-		}
+			const target =
+				pendingTransmissions[id][typeBytes][nonce] || // TODO: having such a deep array probably isn't too good for memory
+				(pendingTransmissions[id][typeBytes][nonce] = {
+					chunks: []
+				});
 
-		if (!pendingTransmissions[id]) {
-			pendingTransmissions[id] = {};
-		}
+			if (isMeta) {
+				target.meta = JSON.parse(decodeBytes(payload));
+			} else {
+				target.chunks.push(payload);
+			}
 
-		if (!pendingTransmissions[id][typeBytes]) {
-			pendingTransmissions[id][typeBytes] = {};
-		}
+			actions[typeBytes].onProgress(progress / oneByteMax, id, target.meta);
 
-		const target =
-      pendingTransmissions[id][typeBytes][nonce] ||
-      (pendingTransmissions[id][typeBytes][nonce] = {
-      	chunks: []
-      });
+			if (!isLast) {
+				return;
+			}
 
-		if (isMeta) {
-			target.meta = JSON.parse(decodeBytes(payload));
-		} else {
-			target.chunks.push(payload);
-		}
+			const full = combineChunks(target.chunks);
 
-		actions[typeBytes].onProgress(progress / oneByteMax, id, target.meta);
+			if (isBinary) {
+				actions[typeBytes].onComplete(full, id, target.meta);
+			} else {
+				const text = decodeBytes(full);
+				actions[typeBytes].onComplete(isJson ? JSON.parse(text) : text, id);
+			}
 
-		if (!isLast) {
-			return;
-		}
-
-		const full = combineChunks(target.chunks);
-
-		if (isBinary) {
-			actions[typeBytes].onComplete(full, id, target.meta);
-		} else {
-			const text = decodeBytes(full);
-			actions[typeBytes].onComplete(isJson ? JSON.parse(text) : text, id);
-		}
-
-		delete pendingTransmissions[id][typeBytes][nonce];
-	} catch (error) {
-		console.error(error);
-	}
+			delete pendingTransmissions[id][typeBytes][nonce];
+		})
+		.catch((error) => console.error(error));
 };

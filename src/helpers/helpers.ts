@@ -14,11 +14,11 @@ export const fancyBytes = (bytes: number) => {
 
 export const isRtcSupported = () => {
 	const peerConn =
-    window.RTCPeerConnection ||
-    // @ts-ignore
-    window.mozRTCPeerConnection ||
-    // @ts-ignore
-    window.webkitRTCPeerConnection;
+		window.RTCPeerConnection ||
+		// @ts-ignore
+		window.mozRTCPeerConnection ||
+		// @ts-ignore
+		window.webkitRTCPeerConnection;
 	const canDataChannel = Boolean(peerConn?.prototype?.createDataChannel);
 	return Boolean(peerConn) && canDataChannel;
 };
@@ -53,10 +53,8 @@ export const randomName = () =>
 		.toString(36)
 		.slice(7));
 
-export const confirmDialog = (msg: string) => {
-	return new Promise(function (resolve, reject) {
+export const confirmDialog = (msg: string) =>
+	new Promise<boolean>((resolve, _reject) => {
 		const confirmed = window.confirm(msg);
-
-		return confirmed ? resolve(true) : reject(false);
+		return resolve(confirmed);
 	});
-};

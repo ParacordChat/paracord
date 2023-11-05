@@ -31,16 +31,14 @@ export const encrypt = async (
 ) => {
 	const iv = crypto.getRandomValues(new Uint8Array(IV_LENGTH));
 
-	return JSON.stringify({
-		c: pack(
-			await crypto.subtle.encrypt(
-				{ name: algo, iv },
-				await keyP,
-				encodeBytes(plaintext)
-			)
-		),
-		iv: [...iv]
-	});
+	return crypto.subtle
+		.encrypt({ name: algo, iv }, await keyP, encodeBytes(plaintext))
+		.then((encBytes) =>
+			JSON.stringify({
+				c: pack(encBytes),
+				iv: [...iv]
+			})
+		);
 };
 
 export const decrypt = async (
@@ -49,11 +47,7 @@ export const decrypt = async (
 ) => {
 	const { c, iv } = JSON.parse(raw);
 
-	return decodeBytes(
-		await crypto.subtle.decrypt(
-			{ name: algo, iv: new Uint8Array(iv) },
-			await keyP,
-			unpack(c)
-		)
-	);
+	return crypto.subtle
+		.decrypt({ name: algo, iv: new Uint8Array(iv) }, await keyP, unpack(c))
+		.then((decBytes) => decodeBytes(decBytes));
 };

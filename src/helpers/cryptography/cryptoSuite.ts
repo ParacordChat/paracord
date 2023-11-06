@@ -1,7 +1,5 @@
 import * as kyber from "pqc-kyber";
-import { useUserStore } from "../../stateManagers/userManagers/userStore";
 import { decodeBytes, encodeBytes } from "../dataHandling/uint8util";
-import { User } from "../types/types";
 
 // Function to generate a public-private key pair
 export const generateKeyPair = () => kyber.keypair();
@@ -95,19 +93,3 @@ export function decryptData(
 			throw error;
 		});
 }
-
-// export const findUserAndEncrypt = async (toId: string, data: Uint8Array) => {
-// 	const sendKey = useUserStore
-// 		.getState()
-// 		.users.find((user: User) => user.id === toId)?.quantumSend;
-// 	if (!sendKey || data.byteLength === 0) return data;
-// 	return await encryptData(data, sendKey);
-// };
-
-export const findUserAndDecrypt = async (fromId: string, data: Uint8Array) => {
-	const recKey = useUserStore
-		.getState()
-		.users.find((user: User) => user.id === fromId)?.quantumRecv;
-	if (!recKey || data.byteLength < IV_LENGTH + 1) return data;
-	return await decryptData(data, recKey);
-};

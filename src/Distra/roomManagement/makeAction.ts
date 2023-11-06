@@ -8,7 +8,7 @@ import {
 	ActionSender,
 	StrictMetadata
 } from "../../helpers/types/distraTypes";
-import { mkErr, noOp } from "../../helpers/utils";
+import { genId, mkErr, noOp } from "../../helpers/utils";
 import { useUserStore } from "../../stateManagers/userManagers/userStore";
 import { useRoomStateManager } from "./state/stateManager";
 
@@ -23,8 +23,6 @@ export const makeAction = <T>(
 	if (useRoomStateManager.getState().actions[type]) {
 		throw mkErr(`action '${type}' already registered`);
 	}
-
-	let nonce = 0;
 
 	useRoomStateManager
 		.getState()
@@ -46,6 +44,7 @@ export const makeAction = <T>(
 			targets = getPeerMap();
 		}
 
+		const uuid = genId(6);
 		const isBlob = data instanceof Blob;
 		const isBinary =
 			isBlob || data instanceof ArrayBuffer || data instanceof Uint8Array;
@@ -70,7 +69,7 @@ export const makeAction = <T>(
 			const isLast = chkIndex === chunkTotal - 1;
 			const chkTmp = JSON.stringify({
 				typeBytes: type,
-				nonce: meta && meta.uuid ? `${meta.uuid}${nonce}` : nonce, // TODO: ARRGH DACH STAHP
+				uuid,
 				isLast,
 				isMeta,
 				isBinary,
@@ -85,7 +84,6 @@ export const makeAction = <T>(
 			return encodeBytes(chkTmp);
 		};
 
-		nonce += 1;
 		const fixedTgts = typeof targets === "string" ? [targets] : targets;
 		await Promise.all(
 			fixedTgts.map(async (iterable) => {

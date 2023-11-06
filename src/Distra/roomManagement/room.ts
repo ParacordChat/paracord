@@ -1,14 +1,19 @@
+/* eslint-disable max-lines-per-function */ // TODO: fixme
 import { SignalData } from "simple-peer";
-import { events } from "../../helpers/consts/consts.js";
+import { events, oneByteMax } from "../../helpers/consts/consts.js";
+import { decryptData } from "../../helpers/cryptography/cryptoSuite.js";
+import { base64ToBytes } from "../../helpers/dataHandling/b64util.js";
+import { decodeBytes } from "../../helpers/dataHandling/uint8util.js";
 import {
 	ExtendedInstance,
 	Room,
 	StrictMetadata,
 	TargetPeers
 } from "../../helpers/types/distraTypes";
+import { User } from "../../helpers/types/types.js";
 import { mkErr } from "../../helpers/utils";
+import { useUserStore } from "../../stateManagers/userManagers/userStore.js";
 import { exitPeer } from "./exitPeer";
-import { handleData } from "./handleData";
 import { makeAction } from "./makeAction";
 import { useHookStateManager } from "./state/hookState";
 import { useRoomSignalManager } from "./state/roomSignalManager";
@@ -35,14 +40,103 @@ export default async (
 			return;
 		}
 
-		const onData = handleData.bind(null, id); // TODO: perhaps passthru st8 here, sender assumes higher ram burden, why?
-
 		useRoomStateManager.getState()
 			.addToPeerMap(id, peer);
 
+		const cachedDecryptKeys: { [key: string]: Uint8Array } = {};
+		const pendingTransmissions: { [key: string]: any } = {};
+
+		const handleData = (id: string, data: any) => {
+			const {
+				typeBytes,
+				uuid,
+				isLast,
+				isMeta,
+				isBinary,
+				isJson,
+				progress,
+				payload: plenc
+			} = data;
+			const payload = base64ToBytes(plenc);
+
+			const actions = useRoomStateManager.getState().actions[typeBytes];
+
+			if (!actions) {
+				throw mkErr(`received message with unregistered type (${typeBytes})`);
+			}
+
+			const target =
+				pendingTransmissions[uuid] ||
+				(pendingTransmissions[uuid] = {
+					chunks: new Uint8Array(),
+					meta: undefined
+				});
+
+			if (isMeta) {
+				target.meta = JSON.parse(decodeBytes(payload));
+			} else {
+				target.chunks = new Uint8Array([...target.chunks, ...payload]);
+			}
+
+			actions.onProgress(progress / oneByteMax, id, target.meta);
+
+			if (isLast) {
+				if (isBinary) {
+					actions.onComplete(target.chunks, id, target.meta);
+				} else {
+					const text = decodeBytes(target.chunks);
+					actions.onComplete(isJson ? JSON.parse(text) : text, id);
+				}
+
+				delete pendingTransmissions[uuid];
+			}
+		};
+
 		peer.on(events.signal, (sdp) => sendSignal(sdp, [id]));
 		peer.on(events.close, () => exitPeer(id));
-		peer.on(events.data, onData);
+		peer.on(events.data, (data) => {
+			const payloadRaw = new Uint8Array(data);
+
+			try {
+				const decKey = cachedDecryptKeys[id];
+				if (!decKey) throw mkErr("");
+				return decryptData(payloadRaw, decKey)
+					.then((dec) => handleData(id, JSON.parse(decodeBytes(dec))))
+					.catch((error) => console.error(error));
+			} catch {
+				const decryptKey = useUserStore
+					.getState()
+					.users.find((user: User) => user.id === id)?.quantumRecv;
+				if (decryptKey) {
+					cachedDecryptKeys[id] = decryptKey;
+					decryptData(payloadRaw, decryptKey)
+						.then((dec) => handleData(id, JSON.parse(decodeBytes(dec))))
+						.catch((error) => console.error(error));
+				} else {
+					handleData(id, JSON.parse(decodeBytes(payloadRaw)));
+				}
+			}
+
+			// if (cachedDecryptKeys.hasOwnProperty(id)) {//TODO: benchmark comparison
+			// 	decryptData(payloadRaw, cachedDecryptKeys[id])
+			// 		.then((dec) =>
+			// 			handleData(id, JSON.parse(decodeBytes(dec)))
+			// 		);
+			// } else {
+			// 	const decryptKey = useUserStore
+			// 		.getState()
+			// 		.users.find((user: User) => user.id === id)?.quantumRecv;
+			// 	if (decryptKey) {
+			// 		cachedDecryptKeys[id] = decryptKey;
+			// 		decryptData(payloadRaw, decryptKey)
+			// 			.then((dec) =>
+			// 				handleData(id, JSON.parse(decodeBytes(dec)))
+			// 			);
+			// 	} else {
+			// 		handleData(id, JSON.parse(decodeBytes(payloadRaw)));
+			// 	}
+			// }
+		});
 
 		peer.on(events.stream, (stream) => {
 			useHookStateManager
@@ -81,7 +175,7 @@ export default async (
 
 		useHookStateManager.getState()
 			.onPeerJoin(id);
-		peer.__drainEarlyData(onData);
+		// peer.__drainEarlyData(onData);
 	});
 
 	getPing((_: any, id: string) => sendPong(null, [id]));

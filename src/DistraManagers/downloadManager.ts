@@ -1,6 +1,6 @@
 import { funAnimalName } from "fun-animal-names";
 import { showSaveFilePicker } from "native-file-system-adapter";
-import { Room, selfId } from "../Distra";
+import { Room, selfId } from "../Distra/index";
 import { confirmDialog, sendSystemMessage } from "../helpers/helpers";
 import {
 	FileAck,
@@ -45,15 +45,10 @@ export default class DownloadManager {
 		this.sendFileOffer = sendFileOffer;
 		this.sendFileAck = sendFileAck;
 		this.terminateClient = (toId, uuid) =>
-			sendFileChunk(
-				new Uint8Array(),
-				[toId],
-				{
-					uuid,
-					chunkN: -1
-				},
-				() => {}
-			);
+			sendFileChunk(new Uint8Array(), [toId], {
+				uuid,
+				chunkN: -1
+			});
 
 		useUserStore.subscribe((state, prevState) => {
 			if (state.keyedUsers.size > prevState.keyedUsers.size) {
@@ -90,10 +85,10 @@ export default class DownloadManager {
 									{
 										id: fileReq.id,
 										uuid: fileReq.uuid,
-										chunkN: 0,
+										chunkN: 1, // I set this to 1 for offset
 										name: currentFile.name,
 										size: currentFile.size,
-										last: false
+										last: currentFile.size <= chunkSize
 									},
 									(chkProgress: number, _fromUser: any) => {
 										const progress =
@@ -195,7 +190,7 @@ export default class DownloadManager {
 				useProgressStore
 					.getState()
 					.updateProgress(processedMeta.uuid, { progress });
-			if (processedMeta.last && progress > 1) {
+			if (processedMeta.last && progress >= 1) {
 				useProgressStore.getState()
 					.deleteProgress(processedMeta.uuid);
 			}
@@ -214,12 +209,20 @@ export default class DownloadManager {
 				.getState()
 				.writablesQueue.find((w) => w.uuid === processedMeta.uuid)?.writable;
 			if (fwrt) {
+				// TODO: why does this write twice?
+				console.log(fileReceipt);
 				await fwrt.write(fileReceipt)
 					.then(() => {
 						if (processedMeta.last) {
 							useProgressStore.getState()
 								.removeWritable(processedMeta.uuid);
 						} else {
+							console.log("sent file ack", {
+								uuid: processedMeta.uuid,
+								id: processedMeta.id,
+								chunkN: processedMeta.chunkN
+							});
+
 							return sendFileAck({
 								uuid: processedMeta.uuid,
 								id: processedMeta.id,
@@ -228,10 +231,6 @@ export default class DownloadManager {
 						}
 					});
 			}
-			// if (processedMeta.last) {
-			// 	useProgressStore.getState()
-			// 		.removeWritable(processedMeta.uuid);
-			// }
 		});
 
 		getFileOffer(async (data, id) => {
@@ -281,15 +280,23 @@ export default class DownloadManager {
 							writable: fileWriter
 						})
 				)
-				.then(() =>
+				.then(() => {
 					this.sendFileRequest(
 						{
 							id: findName.id,
 							uuid: fileUUID
 						},
 						[fromUser]
-					)
-				);
+					);
+					console.log(
+						"sent file request",
+						{
+							id: findName.id,
+							uuid: fileUUID
+						},
+						[fromUser]
+					);
+				});
 		} else {
 			alert("file not found!");
 		}
@@ -359,7 +366,6 @@ export default class DownloadManager {
 				useProgressStore.getState()
 					.removeWritable(uuid);
 				this.sendFileAck({
-					// TODO: this is a hack man!
 					uuid,
 					id: progressSeek.id,
 					chunkN: -1

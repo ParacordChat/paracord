@@ -42,44 +42,46 @@ const PasswordModal = (roomId: string, hasPassword: boolean) => () => {
 				<MainModal roomId={roomId} room={currentRoom} />
 			) : (
 				<GenericHeader>
-					<Text color="red">Enter room password:</Text>
-					<Box direction="row">
-						<TextInput
-							icon={<Key />}
-							ref={passwordRef}
-							name="userInput"
-							type={passwordVisible ? "text" : "password"}
-							autoComplete="off"
-							placeholder="Please enter a password"
-							onKeyUp={(e: { key: string }) => {
-								if (e.key === "Enter") {
+					<Box border={{ color: "brand", size: "large" }} pad="medium">
+						<Text color="red">Enter room password:</Text>
+						<Box direction="row">
+							<TextInput
+								icon={<Key />}
+								ref={passwordRef}
+								name="userInput"
+								type={passwordVisible ? "text" : "password"}
+								autoComplete="off"
+								placeholder="Please enter a password"
+								onKeyUp={(e: { key: string }) => {
+									if (e.key === "Enter") {
+										roomSet(passwordRef.current?.value);
+									}
+								}}
+							/>
+							<Button
+								icon={passwordVisible ? <FormView /> : <FormViewHide />}
+								onClick={() => setPasswordVisible(!passwordVisible)}
+								tip="Toggle password visibility"
+							/>
+						</Box>
+						<Box direction="row">
+							<Button
+								label="home"
+								onClick={() => {
+									route(`/`, true);
+									location.reload();
+								}}
+								icon={<CaretLeftFill />}
+							/>
+							<Button
+								onClick={() => {
 									roomSet(passwordRef.current?.value);
-								}
-							}}
-						/>
-						<Button
-							icon={passwordVisible ? <FormView /> : <FormViewHide />}
-							onClick={() => setPasswordVisible(!passwordVisible)}
-							tip="Toggle password visibility"
-						/>
-					</Box>
-					<Box direction="row">
-						<Button
-							label="home"
-							onClick={() => {
-								route(`/`, true);
-								location.reload();
-							}}
-							icon={<CaretLeftFill />}
-						/>
-						<Button
-							onClick={() => {
-								roomSet(passwordRef.current?.value);
-							}}
-							style={{ marginLeft: "auto", width: "100%" }}
-							label="Go"
-							primary
-						/>
+								}}
+								style={{ marginLeft: "auto", width: "100%" }}
+								label="Go"
+								primary
+							/>
+						</Box>
 					</Box>
 				</GenericHeader>
 			)}

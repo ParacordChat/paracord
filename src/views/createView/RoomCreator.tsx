@@ -4,17 +4,15 @@ import {
 	Button,
 	CheckBox,
 	Footer,
-	Image,
 	Text,
 	TextInput
 } from "grommet";
-import { Login, Risk } from "grommet-icons";
+import { Login, Organization, Risk } from "grommet-icons";
 import { route } from "preact-router";
 import { useRef, useState } from "preact/hooks";
 import packageJson from "../../../package.json";
 import GenericHeader from "../../helpers/components/GenericHeader";
 import { genId } from "../../helpers/utils";
-import emailDisp from "/email.png";
 
 export function RoomCreator() {
 	const [usePassword, setUsePassword] = useState(true);
@@ -24,7 +22,7 @@ export function RoomCreator() {
 	return (
 		<>
 			<GenericHeader>
-				<Box direction="column" style={{ textAlign:"center", paddingBottom:"2em" }}>
+				<Box direction="column" style={{ textAlign:"center", paddingBottom:"3em" }}>
 					<Text size="large" color="#FFFC00">
 						The ghost keeps your messages. <a href="https://www.nytimes.com/2014/05/09/technology/snapchat-reaches-settlement-with-federal-trade-commission.html?_r=0">Forever</a>.
 					</Text>
@@ -85,8 +83,15 @@ export function RoomCreator() {
 						primary
 					/>
 				</Box>
-				<Image style={{ width:"20em", margin: "0 auto" }} src={emailDisp}/>
+				<Button
+					icon={<Organization />}
+					style={{ color: "#4bffac" }}
+					onClick={() => route("/Enterprise", true)}
+					label="Learn about Paracord for your business"
+					size="small"
+				/>
 			</GenericHeader>
+
 
 			<Footer
 				background="brand"

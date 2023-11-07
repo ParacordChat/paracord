@@ -40,6 +40,12 @@ function App() {
 						}
 					/>
 					<AsyncRoute
+						path={`/Enterprise`}
+						getComponent={() =>
+							import("./createView/Enterprise").then((module) => module.default)
+						}
+					/>
+					<AsyncRoute
 						path={`/p/:id`}
 						getComponent={(url) =>
 							import("./createView/PasswordModal").then(async (module) => {

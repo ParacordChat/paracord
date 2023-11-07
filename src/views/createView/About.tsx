@@ -1,5 +1,6 @@
 import { Box, Heading, InfiniteScroll, Paragraph } from "grommet";
 import CollapsibleContainer from "../../helpers/components/Collapsible";
+import GenericHeader from "../../helpers/components/GenericHeader";
 
 const abouts = [
 	{
@@ -74,30 +75,34 @@ The Project will not be liable to You or anyone else for any decision made or ac
 
 export default function About() {
 	return (
-		<Box
-			pad="large"
-			gap="medium"
-			width="large"
-			border={{
-				color: "brand",
-				size: "large"
-			}}
-			background="dark-1"
-			round="medium"
-		>
-			<Heading margin="none">About</Heading>
-			<InfiniteScroll items={abouts}>
-				{(item: { title: string; more: string }) => (
-					<CollapsibleContainer
-						style={{
-							padding: "1rem 1.2rem"
-						}}
-						title={item.title}
-					>
-						<Paragraph>{item.more}</Paragraph>
-					</CollapsibleContainer>
-				)}
-			</InfiniteScroll>
-		</Box>
+		<GenericHeader>
+			<Box
+				pad="large"
+				gap="medium"
+				width="large"
+				border={{
+					color: "brand",
+					size: "large"
+					
+				}}
+				background="dark-1"
+				round="medium"
+				alignSelf="center"
+			>
+				<Heading margin="none">About</Heading>
+				<InfiniteScroll items={abouts}>
+					{(item: { title: string; more: string }) => (
+						<CollapsibleContainer
+							style={{
+								padding: "1rem 1.2rem"
+							}}
+							title={item.title}
+						>
+							<Paragraph>{item.more}</Paragraph>
+						</CollapsibleContainer>
+					)}
+				</InfiniteScroll>
+			</Box>
+		</GenericHeader>
 	);
 }

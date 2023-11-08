@@ -146,10 +146,9 @@ export const joinRoom = initGuard(
 							const jp = JSON.parse(data.val());
 							if (jp.iv) {
 								if (!cryptoKey) throw new Error("No crypto key!");
-								console.log(data.val());
-								const dcv = await decrypt(cryptoKey, jp);
+								const dcv = await decrypt(cryptoKey, jp)
+									.catch(console.error);
 								if (!dcv) throw new Error("No decrypted value!");
-								console.log(dcv);
 								val = JSON.parse(dcv);
 							} else if (!config.password) {
 								val = jp;
@@ -159,7 +158,6 @@ export const joinRoom = initGuard(
 							console.error(error);
 							return;
 						}
-						console.log(val);
 
 						const peer = makePeer(peerId, false);
 

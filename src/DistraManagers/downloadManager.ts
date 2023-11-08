@@ -209,20 +209,12 @@ export default class DownloadManager {
 				.getState()
 				.writablesQueue.find((w) => w.uuid === processedMeta.uuid)?.writable;
 			if (fwrt) {
-				// TODO: why does this write twice?
-				console.log(fileReceipt);
 				await fwrt.write(fileReceipt)
 					.then(() => {
 						if (processedMeta.last) {
 							useProgressStore.getState()
 								.removeWritable(processedMeta.uuid);
 						} else {
-							console.log("sent file ack", {
-								uuid: processedMeta.uuid,
-								id: processedMeta.id,
-								chunkN: processedMeta.chunkN
-							});
-
 							return sendFileAck({
 								uuid: processedMeta.uuid,
 								id: processedMeta.id,
@@ -282,14 +274,6 @@ export default class DownloadManager {
 				)
 				.then(() => {
 					this.sendFileRequest(
-						{
-							id: findName.id,
-							uuid: fileUUID
-						},
-						[fromUser]
-					);
-					console.log(
-						"sent file request",
 						{
 							id: findName.id,
 							uuid: fileUUID

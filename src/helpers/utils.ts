@@ -1,6 +1,6 @@
 import Peer from "simple-peer-light";
 import { FirebaseRoomConfig, TorrentRoomConfig } from "../Distra";
-import { events, libName } from "./consts/consts";
+import { libName } from "./consts/consts";
 import { ExtendedInstance, Room } from "./types/distraTypes";
 
 const charSet =
@@ -17,16 +17,6 @@ export const initPeer = (
 		config,
 		streams: []
 	}) as ExtendedInstance;
-	const onData = (data: any) => peer.__earlyDataBuffer.push(data);
-
-	peer.on(events.data, onData);
-	peer.__earlyDataBuffer = [];
-	peer.__drainEarlyData = (f: any) => {
-		peer.off(events.data, onData);
-		peer.__earlyDataBuffer.forEach(f);
-		delete peer.__earlyDataBuffer;
-		peer.__drainEarlyData = noOp;
-	};
 
 	return peer;
 };

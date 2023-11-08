@@ -175,7 +175,6 @@ export default async (
 
 		useHookStateManager.getState()
 			.onPeerJoin(id);
-		// peer.__drainEarlyData(onData);
 	});
 
 	getPing((_: any, id: string) => sendPong(null, [id]));

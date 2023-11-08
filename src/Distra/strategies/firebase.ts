@@ -143,14 +143,23 @@ export const joinRoom = initGuard(
 						let val;
 
 						try {
-							val = JSON.parse(
-								cryptoKey ? await decrypt(cryptoKey, data.val()) : data.val()
-							);
+							const jp = JSON.parse(data.val());
+							if (jp.iv) {
+								if (!cryptoKey) throw new Error("No crypto key!");
+								console.log(data.val());
+								const dcv = await decrypt(cryptoKey, jp);
+								if (!dcv) throw new Error("No decrypted value!");
+								console.log(dcv);
+								val = JSON.parse(dcv);
+							} else if (!config.password) {
+								val = jp;
+							}
 						} catch (error) {
 							console.error(`${libName}: received malformed SDP JSON`);
 							console.error(error);
 							return;
 						}
+						console.log(val);
 
 						const peer = makePeer(peerId, false);
 

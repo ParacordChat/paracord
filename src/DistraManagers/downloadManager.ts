@@ -15,7 +15,7 @@ import { useOfferStore } from "../stateManagers/downloadManagers/requestManager"
 import { useClientSideUserTraits } from "../stateManagers/userManagers/clientSideUserTraits";
 import { useUserStore } from "../stateManagers/userManagers/userStore";
 
-const chunkSize = 1_000_000 * 20; // 5MB
+const chunkSize = 1_000_000 * 5; // 5MB
 
 const readFileChunk = (data: File, chunkN: number) =>
 	data

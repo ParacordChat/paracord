@@ -43,11 +43,14 @@ export const encrypt = async (
 
 export const decrypt = async (
 	keyP: CryptoKey | PromiseLike<CryptoKey>,
-	raw: string
+	raw: { c: string; iv: number[] }
 ) => {
-	const { c, iv } = JSON.parse(raw);
+	const { c, iv } = raw;
+	const fullKey = await keyP;
+	console.log("fk", fullKey);
 
 	return crypto.subtle
-		.decrypt({ name: algo, iv: new Uint8Array(iv) }, await keyP, unpack(c))
-		.then((decBytes) => decodeBytes(decBytes));
+		.decrypt({ name: algo, iv: new Uint8Array(iv) }, fullKey, unpack(c))
+		.then((decBytes) => decodeBytes(decBytes))
+		.catch(console.error);
 };

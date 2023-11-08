@@ -23,6 +23,12 @@ const readFileChunk = (data: File, chunkN: number) =>
 		.arrayBuffer()
 		.then((buffer: ArrayBuffer) => new Uint8Array(buffer));
 
+const calcProgress = (chunkN: number, rawProg: number, fullSize: number) => {
+	return Number(
+		((chunkN + rawProg) / (Math.ceil(fullSize / chunkSize) + 1)).toFixed(2)
+	);
+};
+
 export default class DownloadManager {
 	private sendFileRequest;
 	private sendFileOffer;
@@ -57,86 +63,88 @@ export default class DownloadManager {
 		});
 
 		getFileRequest((fileReq, userId) => {
-			const realFiles = useRealFiles.getState().realFiles;
-			const mutedUsers = useClientSideUserTraits.getState().mutedUsers;
-			if (realFiles && fileReq.id in realFiles && mutedUsers[userId] !== true) {
-				const sendAction = (currentFile: File) => {
-					useProgressStore.getState()
-						.addProgress({
-							id: fileReq.id,
-							uuid: fileReq.uuid,
-							name: currentFile.name,
-							chunkN: 0,
-							progress: 0,
-							toUser: userId
-						});
+			const userMuted = useClientSideUserTraits.getState().mutedUsers[userId];
+			if (userMuted) return;
+			const realFile = useRealFiles.getState().realFiles[fileReq.id];
+			if (!realFile) return;
 
-					const targetUser = useUserStore
-						.getState()
-						.users.find((user) => user.id === userId);
+			const sendAction = (currentFile: File) => {
+				useProgressStore.getState()
+					.addProgress({
+						id: fileReq.id,
+						uuid: fileReq.uuid,
+						name: currentFile.name,
+						chunkN: 0,
+						progress: 0,
+						toUser: userId
+					});
 
-					return targetUser === undefined
-						? undefined
-						: readFileChunk(currentFile, 0)
-							.then((chunk) =>
-								sendFileChunk(
-									chunk,
-									[targetUser],
-									{
-										id: fileReq.id,
-										uuid: fileReq.uuid,
-										chunkN: 1, // I set this to 1 for offset
-										name: currentFile.name,
-										size: currentFile.size,
-										last: currentFile.size <= chunkSize
-									},
-									(chkProgress: number, _fromUser: any) => {
-										const progress =
-												(chkProgress * chunkSize) / currentFile.size;
-										if (progress > 1) {
-											useProgressStore
-												.getState()
-												.deleteProgress(fileReq.uuid);
-										} else {
-											useProgressStore
-												.getState()
-												.updateProgress(fileReq.uuid, { progress });
-										}
+				const targetUser = useUserStore
+					.getState()
+					.users.find((user) => user.id === userId);
+
+				return targetUser === undefined
+					? undefined
+					: readFileChunk(currentFile, 0)
+						.then((chunk) =>
+							sendFileChunk(
+								chunk,
+								[targetUser],
+								{
+									id: fileReq.id,
+									uuid: fileReq.uuid,
+									chunkN: 1, // I set this to 1 for offset
+									name: currentFile.name,
+									size: currentFile.size,
+									last: currentFile.size <= chunkSize
+								},
+								(chkProgress: number, _fromUser: any) => {
+									const progress = calcProgress(
+										0,
+										chkProgress,
+										currentFile.size
+									);
+									if (progress > 1) {
+										useProgressStore.getState()
+											.deleteProgress(fileReq.uuid);
+									} else {
+										useProgressStore
+											.getState()
+											.updateProgress(fileReq.uuid, { progress });
 									}
-								)
+								}
 							)
-							.catch((error: Error) => console.error(error));
-				};
-				if (
-					useProgressStore
-						.getState()
-						.progressQueue.some(
-							(p) => p.id === fileReq.id && p.toUser === userId
 						)
-				) {
-					confirmDialog(
-						`file already being sent, you can click ok to send it again, or mute the user with id ${funAnimalName(
-							userId
-						)} to prevent spamming`
-					)
-						.then((ok) => {
-							if (ok) {
-								sendAction(realFiles[fileReq.id]);
-							} else {
-								alert("other user rejected your download request!");
-							}
-						})
-						.catch(() => {
-							this.terminateClient(userId, fileReq.uuid);
-						});
-				} else {
-					sendAction(realFiles[fileReq.id]);
-				}
+						.catch((error: Error) => console.error(error));
+			};
+			if (
+				useProgressStore
+					.getState()
+					.progressQueue.some((p) => p.id === fileReq.id && p.toUser === userId)
+			) {
+				confirmDialog(
+					`file already being sent, you can click ok to send it again, or mute the user with id ${funAnimalName(
+						userId
+					)} to prevent spamming`
+				)
+					.then((ok) => {
+						if (ok) {
+							sendAction(realFile);
+						} else {
+							alert("other user rejected your download request!");
+						}
+					})
+					.catch(() => {
+						this.terminateClient(userId, fileReq.uuid);
+					});
+			} else {
+				sendAction(realFile);
 			}
 		});
 
 		getFileAck(async (fileAck, userId) => {
 			const currentFile = useRealFiles.getState().realFiles[fileAck.id];
+			if (!currentFile) return;
 			const totalChunks = Math.ceil(currentFile.size / chunkSize);
 
 			if (fileAck.chunkN === -1) {
@@ -160,9 +168,12 @@ export default class DownloadManager {
 								last: fileAck.chunkN === totalChunks - 1
 							},
 							(chkProgress: number, _fromUser: any) => {
-								const progress =
-									((fileAck.chunkN + chkProgress) * chunkSize) /
-									currentFile.size;
+								const progress = calcProgress(
+									fileAck.chunkN,
+									chkProgress,
+									currentFile.size
+								);
+
 								if (progress > 1) {
 									useProgressStore.getState()
 										.deleteProgress(fileAck.uuid);
@@ -183,8 +194,11 @@ export default class DownloadManager {
 		onFileProgress((rawProgress, _id, metadata) => {
 			if (metadata === undefined) return;
 			const processedMeta = metadata as FileMetaData;
-			const progress =
-				((processedMeta.chunkN + rawProgress) * chunkSize) / processedMeta.size;
+			const progress = calcProgress(
+				processedMeta.chunkN,
+				rawProgress,
+				processedMeta.size
+			);
 
 			processedMeta.uuid &&
 				useProgressStore

@@ -2,9 +2,9 @@ import { create } from "zustand";
 import { genId } from "../../helpers/utils";
 
 interface RealFileStore {
-  realFiles: { [key: string]: File };
-  addRealFiles: (file: File[]) => void;
-  deleteRealFile: (fileId: string) => void;
+	realFiles: { [fileId: string]: File };
+	addRealFiles: (file: File[]) => void;
+	deleteRealFile: (fileId: string) => void;
 }
 
 export const useRealFiles = create<RealFileStore>((set) => ({
@@ -14,7 +14,7 @@ export const useRealFiles = create<RealFileStore>((set) => ({
 			realFiles: {
 				...state.realFiles,
 				...(() => {
-					const newFiles: { [key: string]: File } = {};
+					const newFiles: { [fileId: string]: File } = {};
 					for (const file of files) {
 						newFiles[genId(6)] = file;
 					}

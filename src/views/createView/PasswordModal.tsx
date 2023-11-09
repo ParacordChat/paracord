@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable react/display-name */
 import { Box, Button, Text, TextInput } from "grommet";
 import { CaretLeftFill, FormView, FormViewHide, Key } from "grommet-icons";
@@ -75,6 +74,7 @@ const PasswordModal = (roomId: string, hasPassword: boolean) => () => {
 							/>
 							<Button
 								onClick={() => {
+									if(passwordRef.current?.value.trim() === "") return;
 									roomSet(passwordRef.current?.value);
 								}}
 								style={{ marginLeft: "auto", width: "100%" }}

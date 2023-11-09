@@ -23,10 +23,22 @@ const readFileChunk = (data: File, chunkN: number) =>
 		.arrayBuffer()
 		.then((buffer: ArrayBuffer) => new Uint8Array(buffer));
 
-const calcProgress = (chunkN: number, rawProg: number, fullSize: number) => {
-	return Number(
-		((chunkN + rawProg) / (Math.ceil(fullSize / chunkSize) + 1)).toFixed(2)
+const calcProgress = (
+	chunkN: number,
+	rawProg: number,
+	fullSize: number,
+	uuid: string
+) => {
+	const progress = Number(
+		((chunkN + rawProg) / (Math.ceil(fullSize / chunkSize) + 1)).toFixed(4)
 	);
+	if (progress >= 1) {
+		useProgressStore.getState()
+			.deleteProgress(uuid);
+	} else {
+		useProgressStore.getState()
+			.updateProgress(uuid, { progress });
+	}
 };
 
 export default class DownloadManager {
@@ -98,21 +110,8 @@ export default class DownloadManager {
 									size: currentFile.size,
 									last: currentFile.size <= chunkSize
 								},
-								(chkProgress: number, _fromUser: any) => {
-									const progress = calcProgress(
-										0,
-										chkProgress,
-										currentFile.size
-									);
-									if (progress > 1) {
-										useProgressStore.getState()
-											.deleteProgress(fileReq.uuid);
-									} else {
-										useProgressStore
-											.getState()
-											.updateProgress(fileReq.uuid, { progress });
-									}
-								}
+								(chkProgress: number, _fromUser: any) =>
+									calcProgress(1, chkProgress, currentFile.size, fileReq.uuid)
 							)
 						)
 						.catch((error: Error) => console.error(error));
@@ -167,24 +166,13 @@ export default class DownloadManager {
 								size: currentFile.size,
 								last: fileAck.chunkN === totalChunks - 1
 							},
-							(chkProgress: number, _fromUser: any) => {
-								const progress = calcProgress(
+							(chkProgress: number, _fromUser: any) =>
+								calcProgress(
 									fileAck.chunkN,
 									chkProgress,
-									currentFile.size
-								);
-
-								if (progress > 1) {
-									useProgressStore.getState()
-										.deleteProgress(fileAck.uuid);
-								} else {
-									useProgressStore.getState()
-										.updateProgress(fileAck.uuid, {
-											progress,
-											chunkN: fileAck.chunkN + 1
-										});
-								}
-							}
+									currentFile.size,
+									fileAck.uuid
+								)
 						)
 					)
 					.catch((error: Error) => console.error(error));
@@ -194,20 +182,12 @@ export default class DownloadManager {
 		onFileProgress((rawProgress, _id, metadata) => {
 			if (metadata === undefined) return;
 			const processedMeta = metadata as FileMetaData;
-			const progress = calcProgress(
+			calcProgress(
 				processedMeta.chunkN,
 				rawProgress,
-				processedMeta.size
+				processedMeta.size,
+				processedMeta.uuid
 			);
-
-			processedMeta.uuid &&
-				useProgressStore
-					.getState()
-					.updateProgress(processedMeta.uuid, { progress });
-			if (processedMeta.last && progress >= 1) {
-				useProgressStore.getState()
-					.deleteProgress(processedMeta.uuid);
-			}
 		});
 
 		getFileChunk(async (fileReceipt, _id, metadata) => {
@@ -228,6 +208,11 @@ export default class DownloadManager {
 						if (processedMeta.last) {
 							useProgressStore.getState()
 								.removeWritable(processedMeta.uuid);
+							this.sendFileAck({
+								uuid: processedMeta.uuid,
+								id: processedMeta.id,
+								chunkN: -1
+							});
 						} else {
 							return sendFileAck({
 								uuid: processedMeta.uuid,

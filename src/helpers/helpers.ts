@@ -41,9 +41,9 @@ export const generateHexColorFromString = (str: string) => {
 	[...str].forEach((char) => {
 		hash = char.codePointAt(0)! + ((hash << 5) - hash);
 	});
-	const red = ((hash >> 16) & 0xFF) + 128;
-	const green = ((hash >> 8) & 0xFF) + 128;
-	const blue = (hash & 0xFF) + 128;
+	const red = (hash >> 16) & 0xFF;
+	const green = (hash >> 8) & 0xFF;
+	const blue = hash & 0xFF;
 	const color = ((red << 16) | (green << 8) | blue).toString(16);
 	return `#${"00000".slice(0, Math.max(0, 6 - color.length))}${color}`;
 };

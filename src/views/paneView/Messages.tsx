@@ -15,7 +15,6 @@ export default function Messages() {
 	);
 
 	return (
-	// TODO: fix mbox vert fill and vchat vert fill
 		<Main
 			direction="column"
 			border={{ color: "brand", size: "small" }}

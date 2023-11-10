@@ -116,26 +116,6 @@ export default async (
 					handleData(id, JSON.parse(decodeBytes(payloadRaw)));
 				}
 			}
-
-			// if (cachedDecryptKeys.hasOwnProperty(id)) {//TODO: benchmark comparison
-			// 	decryptData(payloadRaw, cachedDecryptKeys[id])
-			// 		.then((dec) =>
-			// 			handleData(id, JSON.parse(decodeBytes(dec)))
-			// 		);
-			// } else {
-			// 	const decryptKey = useUserStore
-			// 		.getState()
-			// 		.users.find((user: User) => user.id === id)?.quantumRecv;
-			// 	if (decryptKey) {
-			// 		cachedDecryptKeys[id] = decryptKey;
-			// 		decryptData(payloadRaw, decryptKey)
-			// 			.then((dec) =>
-			// 				handleData(id, JSON.parse(decodeBytes(dec)))
-			// 			);
-			// 	} else {
-			// 		handleData(id, JSON.parse(decodeBytes(payloadRaw)));
-			// 	}
-			// }
 		});
 
 		peer.on(events.stream, (stream) => {

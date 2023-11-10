@@ -15,14 +15,7 @@ export function CallView(props: { rtcManagerInstance: RTCManager }) {
 
 	const [myStream, setMyStream] = useState<MediaStream | null>(null);
 
-	const userNames = useUserStore(
-		(
-			state // TODO: this may not update w/ new users
-		) =>
-			state.users.map((p) => {
-				return { id: p.id, name: p.name };
-			})
-	);
+	const userNames = useUserStore((state) =>state.users);
 
 	const uiInteractive = useUserStore((state) =>
 		state.users.some((p) => p.active)

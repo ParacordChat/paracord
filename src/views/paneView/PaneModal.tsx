@@ -2,7 +2,7 @@ import { Box } from "grommet";
 import { Chat, Download, Phone, SettingsOption } from "grommet-icons";
 import { useEffect, useState } from "preact/hooks";
 import { Room } from "../../Distra";
-import RTCManager from "../../DistraManagers/callManager";
+import CallManager from "../../DistraManagers/callManager";
 import ChatManager from "../../DistraManagers/chatManager";
 import DownloadManager from "../../DistraManagers/downloadManager";
 import UserManager from "../../DistraManagers/userManager";
@@ -37,8 +37,8 @@ const MainModal = ({ roomId, room }: { roomId: string; room: Room }) => {
 		})
 	);
 
-	const [rtcManagerInstance] = useState(
-		new RTCManager({
+	const [callManagerInstance] = useState(
+		new CallManager({
 			room,
 			roomId
 		})
@@ -77,7 +77,7 @@ const MainModal = ({ roomId, room }: { roomId: string; room: Room }) => {
 									downloadManagerInstance={downloadManagerInstance}
 								/>
 							),
-							call: <CallView rtcManagerInstance={rtcManagerInstance} />,
+							call: <CallView callManagerInstance={callManagerInstance} />,
 							settings: <SettingsView />
 						}}
 					/>

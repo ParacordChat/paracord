@@ -31,7 +31,7 @@ export default class UserManager {
 		});
 
 		room.onPeerError((id: string, error: Error) => {
-			console.log(id, "_", error);
+			console.error(id, "_", error);
 			// sendSystemMessage(roomId, `${id} left the room`);
 		});
 

@@ -1,11 +1,15 @@
-import { StateUpdater } from "preact/hooks";
 import { Room } from "../Distra";
 import { useCallPrefsState } from "../stateManagers/commsManagers/personalCallPrefs";
 import { useClientSideUserTraits } from "../stateManagers/userManagers/clientSideUserTraits";
 
-type RoomActionType = "phone" | "video" | "screen" | "cutStream" | "view";
+export type RoomActionType =
+	| "phone"
+	| "video"
+	| "screen"
+	| "cutStream"
+	| "view";
 
-export default class RTCManager {
+export default class CallManager {
 	private joinRoom;
 	private removeStream;
 	private addStream;
@@ -27,10 +31,12 @@ export default class RTCManager {
 			const existingStream = useCallPrefsState
 				.getState()
 				.videoBubbles.find((p) => p.id === peerId);
-			const isAudioOnly = stream.getVideoTracks().length === 0;
+
 			// if this peer hasn't sent a stream before, create a video element
 			if (existingStream) {
 				room.removeStream(existingStream.stream);
+				useCallPrefsState.getState()
+					.removeBubbleWithId(peerId);
 			}
 			stream.addEventListener("removetrack", () => {
 				// videoParent.remove();
@@ -39,6 +45,7 @@ export default class RTCManager {
 
 				room.removeStream(stream);
 			});
+			const isAudioOnly = stream.getVideoTracks().length === 0;
 			useCallPrefsState
 				.getState()
 				.addVideoBubble({ id: peerId, stream, isAudioOnly });
@@ -59,16 +66,15 @@ export default class RTCManager {
 				useCallPrefsState.getState()
 					.removeBubbleWithId(id);
 			}
-			if (useCallPrefsState.getState().myStream) {
-				addStream(useCallPrefsState.getState().myStream!, [id]); // TODO: refreshing streams in room still dosen't work...
-			}
+			// if (useCallPrefsState.getState().myStream) {
+			// 	addStream(useCallPrefsState.getState().myStream!, [id]); // TODO: refreshing streams in room still dosen't work...
+			// }  //if you add back global mystream you may want to consider adding a function called "replacestream" on the room function
 		});
 	}
 
 	public shareMedia = async (
 		type: RoomActionType,
-		myStream: MediaStream | null,
-		setMyStream: StateUpdater<MediaStream | null>
+		myStream: MediaStream | undefined
 	) => {
 		if (type === "cutStream") {
 			const videoBubbles = useCallPrefsState.getState().videoBubbles;
@@ -84,9 +90,6 @@ export default class RTCManager {
 			this.joinRoom("cutStream");
 
 			useCallPrefsState.getState()
-				.setMyStream(null);
-
-			useCallPrefsState.getState()
 				.setCallConsent(false);
 
 			useCallPrefsState.getState()
@@ -95,8 +98,6 @@ export default class RTCManager {
 			useCallPrefsState.getState()
 				.setCallConsent(true);
 			this.joinRoom("view");
-			useCallPrefsState.getState()
-				.setMyStream(null);
 		} else {
 			useCallPrefsState.getState()
 				.setCallConsent(true);
@@ -129,13 +130,23 @@ export default class RTCManager {
 			})();
 			if (selfStream) {
 				// send stream to peers currently in the room
-				this.addStream(selfStream);
-				this.joinRoom(type)
-					.then(() =>
-						useCallPrefsState.getState()
-							.setIsSharing(true)
-					);
-				setMyStream(selfStream);
+				if (myStream) {
+					this.removeStream(myStream);
+					this.addStream(selfStream);
+					this.joinRoom(type)
+						.then(() =>
+							useCallPrefsState.getState()
+								.setIsSharing(true)
+						);
+				} else {
+					this.addStream(selfStream);
+					this.joinRoom(type)
+						.then(() =>
+							useCallPrefsState.getState()
+								.setIsSharing(true)
+						);
+				}
+				return selfStream;
 			}
 		}
 	};

@@ -2,18 +2,32 @@
 import { funAnimalName } from "fun-animal-names";
 import { Box, Button, Footer, Text } from "grommet";
 import { Camera, Close, Monitor, Phone, View } from "grommet-icons";
+import { VNode } from "preact";
 import { useState } from "preact/hooks";
 import { selfId } from "../../../Distra";
-import RTCManager from "../../../DistraManagers/callManager";
+import CallManager, { RoomActionType } from "../../../DistraManagers/callManager";
 import StreamPlayer from "../../../helpers/components/StreamPlayer";
 import { generateHexColorFromString } from "../../../helpers/helpers";
 import { useCallPrefsState } from "../../../stateManagers/commsManagers/personalCallPrefs";
 import { useUserStore } from "../../../stateManagers/userManagers/userStore";
 
-export function CallView(props: { rtcManagerInstance: RTCManager }) {
-	const { rtcManagerInstance } = props;
+interface ButtonOption {
+	label: RoomActionType;
+	icon: VNode;
+}
 
-	const [myStream, setMyStream] = useState<MediaStream | null>(null);
+const buttonOptions:ButtonOption[] = [
+	{ label: "phone", icon: <Phone /> },
+	{ label: "video", icon: <Camera /> },
+	{ label: "screen", icon: <Monitor /> },
+	{ label: "view", icon: <View /> }
+];
+
+export function CallView(props: { callManagerInstance: CallManager }) {
+	const { callManagerInstance } = props;
+
+	const [myStream, setMyStream] = useState<MediaStream | undefined>(undefined);
+	const [streamType, setStreamType] = useState<RoomActionType | null>(null);
 
 	const userNames = useUserStore((state) =>state.users);
 
@@ -66,72 +80,58 @@ export function CallView(props: { rtcManagerInstance: RTCManager }) {
 							</Box>
 						</Box>
 					)}
+					<Footer
+						style={{
+							position: "fixed",
+							bottom: "0",
+							width: "100%",
+							height: "10vh"
+						}}
+						direction="row"
+						round="small"
+						background="brand"
+						pad="medium"
+					>
+						{isSharing && (
+							<Button
+								onClick={() =>
+									callManagerInstance.shareMedia(
+										"cutStream",
+										myStream
+									)
+										.then(()=>{
+											setMyStream(undefined);
+											setStreamType("cutStream");
+										})
+								}
+								hoverIndicator
+								icon={<Close />}
+								tip="Leave Call"
+							/>
+						)}
+
+						<div>
+							{buttonOptions.map((entry, index) => (
+								<Button
+									key={index}
+									disabled={!uiInteractive}
+									className={entry.label === streamType ? "active" : ""}
+									primary={entry.label === streamType}
+									icon={entry.icon}
+									tip={entry.label}
+									onClick={() => 
+										callManagerInstance.shareMedia(entry.label, myStream)
+											.then((newStream)=>{
+												setMyStream(newStream);
+												setStreamType(entry.label);
+											})
+									}
+								/>
+							))}
+						</div>
+					</Footer>
 				</Box>
-				<Footer
-					style={{
-						position: "fixed",
-						bottom: "0",
-						width: "100%"
-					}}
-					direction="row"
-					round="small"
-					background="brand"
-					pad="medium"
-				>
-					{isSharing ? (
-						<Button
-							onClick={() =>
-								rtcManagerInstance.shareMedia(
-									"cutStream",
-									myStream,
-									setMyStream
-								)
-							}
-							hoverIndicator
-							icon={<Close />}
-							label="Leave Call"
-						/>
-					) : (
-						<Box gap="small">
-							<Button
-								disabled={!uiInteractive}
-								onClick={() =>
-									rtcManagerInstance.shareMedia("phone", myStream, setMyStream)
-								}
-								hoverIndicator
-								icon={<Phone />}
-								label="Audio Only"
-							/>
-							<Button
-								disabled={!uiInteractive}
-								onClick={() =>
-									rtcManagerInstance.shareMedia("video", myStream, setMyStream)
-								}
-								hoverIndicator
-								icon={<Camera />}
-								label="Camera"
-							/>
-							<Button
-								disabled={!uiInteractive}
-								onClick={() =>
-									rtcManagerInstance.shareMedia("screen", myStream, setMyStream)
-								}
-								hoverIndicator
-								icon={<Monitor />}
-								label="Desktop share"
-							/>
-							<Button
-								disabled={!uiInteractive}
-								onClick={() =>
-									rtcManagerInstance.shareMedia("view", myStream, setMyStream)
-								}
-								hoverIndicator
-								icon={<View />}
-								label="View"
-							/>
-						</Box>
-					)}
-				</Footer>
+				
 			</div>
 		</>
 	);

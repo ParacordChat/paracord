@@ -1,23 +1,21 @@
 import { create } from "zustand";
 
 interface VideoBubble {
-  id: string;
-  stream: MediaStream;
-  isAudioOnly: boolean;
-  isViewOnly?: boolean;
+	id: string;
+	stream: MediaStream;
+	isAudioOnly: boolean;
+	isViewOnly?: boolean;
 }
 
 interface ClientSideUserTraitsStore {
-  isSharing: boolean;
-  setIsSharing: (isSharing: boolean) => void;
-  videoBubbles: VideoBubble[];
-  addVideoBubble: (bubble: VideoBubble) => void;
-  removeBubbleWithId: (id: string) => void;
-  clearVideoBubbles: () => void;
-  callConsent: boolean;
-  setCallConsent: (callConsent: boolean) => void;
-  myStream: MediaStream | null;
-  setMyStream: (myStream: MediaStream | null) => void;
+	isSharing: boolean;
+	setIsSharing: (isSharing: boolean) => void;
+	videoBubbles: VideoBubble[];
+	addVideoBubble: (bubble: VideoBubble) => void;
+	removeBubbleWithId: (id: string) => void;
+	clearVideoBubbles: () => void;
+	callConsent: boolean;
+	setCallConsent: (callConsent: boolean) => void;
 }
 
 export const useCallPrefsState = create<ClientSideUserTraitsStore>(
@@ -33,8 +31,6 @@ export const useCallPrefsState = create<ClientSideUserTraitsStore>(
 			}),
 		clearVideoBubbles: () => set({ videoBubbles: [] }),
 		callConsent: false,
-		setCallConsent: (callConsent) => set({ callConsent }),
-		myStream: null,
-		setMyStream: (myStream) => set({ myStream })
+		setCallConsent: (callConsent) => set({ callConsent })
 	})
 );

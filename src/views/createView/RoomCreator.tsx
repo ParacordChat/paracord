@@ -18,7 +18,7 @@ export function RoomCreator() {
 	const [usePassword, setUsePassword] = useState(true);
 	const roomRef = useRef<HTMLInputElement>(null);
 	const loadRoom = () =>
-		route(`/${usePassword ? "s" : "p"}/${roomRef.current?.value}`, true);
+		route(`/${usePassword ? "s" : "p"}/${roomRef.current?.value}`);
 	return (
 		<>
 			<GenericHeader>
@@ -86,7 +86,7 @@ export function RoomCreator() {
 				<Button
 					icon={<Organization />}
 					style={{ color: "#4bffac" }}
-					onClick={() => route("/Enterprise", true)}
+					onClick={() => route("/Enterprise")}
 					label="Learn about Paracord for your business"
 					size="small"
 				/>
@@ -110,7 +110,7 @@ export function RoomCreator() {
 				<Anchor
 					label="About"
 					onClick={() => {
-						route(`/About`, true);
+						route(`/About`);
 					}}
 				/>
 			</Footer>

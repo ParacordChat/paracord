@@ -12,7 +12,7 @@ export default function CollapsibleContainer({ children }: Props) {
 			<PageHeader
 				title="Paracord"
 				pad="medium"
-				actions={<Image alt="paracord logo" onClick={()=>route("/", true)} height="80vh" src={pcdLogo} />}
+				actions={<Image alt="paracord logo" onClick={()=>route("/")} height="80vh" src={pcdLogo} />}
 			/>
 			<Main pad="large">		
 				{children}

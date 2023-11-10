@@ -20,7 +20,7 @@ export function RoomCard(props: { roomId: string; children?: any }) {
 					<Button
 						label="home"
 						onClick={() => {
-							route(`/`, true);
+							route(`/`);
 							location.reload();
 						}}
 						icon={<CaretLeftFill />}
@@ -46,7 +46,7 @@ export function RoomCard(props: { roomId: string; children?: any }) {
 					style={{ height: "10vh" }}
 					src={pcdLogo}
 					onClick={() => {
-						route(`/`, true);
+						route(`/`);
 						location.reload();
 					}}
 				/>

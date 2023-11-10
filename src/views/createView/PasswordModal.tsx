@@ -67,7 +67,7 @@ const PasswordModal = (roomId: string, hasPassword: boolean) => () => {
 							<Button
 								label="home"
 								onClick={() => {
-									route(`/`, true);
+									route(`/`);
 									location.reload();
 								}}
 								icon={<CaretLeftFill />}

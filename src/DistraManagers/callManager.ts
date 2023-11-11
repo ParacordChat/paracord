@@ -1,3 +1,8 @@
+import {
+	createVideoProcessor,
+	createVideoTrackProcessorWithFallback,
+	InputFrame
+} from "@pexip/media-processor";
 import { Room } from "../Distra";
 import { useCallPrefsState } from "../stateManagers/commsManagers/personalCallPrefs";
 import { useClientSideUserTraits } from "../stateManagers/userManagers/clientSideUserTraits";
@@ -8,6 +13,33 @@ export type RoomActionType =
 	| "screen"
 	| "cutStream"
 	| "view";
+
+const getTrackProcessor = () => {
+	// Feature detection if the browser has the `MediaStreamProcessor` API
+	if ("MediaStreamTrackProcessor" in window) {
+		return createVideoTrackProcessorWithFallback(); // Using the fallback implementation
+	}
+	return createVideoTrackProcessorWithFallback(); // Using the fallback implementation
+};
+
+const transformer = async (frame: InputFrame) => {
+	return frame;
+};
+
+async function streamEncrypt(inputMediaStream: MediaStream) {
+	const videoProcessor = createVideoProcessor(
+		// TODO: https://www.npmjs.com/package/@pexip/media-processor
+		[transformer], // TODO: you can add more processors here
+		getTrackProcessor()
+	);
+
+	await videoProcessor.open();
+
+	// Passing the raw MediaStream to apply the effects
+	// Then, use the output stream for whatever purpose
+	const processedStream = await videoProcessor.process(inputMediaStream);
+	return processedStream;
+}
 
 export default class CallManager {
 	private joinRoom;
@@ -132,7 +164,9 @@ export default class CallManager {
 				// send stream to peers currently in the room
 				if (myStream) {
 					this.removeStream(myStream);
-					this.addStream(selfStream);
+
+					const encryptedStream = streamEncrypt(selfStream);
+					this.addStream(encryptedStream); // TODO: encrypt stream
 					this.joinRoom(type)
 						.then(() =>
 							useCallPrefsState.getState()

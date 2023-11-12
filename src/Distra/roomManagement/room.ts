@@ -285,7 +285,7 @@ export default async (
 					}
 				});
 			}
-		},
+		}, // TODO: replacestream function?
 		replaceTrack: (
 			oldTrack: MediaStreamTrack,
 			newTrack: MediaStreamTrack,

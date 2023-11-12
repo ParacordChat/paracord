@@ -26,7 +26,6 @@ const buttonOptions:ButtonOption[] = [
 export function CallView(props: { callManagerInstance: CallManager }) {
 	const { callManagerInstance } = props;
 
-	const [myStream, setMyStream] = useState<MediaStream | undefined>(undefined);
 	const [streamType, setStreamType] = useState<RoomActionType | null>(null);
 
 	const userNames = useUserStore((state) =>state.users);
@@ -38,6 +37,7 @@ export function CallView(props: { callManagerInstance: CallManager }) {
 	const callConsent = useCallPrefsState((state) => state.callConsent);
 	const isSharing = useCallPrefsState((state) => state.isSharing);
 	const videoBubbles = useCallPrefsState((state) => state.videoBubbles);
+	const myStream = useCallPrefsState((state) => state.myStream);
 
 	return (
 		<>
@@ -47,7 +47,6 @@ export function CallView(props: { callManagerInstance: CallManager }) {
 						<Box fill="vertical">
 							{myStream ? (
 								<StreamPlayer
-									isMuted={true}
 									stream={myStream}
 									username="You"
 									id={selfId}
@@ -100,7 +99,8 @@ export function CallView(props: { callManagerInstance: CallManager }) {
 										myStream
 									)
 										.then(()=>{
-											setMyStream(undefined);
+											useCallPrefsState.getState()
+												.setMyStream(undefined);
 											setStreamType("cutStream");
 										})
 								}
@@ -122,7 +122,8 @@ export function CallView(props: { callManagerInstance: CallManager }) {
 									onClick={() => 
 										callManagerInstance.shareMedia(entry.label, myStream)
 											.then((newStream)=>{
-												setMyStream(newStream);
+												useCallPrefsState.getState()
+													.setMyStream(newStream);
 												setStreamType(entry.label);
 											})
 									}

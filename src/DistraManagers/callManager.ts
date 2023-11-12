@@ -66,9 +66,6 @@ export default class CallManager {
 				useCallPrefsState.getState()
 					.removeBubbleWithId(id);
 			}
-			// if (useCallPrefsState.getState().myStream) {
-			// 	addStream(useCallPrefsState.getState().myStream!, [id]); // TODO: refreshing streams in room still dosen't work...
-			// }  //if you add back global mystream you may want to consider adding a function called "replacestream" on the room function
 		});
 	}
 

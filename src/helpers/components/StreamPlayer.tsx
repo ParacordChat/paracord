@@ -1,22 +1,24 @@
 /* eslint-disable jsx-a11y/media-has-caption */
 import AudioMotionAnalyzer from "audiomotion-analyzer";
-import { Box, Text } from "grommet";
-import { useCallback, useEffect, useRef } from "preact/hooks";
+import { Box, Button, Text } from "grommet";
+import { Volume, VolumeMute } from "grommet-icons";
+import { useCallback, useEffect, useMemo, useRef, useState } from "preact/hooks";
 import { generateHexColorFromString } from "../helpers";
+import { selfId } from "../utils";
 
 export default function StreamPlayer({
 	stream,
 	username,
-	id,
-	isMuted = false
+	id
 }: {
   stream: MediaStream;
   username: string;
   id: string;
-  isMuted?: boolean;
 }) {
 	const player = useRef<HTMLVideoElement>(null);
 	const eqContainer = useRef<HTMLDivElement>(null);
+	const [internalMute, setInternalMute] = useState<boolean>(false);
+	const isSelf = useMemo(()=>id === selfId, [id]);
 
 	useEffect(() => {
 		if (player.current) {
@@ -31,13 +33,12 @@ export default function StreamPlayer({
 	}, [player, stream, id]);
 
 	const deployEqualizer = useCallback((mediaStream: MediaStream) => {
+		if(!eqContainer.current) return; 
 		const container = document.createElement("div");
-		container.style.width = "15vh";
+		container.style.width = "100%";
+		container.style.height = "100%";
 
 		const audioMotion = new AudioMotionAnalyzer(container, {
-			height: 150,
-			width: 150,
-			// you can set other options below - check the docs!
 			mode: 3,
 			barSpace: 0.6,
 			showScaleX: false,
@@ -51,7 +52,8 @@ export default function StreamPlayer({
 		// mute output to prevent feedback loops from the speakers
 		audioMotion.volume = 0;
 
-		eqContainer.current?.append(container);
+		eqContainer.current.innerHTML =	"";
+		eqContainer.current.append(container);
 	}, []);
 
 	return (
@@ -66,16 +68,20 @@ export default function StreamPlayer({
 				overflow: "hidden"
 			}}
 		>
-			<Text color={generateHexColorFromString(id)}>{username}</Text>
+			<Text color={generateHexColorFromString(id)}>
+				{username}
+				{!isSelf && <Button onClick={()=> setInternalMute((muted) =>!muted)} icon={internalMute?<VolumeMute color="red" size="small"/>:<Volume color="green" size="small"/>}/>}
+			</Text>
+
 			{stream.getVideoTracks()?.length === 0 ? (
 				<>
-					<video autoPlay muted={isMuted} hidden ref={player} />
+					<video autoPlay muted={internalMute||isSelf} hidden ref={player} />
 					<Box ref={eqContainer} />
 				</>
 			) : (
 				<video
 					autoPlay
-					muted={isMuted}
+					muted={internalMute||isSelf}
 					ref={player}
 				/>
 			)}

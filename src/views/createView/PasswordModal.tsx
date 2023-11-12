@@ -59,7 +59,7 @@ const PasswordModal = (roomId: string, hasPassword: boolean) => () => {
 							/>
 							<Button
 								icon={passwordVisible ? <FormView /> : <FormViewHide />}
-								onClick={() => setPasswordVisible(!passwordVisible)}
+								onClick={() => setPasswordVisible(pwv=>!pwv)}
 								tip="Toggle password visibility"
 							/>
 						</Box>

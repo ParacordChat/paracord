@@ -1,6 +1,6 @@
 import { Box } from "grommet";
 import { Chat, Download, Phone, SettingsOption } from "grommet-icons";
-import { useEffect, useState } from "preact/hooks";
+import { useEffect, useMemo } from "preact/hooks";
 import { Room } from "../../Distra";
 import CallManager from "../../DistraManagers/callManager";
 import ChatManager from "../../DistraManagers/chatManager";
@@ -16,32 +16,32 @@ import { DownloadView } from "./panes/DownloadView";
 import { SettingsView } from "./panes/SettingsView";
 
 const MainModal = ({ roomId, room }: { roomId: string; room: Room }) => {
-	const [userManagerInstance] = useState(
-		new UserManager({
+	const userManagerInstance = useMemo(
+		()=>new UserManager({
 			room,
 			roomId
-		})
+		}),[room, roomId]
 	);
 
-	const [chatManagerInstance] = useState(
-		new ChatManager({
+	const chatManagerInstance = useMemo(
+		()=>new ChatManager({
 			room,
 			roomId
-		})
+		}),[room, roomId]
 	);
 
-	const [downloadManagerInstance] = useState(
-		new DownloadManager({
+	const downloadManagerInstance = useMemo(
+		()=>new DownloadManager({
 			room,
 			roomId
-		})
+		}),[room, roomId]
 	);
 
-	const [callManagerInstance] = useState(
-		new CallManager({
+	const callManagerInstance = useMemo(
+		()=>new CallManager({
 			room,
 			roomId
-		})
+		}),[room, roomId]
 	);
 
 	useEffect(() => {

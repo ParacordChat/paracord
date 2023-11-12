@@ -30,13 +30,7 @@ export function UserView(props: {
 
 	useEffect(() => {
 		// hide sidebar on window resize
-		window.addEventListener("resize", () => {
-			if (window.innerWidth < 660) {
-				setShowSidebar(false);
-			} else {
-				setShowSidebar(true);
-			}
-		});
+		window.addEventListener("resize", () => setShowSidebar(window.innerWidth > 660));
 	});
 
 	return showSidebar ? (

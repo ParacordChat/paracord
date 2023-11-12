@@ -8,6 +8,8 @@ interface VideoBubble {
 }
 
 interface ClientSideUserTraitsStore {
+	myStream?: MediaStream;
+	setMyStream: (myStream: MediaStream | undefined) => void;
 	isSharing: boolean;
 	setIsSharing: (isSharing: boolean) => void;
 	videoBubbles: VideoBubble[];
@@ -20,6 +22,8 @@ interface ClientSideUserTraitsStore {
 
 export const useCallPrefsState = create<ClientSideUserTraitsStore>(
 	(set, get) => ({
+		myStream: undefined,
+		setMyStream: (myStream) => set({ myStream }),
 		isSharing: false,
 		setIsSharing: (isSharing) => set({ isSharing }),
 		videoBubbles: [],

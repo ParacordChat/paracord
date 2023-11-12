@@ -12,7 +12,7 @@ export default function CollapsibleContainer(props: CollapsibleProps) {
 	const { children, title, open = false, ...extprops } = props;
 	const [collapsed, setCollapsed] = useState(!open);
 
-	const toggleCollapsed = () => setCollapsed(!collapsed);
+	const toggleCollapsed = () => setCollapsed(c=>!c);
 
 	return (
 		<Box {...extprops}>

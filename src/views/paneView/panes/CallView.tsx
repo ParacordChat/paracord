@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/media-has-caption */
 import { funAnimalName } from "fun-animal-names";
-import { Box, Button, Footer, Text } from "grommet";
+import { Box, Button, Footer } from "grommet";
 import { Camera, Close, Monitor, Phone, View } from "grommet-icons";
 import { VNode } from "preact";
 import { useState } from "preact/hooks";
@@ -9,7 +9,6 @@ import CallManager, {
 	RoomActionType
 } from "../../../DistraManagers/callManager";
 import StreamPlayer from "../../../helpers/components/StreamPlayer";
-import { generateHexColorFromString } from "../../../helpers/helpers";
 import { useCallPrefsState } from "../../../stateManagers/commsManagers/personalCallPrefs";
 import { useUserStore } from "../../../stateManagers/userManagers/userStore";
 
@@ -24,6 +23,8 @@ const buttonOptions: ButtonOption[] = [
 	{ label: "screen", icon: <Monitor /> },
 	{ label: "view", icon: <View /> }
 ];
+
+
 
 export function CallView(props: { callManagerInstance: CallManager }) {
 	const { callManagerInstance } = props;
@@ -47,23 +48,12 @@ export function CallView(props: { callManagerInstance: CallManager }) {
 				<Box>
 					{callConsent && (
 						<Box fill="vertical">
-							{myStream ? (
-								<StreamPlayer stream={myStream} username="You" id={selfId} />
-							) : (
-								<Box
-									round="small"
-									border={{
-										color: generateHexColorFromString(selfId),
-										size: "medium",
-										width: "30vh"
-									}}
-								>
-									<Text color={generateHexColorFromString(selfId)}>You</Text>
-									<View size="xlarge" />
-								</Box>
-							)}
 							<Box>
-								{videoBubbles.map((bubble) => (
+								{[{
+									id: selfId,
+									stream: myStream,
+									username: "You"
+								},...videoBubbles].map((bubble) => (
 									<StreamPlayer
 										key={bubble.id}
 										stream={bubble.stream}

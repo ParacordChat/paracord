@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/media-has-caption */
 import AudioMotionAnalyzer from "audiomotion-analyzer";
 import { Box, Button, Text } from "grommet";
-import { Volume, VolumeMute } from "grommet-icons";
+import { View, Volume, VolumeMute } from "grommet-icons";
 import {
 	useCallback,
 	useEffect,
@@ -17,7 +17,7 @@ export default function StreamPlayer({
 	username,
 	id
 }: {
-  stream: MediaStream;
+  stream: MediaStream|undefined;
   username: string;
   id: string;
 }) {
@@ -51,6 +51,7 @@ export default function StreamPlayer({
 	}, []);
 
 	useEffect(() => {
+		if(!stream) return;
 		if (player.current) {
 			player.current.srcObject = stream;
 		}
@@ -68,15 +69,15 @@ export default function StreamPlayer({
 			border={{ color: generateHexColorFromString(id), size: "medium" }}
 			className="handle"
 			style={{
-				height: "20em",
-				width: "30em",
+				height: "40vh",
+				width: "60vh",
 				resize: "both",
 				overflow: "hidden"
 			}}
 		>
 			<Text color={generateHexColorFromString(id)}>
 				{username}
-				{!isSelf && (
+				{!isSelf||!stream && (
 					<Button
 						onClick={() => setInternalMute((muted) => !muted)}
 						icon={
@@ -90,13 +91,17 @@ export default function StreamPlayer({
 				)}
 			</Text>
 
-			{stream.getVideoTracks()?.length === 0 ? (
+			{stream?(stream.getVideoTracks()?.length === 0 ? (
 				<>
 					<video autoPlay muted={internalMute || isSelf} hidden ref={player} />
 					<Box ref={eqContainer} />
 				</>
 			) : (
 				<video autoPlay muted={internalMute || isSelf} ref={player} />
+			)):(
+				<Box align="center">
+					<View size="xlarge" />
+				</Box>
 			)}
 		</Box>
 	);

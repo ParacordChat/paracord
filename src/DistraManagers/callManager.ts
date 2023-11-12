@@ -3,11 +3,11 @@ import { useCallPrefsState } from "../stateManagers/commsManagers/personalCallPr
 import { useClientSideUserTraits } from "../stateManagers/userManagers/clientSideUserTraits";
 
 export type RoomActionType =
-  | "phone"
-  | "video"
-  | "screen"
-  | "cutStream"
-  | "view";
+	| "phone"
+	| "video"
+	| "screen"
+	| "cutStream"
+	| "view";
 
 export default class CallManager {
 	private joinRoom;
@@ -33,7 +33,7 @@ export default class CallManager {
 				.videoBubbles.find((p) => p.id === peerId);
 
 			// if this peer hasn't sent a stream before, create a video element
-			if (existingStream) {
+			if (existingStream && existingStream.stream) {
 				room.removeStream(existingStream.stream);
 				useCallPrefsState.getState()
 					.removeBubbleWithId(peerId);
@@ -56,10 +56,18 @@ export default class CallManager {
 		});
 		getRoomJoined((type, id) => {
 			if (type === "view") {
+				const existingStream = useCallPrefsState
+					.getState()
+					.videoBubbles.find((p) => p.id === id);
+				if (existingStream && existingStream.stream) {
+					room.removeStream(existingStream.stream);
+					useCallPrefsState.getState()
+						.removeBubbleWithId(id);
+				}
 				useCallPrefsState.getState()
 					.addVideoBubble({
 						id,
-						stream: new MediaStream(),
+						stream: undefined,
 						isAudioOnly: false
 					});
 			} else if (type === "cutStream") {
@@ -76,9 +84,9 @@ export default class CallManager {
 		if (type === "cutStream") {
 			const videoBubbles = useCallPrefsState.getState().videoBubbles;
 			if (myStream) {
-				[...videoBubbles.map((vb) => vb.stream), myStream].forEach((stream) => {
-					this.removeStream(stream);
-				});
+				[...videoBubbles.map((vb) => vb.stream), myStream].forEach(
+					(stream) => stream && this.removeStream(stream)
+				);
 			}
 
 			useCallPrefsState.getState()
@@ -94,6 +102,15 @@ export default class CallManager {
 		} else if (type === "view") {
 			useCallPrefsState.getState()
 				.setCallConsent(true);
+			useCallPrefsState.getState()
+				.setIsSharing(true);
+			if (myStream) {
+				myStream.getTracks()
+					.forEach((track) => {
+						track.stop();
+					});
+				this.removeStream(myStream);
+			}
 			this.joinRoom("view");
 		} else {
 			useCallPrefsState.getState()
@@ -129,20 +146,14 @@ export default class CallManager {
 				// send stream to peers currently in the room
 				if (myStream) {
 					this.removeStream(myStream);
-					this.addStream(selfStream);
-					this.joinRoom(type)
-						.then(() =>
-							useCallPrefsState.getState()
-								.setIsSharing(true)
-						);
-				} else {
-					this.addStream(selfStream);
-					this.joinRoom(type)
-						.then(() =>
-							useCallPrefsState.getState()
-								.setIsSharing(true)
-						);
 				}
+				this.addStream(selfStream);
+				this.joinRoom(type)
+					.then(() =>
+						useCallPrefsState.getState()
+							.setIsSharing(true)
+					);
+
 				return selfStream;
 			}
 		}

@@ -26,7 +26,7 @@ export function ChatView(props: { chatManagerInstance: ChatManager }) {
 			<Box direction="row">
 				<Button
 					icon={multilineInput ? <FormDown /> : <FormUp />}
-					onClick={() => setMultilineInput(mli=>!mli)}
+					onClick={() => setMultilineInput((mli) => !mli)}
 					disabled={!uiInteractive}
 					tip="Toggle multiline input"
 				/>

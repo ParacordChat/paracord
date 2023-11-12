@@ -30,7 +30,9 @@ function App() {
 						path={`/`}
 						default
 						getComponent={() =>
-							import("./createView/RoomCreator").then((module) => module.RoomCreator)
+							import("./createView/RoomCreator").then(
+								(module) => module.RoomCreator
+							)
 						}
 					/>
 					<AsyncRoute

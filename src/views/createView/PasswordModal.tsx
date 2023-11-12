@@ -16,17 +16,19 @@ const PasswordModal = (roomId: string, hasPassword: boolean) => () => {
 	const roomSet = async (password = "") => {
 		if (!currentRoom) {
 			const room = await fetch(turnAPI)
-				.then(response=>response.json())
-				.then(iceServers=>joinFirebaseRoom(
-					{
-						...firebaseRoomConfig,
-						rtcConfig:{
-							iceServers
+				.then((response) => response.json())
+				.then((iceServers) =>
+					joinFirebaseRoom(
+						{
+							...firebaseRoomConfig,
+							rtcConfig: {
+								iceServers
+							},
+							password: password === "" ? undefined : password
 						},
-						password: password === "" ? undefined : password
-					},
-					roomId
-				));
+						roomId
+					)
+				);
 			setCurrentRoom(room);
 		}
 	};
@@ -59,7 +61,7 @@ const PasswordModal = (roomId: string, hasPassword: boolean) => () => {
 							/>
 							<Button
 								icon={passwordVisible ? <FormView /> : <FormViewHide />}
-								onClick={() => setPasswordVisible(pwv=>!pwv)}
+								onClick={() => setPasswordVisible((pwv) => !pwv)}
 								tip="Toggle password visibility"
 							/>
 						</Box>
@@ -74,7 +76,7 @@ const PasswordModal = (roomId: string, hasPassword: boolean) => () => {
 							/>
 							<Button
 								onClick={() => {
-									if(passwordRef.current?.value.trim() === "") return;
+									if (passwordRef.current?.value.trim() === "") return;
 									roomSet(passwordRef.current?.value);
 								}}
 								style={{ marginLeft: "auto", width: "100%" }}

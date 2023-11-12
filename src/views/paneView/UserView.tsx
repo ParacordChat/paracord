@@ -30,7 +30,9 @@ export function UserView(props: {
 
 	useEffect(() => {
 		// hide sidebar on window resize
-		window.addEventListener("resize", () => setShowSidebar(window.innerWidth > 660));
+		window.addEventListener("resize", () =>
+			setShowSidebar(window.innerWidth > 660)
+		);
 	});
 
 	return showSidebar ? (
@@ -98,15 +100,20 @@ export function UserView(props: {
 							}}
 						>
 							{({ name, id }: { name: string; id: string }) => {
-								const isTyping = useClientSideUserTraits.getState().typingUsers.includes(id);
-								return(
+								const isTyping = useClientSideUserTraits
+									.getState()
+									.typingUsers.includes(id);
+								return (
 									<div>
 										<Box key={id} direction="row" gap="small">
 											<MuteUserButton
 												toggleMuted={() => mutedPeers.toggleMute(id)}
 												isMuted={mutedPeers.mutedUsers[id] || false}
 											/>
-											<Text style={{ color: generateHexColorFromString(id) }} className={isTyping && "bouncing-letters"}>
+											<Text
+												style={{ color: generateHexColorFromString(id) }}
+												className={isTyping && "bouncing-letters"}
+											>
 												{name}
 											</Text>
 										</Box>

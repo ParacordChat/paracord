@@ -2,9 +2,9 @@ import { create } from "zustand";
 import { genId } from "../../helpers/utils";
 
 interface RealFileStore {
-	realFiles: { [fileId: string]: File };
-	addRealFiles: (file: File[]) => void;
-	deleteRealFile: (fileId: string) => void;
+  realFiles: { [fileId: string]: File };
+  addRealFiles: (file: File[]) => void;
+  deleteRealFile: (fileId: string) => void;
 }
 
 export const useRealFiles = create<RealFileStore>((set) => ({

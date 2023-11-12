@@ -51,7 +51,10 @@ export default function RenderMessage(props: {
 	const lastMessage = useRef<HTMLDivElement>(null);
 	useEffect(() => {
 		if (isLast && lastMessage.current) {
-			lastMessage.current.scrollIntoView({ behavior: "smooth", block: "center" });
+			lastMessage.current.scrollIntoView({
+				behavior: "smooth",
+				block: "center"
+			});
 		}
 		for (const element of document.querySelectorAll(".msgLink")) {
 			element.setAttribute("cursor", "pointer");

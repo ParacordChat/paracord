@@ -49,7 +49,7 @@ export default class DownloadManager {
 
 	constructor({ room, roomId }: { room: Room; roomId: string }) {
 		const [sendFileChunk, getFileChunk, onFileProgress] =
-			room.makeAction<Uint8Array>("transfer", true);
+      room.makeAction<Uint8Array>("transfer", true);
 		const [sendFileRequest, getFileRequest] = room.makeAction<FileRequest>(
 			"fileRequest",
 			true
@@ -241,9 +241,9 @@ export default class DownloadManager {
 
 	public requestFile = async (fromUser: string, fileId: string) => {
 		const requestableFiles =
-			useOfferStore.getState().requestableDownloads[fromUser];
+      useOfferStore.getState().requestableDownloads[fromUser];
 		const findName =
-			requestableFiles && requestableFiles.find((f) => f.id === fileId);
+      requestableFiles && requestableFiles.find((f) => f.id === fileId);
 		if (findName) {
 			const fileUUID = genId(6);
 			await showSaveFilePicker({

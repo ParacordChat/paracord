@@ -83,7 +83,6 @@ export default function About() {
 				border={{
 					color: "brand",
 					size: "large"
-					
 				}}
 				background="dark-1"
 				round="medium"

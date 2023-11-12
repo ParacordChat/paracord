@@ -3,11 +3,11 @@ import { useCallPrefsState } from "../stateManagers/commsManagers/personalCallPr
 import { useClientSideUserTraits } from "../stateManagers/userManagers/clientSideUserTraits";
 
 export type RoomActionType =
-	| "phone"
-	| "video"
-	| "screen"
-	| "cutStream"
-	| "view";
+  | "phone"
+  | "video"
+  | "screen"
+  | "cutStream"
+  | "view";
 
 export default class CallManager {
 	private joinRoom;

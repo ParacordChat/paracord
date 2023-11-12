@@ -5,18 +5,20 @@ import { Camera, Close, Monitor, Phone, View } from "grommet-icons";
 import { VNode } from "preact";
 import { useState } from "preact/hooks";
 import { selfId } from "../../../Distra";
-import CallManager, { RoomActionType } from "../../../DistraManagers/callManager";
+import CallManager, {
+	RoomActionType
+} from "../../../DistraManagers/callManager";
 import StreamPlayer from "../../../helpers/components/StreamPlayer";
 import { generateHexColorFromString } from "../../../helpers/helpers";
 import { useCallPrefsState } from "../../../stateManagers/commsManagers/personalCallPrefs";
 import { useUserStore } from "../../../stateManagers/userManagers/userStore";
 
 interface ButtonOption {
-	label: RoomActionType;
-	icon: VNode;
+  label: RoomActionType;
+  icon: VNode;
 }
 
-const buttonOptions:ButtonOption[] = [
+const buttonOptions: ButtonOption[] = [
 	{ label: "phone", icon: <Phone /> },
 	{ label: "video", icon: <Camera /> },
 	{ label: "screen", icon: <Monitor /> },
@@ -28,7 +30,7 @@ export function CallView(props: { callManagerInstance: CallManager }) {
 
 	const [streamType, setStreamType] = useState<RoomActionType | null>(null);
 
-	const userNames = useUserStore((state) =>state.users);
+	const userNames = useUserStore((state) => state.users);
 
 	const uiInteractive = useUserStore((state) =>
 		state.users.some((p) => p.active)
@@ -46,18 +48,14 @@ export function CallView(props: { callManagerInstance: CallManager }) {
 					{callConsent && (
 						<Box fill="vertical">
 							{myStream ? (
-								<StreamPlayer
-									stream={myStream}
-									username="You"
-									id={selfId}
-								/>
+								<StreamPlayer stream={myStream} username="You" id={selfId} />
 							) : (
 								<Box
 									round="small"
 									border={{
 										color: generateHexColorFromString(selfId),
 										size: "medium",
-										width:"30vh"
+										width: "30vh"
 									}}
 								>
 									<Text color={generateHexColorFromString(selfId)}>You</Text>
@@ -94,11 +92,9 @@ export function CallView(props: { callManagerInstance: CallManager }) {
 						{isSharing && (
 							<Button
 								onClick={() =>
-									callManagerInstance.shareMedia(
-										"cutStream",
-										myStream
-									)
-										.then(()=>{
+									callManagerInstance
+										.shareMedia("cutStream", myStream)
+										.then(() => {
 											useCallPrefsState.getState()
 												.setMyStream(undefined);
 											setStreamType("cutStream");
@@ -119,9 +115,10 @@ export function CallView(props: { callManagerInstance: CallManager }) {
 									primary={entry.label === streamType}
 									icon={entry.icon}
 									tip={entry.label}
-									onClick={() => 
-										callManagerInstance.shareMedia(entry.label, myStream)
-											.then((newStream)=>{
+									onClick={() =>
+										callManagerInstance
+											.shareMedia(entry.label, myStream)
+											.then((newStream) => {
 												useCallPrefsState.getState()
 													.setMyStream(newStream);
 												setStreamType(entry.label);
@@ -132,7 +129,6 @@ export function CallView(props: { callManagerInstance: CallManager }) {
 						</div>
 					</Footer>
 				</Box>
-				
 			</div>
 		</>
 	);

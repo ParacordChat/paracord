@@ -30,7 +30,7 @@ export default function Messages() {
 				height: "90%"
 			}}
 		>
-			<div style={{ height: "100%" }}/>
+			<div style={{ height: "100%" }} />
 			<InfiniteScroll
 				items={messageQueue.sort((a, b) => a.recievedAt - b.recievedAt)}
 			>

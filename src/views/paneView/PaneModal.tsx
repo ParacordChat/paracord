@@ -17,38 +17,47 @@ import { SettingsView } from "./panes/SettingsView";
 
 const MainModal = ({ roomId, room }: { roomId: string; room: Room }) => {
 	const userManagerInstance = useMemo(
-		()=>new UserManager({
-			room,
-			roomId
-		}),[room, roomId]
+		() =>
+			new UserManager({
+				room,
+				roomId
+			}),
+		[room, roomId]
 	);
 
 	const chatManagerInstance = useMemo(
-		()=>new ChatManager({
-			room,
-			roomId
-		}),[room, roomId]
+		() =>
+			new ChatManager({
+				room,
+				roomId
+			}),
+		[room, roomId]
 	);
 
 	const downloadManagerInstance = useMemo(
-		()=>new DownloadManager({
-			room,
-			roomId
-		}),[room, roomId]
+		() =>
+			new DownloadManager({
+				room,
+				roomId
+			}),
+		[room, roomId]
 	);
 
 	const callManagerInstance = useMemo(
-		()=>new CallManager({
-			room,
-			roomId
-		}),[room, roomId]
+		() =>
+			new CallManager({
+				room,
+				roomId
+			}),
+		[room, roomId]
 	);
 
 	useEffect(() => {
 		userManagerInstance.createPersona();
-		room.onPeerJoin(async (peerId) => 
-			userManagerInstance.peerJoinHook(peerId)
-				.then(()=>downloadManagerInstance.peerJoinHook(peerId))
+		room.onPeerJoin(async (peerId) =>
+			userManagerInstance
+				.peerJoinHook(peerId)
+				.then(() => downloadManagerInstance.peerJoinHook(peerId))
 		);
 	}, [downloadManagerInstance, room, userManagerInstance]);
 

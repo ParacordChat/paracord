@@ -22,26 +22,35 @@ export function RoomCreator() {
 	return (
 		<>
 			<GenericHeader>
-				<Box direction="column" style={{ textAlign:"center", paddingBottom:"3em" }}>
+				<Box
+					direction="column"
+					style={{ textAlign: "center", paddingBottom: "3em" }}
+				>
 					<Text size="large" color="#FFFC00">
-						The ghost keeps your messages. <a href="https://www.nytimes.com/2014/05/09/technology/snapchat-reaches-settlement-with-federal-trade-commission.html?_r=0">Forever</a>.
+            The ghost keeps your messages.{" "}
+						<a href="https://www.nytimes.com/2014/05/09/technology/snapchat-reaches-settlement-with-federal-trade-commission.html?_r=0">
+              Forever
+						</a>
+            .
 					</Text>
 					<Text size="large" color="#7289da">
-						Same goes for a certain purple... <a href="https://www.reddit.com/r/privacy/comments/jy14qi/psa_discord_lies_about_removing_deleted_files/">creature</a>.
+            Same goes for a certain purple...{" "}
+						<a href="https://www.reddit.com/r/privacy/comments/jy14qi/psa_discord_lies_about_removing_deleted_files/">
+              creature
+						</a>
+            .
 					</Text>
 					<Text size="large">
-						Want privacy? Choose <b style={{ color:"#4bffac" }}>Para</b><b style={{ color:"#af79ff" }}>cord</b>.
+            Want privacy? Choose <b style={{ color: "#4bffac" }}>Para</b>
+						<b style={{ color: "#af79ff" }}>cord</b>.
 					</Text>
 					<Text size="small">
-						There in seconds, gone in seconds. Always yours.
+            There in seconds, gone in seconds. Always yours.
 					</Text>
 				</Box>
-				
 
 				<Box border={{ color: "brand", size: "large" }} pad="medium">
-					<Text size="medium">
-						Create a room:
-					</Text>
+					<Text size="medium">Create a room:</Text>
 					<Box direction="row">
 						<TextInput
 							border={{ color: "brand", size: "small" }}
@@ -71,17 +80,13 @@ export function RoomCreator() {
 							label="Use Password?"
 							color="brand"
 							onChange={(event: {
-              target: {
-                checked: boolean | ((prevState: boolean) => boolean);
-              };
-            }) => setUsePassword(event.target.checked)}
+                target: {
+                  checked: boolean | ((prevState: boolean) => boolean);
+                };
+              }) => setUsePassword(event.target.checked)}
 						/>
 					</Box>
-					<Button
-						onClick={loadRoom}
-						label="Go"
-						primary
-					/>
+					<Button onClick={loadRoom} label="Go" primary />
 				</Box>
 				<Button
 					icon={<Organization />}
@@ -91,7 +96,6 @@ export function RoomCreator() {
 					size="small"
 				/>
 			</GenericHeader>
-
 
 			<Footer
 				background="brand"

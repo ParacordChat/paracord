@@ -13,7 +13,7 @@ export default function FileUploader(props: {
 		if (input.files) {
 			const files = [...input.files];
 			addFiles(files);
-			setFileInputKey(ipk=>ipk + 1);
+			setFileInputKey((ipk) => ipk + 1);
 		}
 	};
 

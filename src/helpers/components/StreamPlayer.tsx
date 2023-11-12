@@ -17,7 +17,7 @@ export default function StreamPlayer({
 	username,
 	id
 }: {
-  stream: MediaStream|undefined;
+  stream: MediaStream | undefined;
   username: string;
   id: string;
 }) {
@@ -51,7 +51,7 @@ export default function StreamPlayer({
 	}, []);
 
 	useEffect(() => {
-		if(!stream) return;
+		if (!stream) return;
 		if (player.current) {
 			player.current.srcObject = stream;
 		}
@@ -77,28 +77,36 @@ export default function StreamPlayer({
 		>
 			<Text color={generateHexColorFromString(id)}>
 				{username}
-				{!isSelf||!stream && (
-					<Button
-						onClick={() => setInternalMute((muted) => !muted)}
-						icon={
-							internalMute ? (
-								<VolumeMute color="red" size="small" />
-							) : (
-								<Volume color="green" size="small" />
-							)
-						}
-					/>
-				)}
+				{!isSelf ||
+          (!stream && (
+          	<Button
+          		onClick={() => setInternalMute((muted) => !muted)}
+          		icon={
+          			internalMute ? (
+          				<VolumeMute color="red" size="small" />
+          			) : (
+          				<Volume color="green" size="small" />
+          			)
+          		}
+          	/>
+          ))}
 			</Text>
 
-			{stream?(stream.getVideoTracks()?.length === 0 ? (
-				<>
-					<video autoPlay muted={internalMute || isSelf} hidden ref={player} />
-					<Box ref={eqContainer} />
-				</>
+			{stream ? (
+				stream.getVideoTracks()?.length === 0 ? (
+					<>
+						<video
+							autoPlay
+							muted={internalMute || isSelf}
+							hidden
+							ref={player}
+						/>
+						<Box ref={eqContainer} />
+					</>
+				) : (
+					<video autoPlay muted={internalMute || isSelf} ref={player} />
+				)
 			) : (
-				<video autoPlay muted={internalMute || isSelf} ref={player} />
-			)):(
 				<Box align="center">
 					<View size="xlarge" />
 				</Box>

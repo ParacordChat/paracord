@@ -24,8 +24,6 @@ const buttonOptions: ButtonOption[] = [
 	{ label: "view", icon: <View /> }
 ];
 
-
-
 export function CallView(props: { callManagerInstance: CallManager }) {
 	const { callManagerInstance } = props;
 
@@ -49,11 +47,14 @@ export function CallView(props: { callManagerInstance: CallManager }) {
 					{callConsent && (
 						<Box fill="vertical">
 							<Box>
-								{[{
-									id: selfId,
-									stream: myStream,
-									username: "You"
-								},...videoBubbles].map((bubble) => (
+								{[
+									{
+										id: selfId,
+										stream: myStream,
+										username: "You"
+									},
+									...videoBubbles
+								].map((bubble) => (
 									<StreamPlayer
 										key={bubble.id}
 										stream={bubble.stream}

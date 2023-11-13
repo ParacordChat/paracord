@@ -1,4 +1,6 @@
-import { Box, Heading, InfiniteScroll, Paragraph } from "grommet";
+import { Box, Button, Heading, InfiniteScroll, Paragraph, Text } from "grommet";
+import { Home } from "grommet-icons";
+import { route } from "preact-router";
 import CollapsibleContainer from "../../helpers/components/Collapsible";
 import GenericHeader from "../../helpers/components/GenericHeader";
 
@@ -88,7 +90,23 @@ export default function About() {
 				round="medium"
 				alignSelf="center"
 			>
+				<Button icon={<Home size="medium" />} onClick={() => route("/")} />
 				<Heading margin="none">About</Heading>
+				<Text size="large" color="#FFFC00">
+          The ghost keeps your messages.{" "}
+					<a href="https://www.nytimes.com/2014/05/09/technology/snapchat-reaches-settlement-with-federal-trade-commission.html?_r=0">
+            Forever
+					</a>
+          .
+				</Text>
+				<Text size="large" color="#7289da">
+          Same goes for a certain purple...{" "}
+					<a href="https://www.reddit.com/r/privacy/comments/jy14qi/psa_discord_lies_about_removing_deleted_files/">
+            creature
+					</a>
+          .
+				</Text>
+				<Text>So what are you supposed to do about it?</Text>
 				<InfiniteScroll items={abouts}>
 					{(item: { title: string; more: string }) => (
 						<CollapsibleContainer

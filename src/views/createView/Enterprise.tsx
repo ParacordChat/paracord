@@ -1,4 +1,6 @@
-import { Box, Heading, Image, Text } from "grommet";
+import { Box, Button, Heading, Image, Text } from "grommet";
+import { Home } from "grommet-icons";
+import { route } from "preact-router";
 import GenericHeader from "../../helpers/components/GenericHeader";
 import emailDisp from "/email.png";
 
@@ -17,6 +19,7 @@ export default function Enterprise() {
 				round="medium"
 				alignSelf="center"
 			>
+				<Button icon={<Home size="medium" />} onClick={() => route("/")} />
 				<Heading margin="none">Paracord for enterprise</Heading>
 				<Text size="medium">
           Paracord is a free, open source, and easy to use video conferencing,

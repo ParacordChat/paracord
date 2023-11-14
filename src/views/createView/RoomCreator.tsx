@@ -128,7 +128,7 @@ export function RoomCreator() {
 							}}
 							onClick={() => {
 								window.location.href =
-                    "https://github.com/ParacordChat/paracord/releases/tag/allplatforms";
+                    "https://github.com/ParacordChat/ParaDesk/releases/";
 							}}
 						>
 							<Box

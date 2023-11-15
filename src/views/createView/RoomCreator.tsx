@@ -120,7 +120,8 @@ export function RoomCreator() {
 								<Organization />
 							</Box>
 						</Button>
-						<Button
+						{/* @ts-ignore */}
+						{!window["go"] &&<Button
 							pad="large"
 							style={{
 								background: "#4bffac",
@@ -144,7 +145,7 @@ export function RoomCreator() {
                   Paracord Desktop(Beta)
 								<Download />
 							</Box>
-						</Button>
+						</Button>}
 						<Button
 							pad="large"
 							style={{

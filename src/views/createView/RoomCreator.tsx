@@ -36,11 +36,11 @@ export function RoomCreator() {
 						paddingBottom: "3em"
 					 }}
 				>
-					<Text size="xxlarge" style={{ background: "black" }}>
+					<Text size="xxlarge" style={{ background: "black", color:"white" }}>
               Want privacy? Choose <b style={{ color: "#4bffac" }}>Para</b>
 						<b style={{ color: "#af79ff" }}>cord</b>.
 					</Text>
-					<Text size="small" style={{ background: "black" }}>
+					<Text size="small" style={{ background: "black", color:"white" }}>
               Send multiple gigabytes, Call and chat without anyone in the
               middle.
 					</Text>
@@ -51,6 +51,7 @@ export function RoomCreator() {
 						pad="medium"
 						style={{
 							background: "black",
+							color: "white",
 							marginTop: "10vh",
 							marginBottom: "10vh",
 							width: "65vh",
@@ -100,6 +101,7 @@ export function RoomCreator() {
 						<Button
 							style={{
 								background: "black",
+								color: "white",
 								border: "1px solid #af79ff",
 								clipPath: "polygon(0 0, 100% 0, 100% 100%, 0 40%)",
 								padding: "1em",
@@ -147,6 +149,7 @@ export function RoomCreator() {
 							pad="large"
 							style={{
 								background: "black",
+								color: "white",
 								border: "1px solid #4bffac",
 								clipPath: "polygon(0 0, 100% 0, 100% 60%, 0 100%)",
 								padding: "1em"
@@ -168,7 +171,7 @@ export function RoomCreator() {
 						</Button>
 					</Box>
 
-					<Text size="xsmall" style={{ background: "black" }}>
+					<Text size="xsmall" style={{ background: "black", color: "white" }}>
               Copyright {new Date()
 							.getFullYear()} Paracord. Version:{" "}
 						{packageJson.version}

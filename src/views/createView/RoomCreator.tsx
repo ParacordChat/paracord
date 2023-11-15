@@ -53,7 +53,7 @@ export function RoomCreator() {
 							background: "black",
 							marginTop: "10vh",
 							marginBottom: "10vh",
-							width: "50vh",
+							width: "65vh",
 							height: "30vh"
 						}}
 					>

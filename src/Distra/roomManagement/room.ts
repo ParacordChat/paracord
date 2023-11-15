@@ -66,11 +66,11 @@ export default async (
 			}
 
 			const target =
-        pendingTransmissions[uuid] ||
-        (pendingTransmissions[uuid] = {
-        	chunks: new Uint8Array(),
-        	meta: undefined
-        });
+				pendingTransmissions[uuid] ||
+				(pendingTransmissions[uuid] = {
+					chunks: new Uint8Array(),
+					meta: undefined
+				});
 
 			if (isMeta) {
 				target.meta = JSON.parse(decodeBytes(payload));
@@ -101,7 +101,10 @@ export default async (
 				const decKey = cachedDecryptKeys[id];
 				if (!decKey) throw mkErr("");
 				return decryptData(payloadRaw, decKey)
-					.then((dec) => handleData(id, JSON.parse(decodeBytes(dec))))
+					.then((dec) => {
+						const cdc = JSON.parse(decodeBytes(dec));
+						handleData(id, cdc);
+					})
 					.catch((error) => console.error(error));
 			} catch {
 				const decryptKey = useUserStore
@@ -110,7 +113,10 @@ export default async (
 				if (decryptKey) {
 					cachedDecryptKeys[id] = decryptKey;
 					decryptData(payloadRaw, decryptKey)
-						.then((dec) => handleData(id, JSON.parse(decodeBytes(dec))))
+						.then((dec) => {
+							const cdc = JSON.parse(decodeBytes(dec));
+							handleData(id, cdc);
+						})
 						.catch((error) => console.error(error));
 				} else {
 					handleData(id, JSON.parse(decodeBytes(payloadRaw)));

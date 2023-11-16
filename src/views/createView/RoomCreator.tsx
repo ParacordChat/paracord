@@ -78,6 +78,7 @@ export function RoomCreator() {
 								onClick={() =>
 									roomRef.current && (roomRef.current.value = genId(6))
 								}
+								primary
 								label="Random"
 							/>
 						</Box>

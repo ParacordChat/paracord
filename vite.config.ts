@@ -1,4 +1,5 @@
 import preact from "@preact/preset-vite";
+import sri from "@vividlemon/vite-plugin-sri";
 import { defineConfig } from "vite";
 import { VitePWA } from "vite-plugin-pwa";
 import topLevelAwait from "vite-plugin-top-level-await";
@@ -74,6 +75,7 @@ export default defineConfig({
 			// devOptions: {
 			//   enabled: true,
 			// },
-		})
+		}),
+		sri()
 	]
 });

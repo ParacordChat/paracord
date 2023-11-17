@@ -24,21 +24,13 @@ const defaultRedundancy = 2;
 const defaultAnnounceSecs = 33;
 const maxAnnounceSecs = 120;
 const trackerAction = "announce";
-const defaultTrackerUrls = [
-	"wss://fediverse.tv/tracker/socket",
-	"wss://tracker.files.fm:7073/announce",
-	"wss://tracker.openwebtorrent.com",
-	"wss://tracker.btorrent.xyz",
-	"wss://qot.abiir.top:443/announce",
-	"wss://spacetradersapi-chatbox.herokuapp.com:443/announce"
-];
 
 export const joinRoom = initGuard(
 	occupiedRooms,
 	async (config: TorrentRoomConfig, ns: string | number) => {
 		const connectedPeers: { [x: string]: any } = {};
 		const key = config.password && (await genKey(config.password, ns));
-		const trackerUrls = (config.trackerUrls || defaultTrackerUrls).slice(
+		const trackerUrls = config.trackerUrls.slice(
 			0,
 			config.trackerUrls
 				? config.trackerUrls.length
@@ -82,14 +74,14 @@ export const joinRoom = initGuard(
 		const onSocketMessage = async (socket: WebSocket, e: { data: string }) => {
 			const infoHash = await infoHashP;
 			let val: {
-        [x: string]: any;
-        info_hash: string;
-        peer_id: string;
-        interval: number;
-        offer: { sdp: string };
-        offer_id: string | number;
-        answer: { sdp: string };
-      };
+				[x: string]: any;
+				info_hash: string;
+				peer_id: string;
+				interval: number;
+				offer: { sdp: string };
+				offer_id: string | number;
+				answer: { sdp: string };
+			};
 
 			try {
 				val = JSON.parse(e.data);
@@ -100,7 +92,7 @@ export const joinRoom = initGuard(
 
 			if (
 				val.info_hash !== infoHash ||
-        (val.peer_id && val.peer_id === selfId)
+				(val.peer_id && val.peer_id === selfId)
 			) {
 				return;
 			}
@@ -114,8 +106,8 @@ export const joinRoom = initGuard(
 
 			if (
 				val.interval &&
-        val.interval > announceSecs &&
-        val.interval <= maxAnnounceSecs
+				val.interval > announceSecs &&
+				val.interval <= maxAnnounceSecs
 			) {
 				clearInterval(announceInterval);
 				announceSecs = val.interval;
@@ -157,7 +149,7 @@ export const joinRoom = initGuard(
 								...val.offer,
 								sdp: await decrypt(key, JSON.parse(val.offer.sdp)),
 								type: "offer"
-							}
+						  }
 						: { ...val.offer, type: "offer" }
 				);
 
@@ -191,7 +183,7 @@ export const joinRoom = initGuard(
 									...val.answer,
 									sdp: await decrypt(key, JSON.parse(val.answer.sdp)),
 									type: "answer"
-								}
+							  }
 							: { ...val.answer, type: "answer" }
 					);
 				}
@@ -304,16 +296,16 @@ export const joinRoom = initGuard(
 		let announceSecs = defaultAnnounceSecs;
 		let announceInterval = setInterval(announceAll, announceSecs * 1000);
 		let onPeerConnect: (
-      peer: ExtendedInstance,
-      id: string
-    ) => void | (() => void) = noOp;
+			peer: ExtendedInstance,
+			id: string
+		) => void | (() => void) = noOp;
 		let handledOffers: { [x: string]: any } = {};
 		let offerPool: {
-      [s: string]: {
-        peer: ExtendedInstance;
-        offerP: Promise<RTCSessionDescription>;
-      };
-    };
+			[s: string]: {
+				peer: ExtendedInstance;
+				offerP: Promise<RTCSessionDescription>;
+			};
+		};
 
 		occupiedRooms[ns] = true;
 		announceAll();

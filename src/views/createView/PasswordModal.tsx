@@ -5,7 +5,7 @@ import { route } from "preact-router";
 import { useEffect, useRef, useState } from "preact/hooks";
 import { joinFirebaseRoom, joinTorrentRoom, Room } from "../../Distra";
 import GenericHeader from "../../helpers/components/GenericHeader";
-import { firebaseRoomConfig, turnAPI } from "../../helpers/consts/roomConfig";
+import { firebaseRoomConfig, torrentRoomConfig, turnAPI } from "../../helpers/consts/roomConfig";
 import MainModal from "../paneView/PaneModal";
 
 const PasswordModal = (roomId: string, strategy: string,hasPassword: boolean) => () => {
@@ -21,7 +21,7 @@ const PasswordModal = (roomId: string, strategy: string,hasPassword: boolean) =>
 					switch (strategy) {
 						case "t": { {
 							return joinTorrentRoom({
-								appId: "paracord",
+								...torrentRoomConfig,
 								rtcConfig: {
 									iceServers
 								},

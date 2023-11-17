@@ -10,14 +10,8 @@ import { route } from "preact-router";
 import { useRef, useState } from "preact/hooks";
 import packageJson from "../../../package.json";
 import GenericHeader from "../../helpers/components/GenericHeader";
+import { RoomStrategy, roomStrategyUrl, strategyList } from "../../helpers/consts/roomConfig";
 import { genId } from "../../helpers/utils";
-
-type RoomStrategy = "firebase" | "torrent";
-const roomStrategyUrl: Record<RoomStrategy, string> = {
-	firebase:"f",
-	torrent:"t"
-};
-const strategyList = Object.keys(roomStrategyUrl) as RoomStrategy[];
 
 export function RoomCreator() {
 	const [usePassword, setUsePassword] = useState(true);
@@ -197,7 +191,7 @@ export function RoomCreator() {
 					</Text>
 				</Box>
 
-				<a href="https://github.com/ParacordChat/paracord/issues" style={{ textAlign: "center" }}>Find a bug?</a>
+				<a href="https://github.com/ParacordChat/paracord/issues" style={{ textAlign: "center" }}>Find a bug? Have a suggestion?</a>
 			</GenericHeader>
 		</>
 	);

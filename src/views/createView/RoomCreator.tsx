@@ -1,4 +1,4 @@
-import { Box, Button, CheckBox, Text, TextInput } from "grommet";
+import { Box, Button, CheckBox, Select, Text, TextInput } from "grommet";
 import {
 	CircleQuestion,
 	Download,
@@ -12,11 +12,19 @@ import packageJson from "../../../package.json";
 import GenericHeader from "../../helpers/components/GenericHeader";
 import { genId } from "../../helpers/utils";
 
+type RoomStrategy = "firebase" | "torrent";
+const roomStrategyUrl: Record<RoomStrategy, string> = {
+	firebase:"f",
+	torrent:"t"
+};
+const strategyList = Object.keys(roomStrategyUrl) as RoomStrategy[];
+
 export function RoomCreator() {
 	const [usePassword, setUsePassword] = useState(true);
+	const [strategyUsed, setStrategyUsed] = useState<RoomStrategy>(strategyList[0]);
 	const roomRef = useRef<HTMLInputElement>(null);
 	const loadRoom = () =>
-		route(`/${usePassword ? "s" : "p"}/${roomRef.current?.value}`);
+		route(`/r/${roomRef.current?.value}?${usePassword ? "s" : "p"}${roomStrategyUrl[strategyUsed]}`);
 	return (
 		<>
 			<GenericHeader>
@@ -89,10 +97,19 @@ export function RoomCreator() {
 								label="Use Password?"
 								color="brand"
 								onChange={(event: {
-                    target: {
-                      checked: boolean | ((prevState: boolean) => boolean);
-                    };
-                  }) => setUsePassword(event.target.checked)}
+									target: {
+									checked: boolean | ((prevState: boolean) => boolean);
+									};
+								}) => setUsePassword(event.target.checked)}
+							/>
+							<Select
+								options={strategyList}
+								value={strategyUsed}
+								label="Link Strategy(cannot cross-communicate)"
+								onChange={({ option }:{option:RoomStrategy}) => {
+									console.log(option);
+									setStrategyUsed(option);
+								}}
 							/>
 						</Box>
 						<Button onClick={loadRoom} label="Go" primary />

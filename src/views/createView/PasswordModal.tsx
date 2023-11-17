@@ -3,12 +3,12 @@ import { Box, Button, Text, TextInput } from "grommet";
 import { CaretLeftFill, FormView, FormViewHide, Key } from "grommet-icons";
 import { route } from "preact-router";
 import { useEffect, useRef, useState } from "preact/hooks";
-import { joinFirebaseRoom, Room } from "../../Distra";
+import { joinFirebaseRoom, joinTorrentRoom, Room } from "../../Distra";
 import GenericHeader from "../../helpers/components/GenericHeader";
 import { firebaseRoomConfig, turnAPI } from "../../helpers/consts/roomConfig";
 import MainModal from "../paneView/PaneModal";
 
-const PasswordModal = (roomId: string, hasPassword: boolean) => () => {
+const PasswordModal = (roomId: string, strategy: string,hasPassword: boolean) => () => {
 	const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
 	const [currentRoom, setCurrentRoom] = useState<Room | null>(null);
 	const passwordRef = useRef<HTMLInputElement>(null);
@@ -17,17 +17,46 @@ const PasswordModal = (roomId: string, hasPassword: boolean) => () => {
 		if (!currentRoom) {
 			const room = await fetch(turnAPI)
 				.then((response) => response.json())
-				.then((iceServers) =>
-					joinFirebaseRoom(
-						{
-							...firebaseRoomConfig,
-							rtcConfig: {
-								iceServers
+				.then((iceServers) =>{
+					switch (strategy) {
+						case "t": { {
+							return joinTorrentRoom({
+								appId: "paracord",
+								rtcConfig: {
+									iceServers
+								},
+								password: password === "" ? undefined : password
 							},
-							password: password === "" ? undefined : password
-						},
-						roomId
-					)
+							roomId);
+						}
+						}
+						case "f": { {
+							return joinFirebaseRoom(
+								{
+									...firebaseRoomConfig,
+									rtcConfig: {
+										iceServers
+									},
+									password: password === "" ? undefined : password
+								},
+								roomId
+							);
+						}
+						}
+						default: { {
+							return joinFirebaseRoom(
+								{
+									...firebaseRoomConfig,
+									rtcConfig: {
+										iceServers
+									},
+									password: password === "" ? undefined : password
+								},
+								roomId
+							);
+						}
+						}
+					}}
 				);
 			setCurrentRoom(room);
 		}

@@ -6,7 +6,7 @@ interface Props {
   children: React.ReactNode;
 }
 
-export default function CollapsibleContainer({ children }: Props) {
+const CollapsibleContainer = ({ children }: Props) =>{
 	return (
 		<Page kind="narrow">
 			<PageHeader
@@ -24,4 +24,5 @@ export default function CollapsibleContainer({ children }: Props) {
 			<Main pad="large">{children}</Main>
 		</Page>
 	);
-}
+};
+export default CollapsibleContainer;

@@ -18,6 +18,7 @@ export default function CollapsibleContainer(props: CollapsibleProps) {
 		<Box {...extprops}>
 			<Button
 				width="100%"
+				{...extprops}
 				icon={collapsed ? <CaretRightFill /> : <CaretDownFill />}
 				label={title}
 				onClick={toggleCollapsed}

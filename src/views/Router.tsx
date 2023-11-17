@@ -48,26 +48,18 @@ function App() {
 						}
 					/>
 					<AsyncRoute
-						path={`/p/:id`}
+						path={`/r/:id`}
 						getComponent={(url) =>
 							import("./createView/PasswordModal").then(async (module) => {
 								const cleanUrl = url.split("/");
 								if (cleanUrl.length < 2) alert("Invalid URL");
-								const roomId = cleanUrl[2].trim();
-								return module.default(roomId, false);
-							})
-						}
-						loading={loadingComponent}
-					/>
-					<AsyncRoute
-						path={`/s/:id`}
-						getComponent={(url) =>
-							import("./createView/PasswordModal").then(async (module) => {
-								const cleanUrl = url.split("/");
-								if (cleanUrl.length < 2) alert("Invalid URL");
-								const roomId = cleanUrl[2].trim();
+								const roomIdProps = cleanUrl[2].trim()
+									.split("?");
+								const roomProps = roomIdProps.length === 1?["s","f"]:[...roomIdProps[1]];
+								if(roomProps.length === 0) roomProps.push("s");
+								if(roomProps.length<2) roomProps.push("f");
 
-								return module.default(roomId, true);
+								return module.default(roomIdProps[0], roomProps[1],roomProps[0]==="s");
 							})
 						}
 						loading={loadingComponent}

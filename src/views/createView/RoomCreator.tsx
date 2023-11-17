@@ -179,6 +179,8 @@ export function RoomCreator() {
 						{packageJson.version}
 					</Text>
 				</Box>
+
+				<a href="https://github.com/ParacordChat/paracord/issues" style={{ textAlign: "center" }}>Find a bug?</a>
 			</GenericHeader>
 		</>
 	);

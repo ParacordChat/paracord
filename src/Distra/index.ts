@@ -6,7 +6,7 @@ export type {
 } from "../helpers/types/distraTypes.js";
 export { selfId } from "../helpers/utils.js";
 export {
-	getOccupants,
+	// getOccupants,
 	joinRoom as joinFirebaseRoom
 } from "./strategies/firebase";
-export { joinRoom } from "./strategies/torrent.js";
+export { joinRoom as joinTorrentRoom } from "./strategies/torrent.js";

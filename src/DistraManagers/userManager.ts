@@ -1,5 +1,5 @@
 import { funAnimalName } from "fun-animal-names";
-import * as kyber from "pqc-kyber";
+import { decapsulate, encapsulate } from "pqc-kyber";
 import { Room } from "../Distra";
 import { sendSystemMessage } from "../helpers/helpers";
 import { useProgressStore } from "../stateManagers/downloadManagers/progressManager";
@@ -16,9 +16,9 @@ export default class UserManager {
 	constructor({ room, roomId }: { room: Room; roomId: string }) {
 		const [sendName, getName] = room.makeAction<string>("name", true);
 		const [sendEncryptionInfo, getEncryptionInfo] =
-      room.makeAction<Uint8Array>("encReq");
+			room.makeAction<Uint8Array>("encReq");
 		const [sendProcessedKey, getProcessedKey] =
-      room.makeAction<Uint8Array>("encProc");
+			room.makeAction<Uint8Array>("encProc");
 
 		this.sendName = sendName;
 		this.sendEncryptionInfo = sendEncryptionInfo;
@@ -65,7 +65,7 @@ export default class UserManager {
 			}
 
 			try {
-				const { ciphertext, sharedSecret } = await kyber.encapsulate(key);
+				const { ciphertext, sharedSecret } = await encapsulate(key);
 				useUserStore.getState()
 					.updateUser(id, { quantumSend: sharedSecret });
 				sendProcessedKey(ciphertext, [id]);
@@ -80,7 +80,10 @@ export default class UserManager {
 			}
 			const activePersona = usePersonaStore.getState().persona;
 			if (activePersona && activePersona.keyPair) {
-				const key = kyber.decapsulate(cyphertext, activePersona.keyPair.secret);
+				const key = await decapsulate(
+					cyphertext,
+					activePersona.keyPair.privateKey
+				);
 				try {
 					useUserStore.getState()
 						.updateUser(id, { quantumRecv: key });
@@ -111,7 +114,7 @@ export default class UserManager {
 		if (activePersona) {
 			if (id) {
 				if (activePersona.keyPair) {
-					await this.sendEncryptionInfo(activePersona.keyPair.pubkey, [id]);
+					await this.sendEncryptionInfo(activePersona.keyPair.publicKey, [id]);
 				}
 				const allowedSendNames = useUserStore.getState().keyedUsers;
 				if (allowedSendNames.has(id)) {
@@ -120,7 +123,7 @@ export default class UserManager {
 			} else {
 				if (useClientSideUserTraits.getState().roomPassword) {
 					if (activePersona.keyPair) {
-						await this.sendEncryptionInfo(activePersona.keyPair.pubkey);
+						await this.sendEncryptionInfo(activePersona.keyPair.publicKey);
 						this.sendName(activePersona.name);
 					}
 				} else {
@@ -135,14 +138,6 @@ export default class UserManager {
 			.updatePersona({ name });
 		this.syncInfo();
 	};
-
-	// setEncryptionInfo = (info: {
-	//   privateKey: Uint8Array;
-	//   publicKey: Uint8Array;
-	// }) => {
-	//   usePersonaStore.getState().updatePersona({ keyPair: info as Keys });
-	//   this.syncInfo();
-	// };
 
 	createPersona = async () => {
 		await usePersonaStore.getState()

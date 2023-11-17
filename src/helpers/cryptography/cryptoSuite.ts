@@ -1,8 +1,14 @@
-import * as kyber from "pqc-kyber";
+import { keypair } from "pqc-kyber";
 import { decodeBytes, encodeBytes } from "../dataHandling/uint8util";
 
 // Function to generate a public-private key pair
-export const generateKeyPair = () => kyber.keypair();
+export const generateKeyPair = () => {
+	const kp = keypair();
+	return {
+		publicKey: kp.pubkey,
+		privateKey: kp.secret
+	};
+};
 
 const algo = "AES-GCM";
 const IV_LENGTH = 12;

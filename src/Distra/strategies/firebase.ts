@@ -19,13 +19,7 @@ import {
 	ExtendedInstance,
 	FirebaseRoomConfig
 } from "../../helpers/types/distraTypes.js";
-import {
-	firebaseGuard,
-	initGuard,
-	initPeer,
-	noOp,
-	selfId
-} from "../../helpers/utils.js";
+import { initGuard, initPeer, noOp, selfId } from "../../helpers/utils.js";
 import room from "../roomManagement/room.js";
 
 const presencePath = "_";
@@ -111,9 +105,9 @@ export const joinRoom = initGuard(
 
 		let didSyncRoom = false;
 		let onPeerConnect: (
-      peer: ExtendedInstance,
-      id: string
-    ) => void | (() => void) = noOp;
+			peer: ExtendedInstance,
+			id: string
+		) => void | (() => void) = noOp;
 
 		occupiedRooms[ns] = true;
 
@@ -189,14 +183,14 @@ export const joinRoom = initGuard(
 	}
 );
 
-export const getOccupants = firebaseGuard(
-	occupiedRooms,
-	(config: FirebaseRoomConfig, ns: string | number): Promise<string[]> =>
-		new Promise((res) =>
-			onValue(
-				ref(init(config), getPath(config.rootPath || defaultRootPath, `${ns}`)),
-				(data) => res(Object.keys(data.val() || {})),
-				{ onlyOnce: true }
-			)
-		)
-);
+// export const getOccupants = firebaseGuard(
+// 	occupiedRooms,
+// 	(config: FirebaseRoomConfig, ns: string | number): Promise<string[]> =>
+// 		new Promise((res) =>
+// 			onValue(
+// 				ref(init(config), getPath(config.rootPath || defaultRootPath, `${ns}`)),
+// 				(data) => res(Object.keys(data.val() || {})),
+// 				{ onlyOnce: true }
+// 			)
+// 		)
+// );

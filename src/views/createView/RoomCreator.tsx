@@ -56,14 +56,15 @@ export function RoomCreator() {
 							color: "white",
 							marginTop: "10vh",
 							marginBottom: "10vh",
-							width: "65vh",
-							height: "30vh"
+							width: "65vh"
+							
 						}}
 					>
 						<Text size="medium">Create a room:</Text>
-						<Box direction="row">
+						<Box direction="row" style={{ paddingBottom: "2vh" }}>
 							<TextInput
 								border={{ color: "brand", size: "small" }}
+								style={{ height:"6vh" }}
 								ref={roomRef}
 								name="userInput"
 								autoComplete="off"
@@ -84,7 +85,7 @@ export function RoomCreator() {
 								label="Random"
 							/>
 						</Box>
-						<Box direction="row">
+						<Box direction="row" style={{ paddingBottom: "2vh" }}>
 							<CheckBox
 								pad="small"
 								checked={usePassword}
@@ -99,7 +100,6 @@ export function RoomCreator() {
 							<Select
 								options={strategyList}
 								value={strategyUsed}
-								label="Link Strategy(cannot cross-communicate)"
 								onChange={({ option }:{option:RoomStrategy}) => {
 									console.log(option);
 									setStrategyUsed(option);

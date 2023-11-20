@@ -100,10 +100,9 @@ export function RoomCreator() {
 							<Select
 								options={strategyList}
 								value={strategyUsed}
-								onChange={({ option }:{option:RoomStrategy}) => {
-									console.log(option);
-									setStrategyUsed(option);
-								}}
+								onChange={({ option }:{option:RoomStrategy}) => 
+									setStrategyUsed(option)
+								}
 							/>
 						</Box>
 						<Button onClick={loadRoom} label="Go" primary />
@@ -191,6 +190,7 @@ export function RoomCreator() {
 					</Text>
 				</Box>
 
+				<p>WARNING: YOU ARE ADVISED NOT TO USE FIREFOX WITH PARACORD</p>
 				<a href="https://github.com/ParacordChat/paracord/issues" style={{ textAlign: "center" }}>Find a bug? Have a suggestion?</a>
 			</GenericHeader>
 		</>

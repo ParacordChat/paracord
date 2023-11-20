@@ -8,7 +8,7 @@ export const events = {
 	track: "track"
 };
 
-export const chunkSize = 128 * 2 ** 10; // 128KB
+export const chunkSize = 128_000; // 128KB
 export const oneByteMax = 0xFF;
 
 export const libName = "distra";

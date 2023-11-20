@@ -1,6 +1,7 @@
 import { funAnimalName } from "fun-animal-names";
 import { showSaveFilePicker } from "native-file-system-adapter";
 import { Room, selfId } from "../Distra/index";
+import { chunkSize as smallChunkSize } from "../helpers/consts/consts";
 import { sendSystemMessage } from "../helpers/helpers";
 import { FileAck, FileMetaData, FileOffer } from "../helpers/types/types";
 import { genId } from "../helpers/utils";
@@ -10,7 +11,7 @@ import { useOfferStore } from "../stateManagers/downloadManagers/requestManager"
 import { useClientSideUserTraits } from "../stateManagers/userManagers/clientSideUserTraits";
 import { useUserStore } from "../stateManagers/userManagers/userStore";
 
-const chunkSize = 1_000_000 * 5; // 5MB
+const chunkSize = smallChunkSize * 40; // ~5MB
 
 const readFileChunk = (data: File, chunkN: number) =>
 	data
@@ -181,11 +182,6 @@ export default class DownloadManager {
 						if (processedMeta.last) {
 							useProgressStore.getState()
 								.removeWritable(processedMeta.uuid);
-						// this.sendFileAck({
-						// 	uuid: processedMeta.uuid,
-						// 	id: processedMeta.id,
-						// 	chunkN: -1
-						// });
 						} else {
 							return sendFileAck({
 								uuid: processedMeta.uuid,

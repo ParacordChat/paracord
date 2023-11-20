@@ -47,7 +47,7 @@ export const makeAction = <T>(
 		const uuid = genId(6);
 		const isBlob = data instanceof Blob;
 		const isBinary =
-			isBlob || data instanceof ArrayBuffer || data instanceof Uint8Array;
+      isBlob || data instanceof ArrayBuffer || data instanceof Uint8Array;
 		const isJson = typeof data !== "string" && !isBinary && !isBlob;
 
 		if (meta && !isBinary) {
@@ -59,7 +59,7 @@ export const makeAction = <T>(
 			: encodeBytes(isJson ? JSON.stringify(data) : (data as string));
 
 		const chunkTotal =
-			Math.ceil(buffer.byteLength / chunkSize) + (meta ? 1 : 0);
+      Math.ceil(buffer.byteLength / chunkSize) + (meta ? 1 : 0);
 
 		const formatChunk = (
 			chkValue: Uint8Array | StrictMetadata,
@@ -88,9 +88,9 @@ export const makeAction = <T>(
 		await Promise.all(
 			fixedTgts.map(async (iterable) => {
 				const peer =
-					typeof iterable === "string"
-						? useRoomStateManager.getState().peerMap[iterable]
-						: useRoomStateManager.getState().peerMap[iterable.id];
+          typeof iterable === "string"
+          	? useRoomStateManager.getState().peerMap[iterable]
+          	: useRoomStateManager.getState().peerMap[iterable.id];
 				if (!peer) {
 					return;
 				}
@@ -109,10 +109,10 @@ export const makeAction = <T>(
 									: buffer.slice(
 										chunkN * chunkSize,
 										(chunkN + 1) * chunkSize
-										  ),
+									),
 								chunkN,
 								false
-							  );
+							);
 					})();
 
 					if (chan.bufferedAmount > chan.bufferedAmountLowThreshold) {
@@ -174,10 +174,10 @@ export const makeAction = <T>(
 
 		(
 			onProgress: (
-				percent: number,
-				peerId: string,
-				metadata?: StrictMetadata
-			) => void
+        percent: number,
+        peerId: string,
+        metadata?: StrictMetadata,
+      ) => void
 		) =>
 			(useRoomStateManager.getState().actions[type] = {
 				...useRoomStateManager.getState().actions[type],

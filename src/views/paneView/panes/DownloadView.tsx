@@ -91,7 +91,7 @@ export function DownloadView(props: {
                 	.map(([id, fileOffers]) => {
                 	const userName = useUserStore((state) =>
                 		state.users.find((u) => u.id === id)
-                	)?.name;
+                		)?.name;
 
                 	return fileOffers.map(({ id, name, size, ownerId }) => (
                 		<Box

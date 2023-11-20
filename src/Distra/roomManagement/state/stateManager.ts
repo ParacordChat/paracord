@@ -18,7 +18,7 @@ interface RoomStateManager {
   addToPendingTransmissions: (
     id: string,
     targetId: string,
-    transmission: any
+    transmission: any,
   ) => void;
   removeFromPendingTransmissions: (id: string) => void;
 }

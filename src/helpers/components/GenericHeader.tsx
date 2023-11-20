@@ -6,7 +6,7 @@ interface Props {
   children: React.ReactNode;
 }
 
-const CollapsibleContainer = ({ children }: Props) =>{
+const CollapsibleContainer = ({ children }: Props) => {
 	return (
 		<Page kind="narrow">
 			<PageHeader

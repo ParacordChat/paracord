@@ -55,11 +55,16 @@ function App() {
 								if (cleanUrl.length < 2) alert("Invalid URL");
 								const roomIdProps = cleanUrl[2].trim()
 									.split("?");
-								const roomProps = roomIdProps.length === 1?["s","f"]:[...roomIdProps[1]];
-								if(roomProps.length === 0) roomProps.push("s");
-								if(roomProps.length<2) roomProps.push("f");
+								const roomProps =
+                  roomIdProps.length === 1 ? ["s", "f"] : [...roomIdProps[1]];
+								if (roomProps.length === 0) roomProps.push("s");
+								if (roomProps.length < 2) roomProps.push("f");
 
-								return module.default(roomIdProps[0], roomProps[1],roomProps[0]==="s");
+								return module.default(
+									roomIdProps[0],
+									roomProps[1],
+									roomProps[0] === "s"
+								);
 							})
 						}
 						loading={loadingComponent}

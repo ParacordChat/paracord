@@ -66,11 +66,11 @@ export default async (
 			}
 
 			const target =
-				pendingTransmissions[uuid] ||
-				(pendingTransmissions[uuid] = {
-					chunks: new Uint8Array(),
-					meta: undefined
-				});
+        pendingTransmissions[uuid] ||
+        (pendingTransmissions[uuid] = {
+        	chunks: new Uint8Array(),
+        	meta: undefined
+        });
 
 			if (isMeta) {
 				target.meta = JSON.parse(decodeBytes(payload));

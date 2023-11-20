@@ -46,7 +46,7 @@ globalThis.addEventListener("message", (evt) => {
   if (data.url && data.readablePort) {
     data.rs = new ReadableStream(
       new MessagePortSource(evt.data.readablePort),
-      new CountQueuingStrategy({ highWaterMark: 4 })
+      new CountQueuingStrategy({ highWaterMark: 4 }),
     );
     map.set(data.url, data);
   }

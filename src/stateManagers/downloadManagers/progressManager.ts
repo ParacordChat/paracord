@@ -2,21 +2,21 @@ import { create } from "zustand";
 import { FileProgress } from "../../helpers/types/types";
 
 export interface QueuedWritable {
-	fileId: string;
-	uuid: string;
-	writable: FileSystemWritableFileStream;
+  fileId: string;
+  uuid: string;
+  writable: FileSystemWritableFileStream;
 }
 
 interface ProgressStore {
-	progressQueue: FileProgress[];
-	writablesQueue: QueuedWritable[];
-	addWritable: (writeHook: QueuedWritable) => void;
-	removeWritable: (uuid: string) => void;
-	addProgress: (progress: FileProgress) => void;
-	deleteProgress: (uuid: string) => void;
-	deleteFid: (fid: string) => void;
-	updateOrAddProgress: (uuid: string, updates: FileProgress) => void;
-	removeFile: (id: string) => void;
+  progressQueue: FileProgress[];
+  writablesQueue: QueuedWritable[];
+  addWritable: (writeHook: QueuedWritable) => void;
+  removeWritable: (uuid: string) => void;
+  addProgress: (progress: FileProgress) => void;
+  deleteProgress: (uuid: string) => void;
+  deleteFid: (fid: string) => void;
+  updateOrAddProgress: (uuid: string, updates: FileProgress) => void;
+  removeFile: (id: string) => void;
 }
 
 export const useProgressStore = create<ProgressStore>((set) => ({
@@ -46,12 +46,12 @@ export const useProgressStore = create<ProgressStore>((set) => ({
 			return fileReq.length === 0
 				? {
 						progressQueue: [...state.progressQueue, { ...updates }]
-				  }
+					}
 				: {
 						progressQueue: state.progressQueue.map((progress) =>
 							uuid === progress.uuid ? { ...progress, ...updates } : progress
 						)
-				  };
+					};
 		}),
 	writablesQueue: [],
 	addWritable: (writeHook: QueuedWritable) =>

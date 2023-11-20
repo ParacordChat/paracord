@@ -13,7 +13,7 @@ interface HookStateManager {
 
   onPeerTrack: (arg0: any, arg1: any, arg2: string, arg3: any) => void;
   setOnPeerTrack: (
-    arg0: (track: any, stream: any, id: string, meta: any) => void
+    arg0: (track: any, stream: any, id: string, meta: any) => void,
   ) => void;
 
   onPeerError: (arg0: string, arg1: any) => void;

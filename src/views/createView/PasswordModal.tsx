@@ -5,119 +5,129 @@ import { route } from "preact-router";
 import { useEffect, useRef, useState } from "preact/hooks";
 import { joinFirebaseRoom, joinTorrentRoom, Room } from "../../Distra";
 import GenericHeader from "../../helpers/components/GenericHeader";
-import { firebaseRoomConfig, torrentRoomConfig, turnAPI } from "../../helpers/consts/roomConfig";
+import {
+	firebaseRoomConfig,
+	torrentRoomConfig,
+	turnAPI
+} from "../../helpers/consts/roomConfig";
 import MainModal from "../paneView/PaneModal";
 
-const PasswordModal = (roomId: string, strategy: string,hasPassword: boolean) => () => {
-	const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
-	const [currentRoom, setCurrentRoom] = useState<Room | null>(null);
-	const passwordRef = useRef<HTMLInputElement>(null);
+const PasswordModal =
+  (roomId: string, strategy: string, hasPassword: boolean) => () => {
+  	const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
+  	const [currentRoom, setCurrentRoom] = useState<Room | null>(null);
+  	const passwordRef = useRef<HTMLInputElement>(null);
 
-	const roomSet = async (password = "") => {
-		if (!currentRoom) {
-			const room = await fetch(turnAPI)
-				.then((response) => response.json())
-				.then((iceServers) =>{
-					switch (strategy) {
-						case "t": { {
-							return joinTorrentRoom({
-								...torrentRoomConfig,
-								rtcConfig: {
-									iceServers
-								},
-								password: password === "" ? undefined : password
-							},
-							roomId);
-						}
-						}
-						case "f": { {
-							return joinFirebaseRoom(
-								{
-									...firebaseRoomConfig,
-									rtcConfig: {
-										iceServers
-									},
-									password: password === "" ? undefined : password
-								},
-								roomId
-							);
-						}
-						}
-						default: { {
-							return joinFirebaseRoom(
-								{
-									...firebaseRoomConfig,
-									rtcConfig: {
-										iceServers
-									},
-									password: password === "" ? undefined : password
-								},
-								roomId
-							);
-						}
-						}
-					}}
-				);
-			setCurrentRoom(room);
-		}
-	};
+  	const roomSet = async (password = "") => {
+  		if (!currentRoom) {
+  			const room = await fetch(turnAPI)
+  				.then((response) => response.json())
+  				.then((iceServers) => {
+  					switch (strategy) {
+  						case "t": {
+  							{
+  								return joinTorrentRoom(
+  									{
+  										...torrentRoomConfig,
+  										rtcConfig: {
+  											iceServers
+  										},
+  										password: password === "" ? undefined : password
+  									},
+  									roomId
+  								);
+  							}
+  						}
+  						case "f": {
+  							{
+  								return joinFirebaseRoom(
+  									{
+  										...firebaseRoomConfig,
+  										rtcConfig: {
+  											iceServers
+  										},
+  										password: password === "" ? undefined : password
+  									},
+  									roomId
+  								);
+  							}
+  						}
+  						default: {
+  							{
+  								return joinFirebaseRoom(
+  									{
+  										...firebaseRoomConfig,
+  										rtcConfig: {
+  											iceServers
+  										},
+  										password: password === "" ? undefined : password
+  									},
+  									roomId
+  								);
+  							}
+  						}
+  					}
+  				});
+  			setCurrentRoom(room);
+  		}
+  	};
 
-	useEffect(() => {
-		if (!hasPassword) roomSet();
-	});
+  	useEffect(() => {
+  		if (!hasPassword) roomSet();
+  	});
 
-	return (
-		<>
-			{currentRoom ? (
-				<MainModal roomId={roomId} room={currentRoom} />
-			) : (
-				<GenericHeader>
-					<Box border={{ color: "brand", size: "large" }} pad="medium">
-						<Text color="red">Enter room password:</Text>
-						<Box direction="row">
-							<TextInput
-								icon={<Key />}
-								ref={passwordRef}
-								name="userInput"
-								type={passwordVisible ? "text" : "password"}
-								autoComplete="off"
-								placeholder="Please enter a password"
-								onKeyUp={(e: { key: string }) => {
-									if (e.key === "Enter") {
-										roomSet(passwordRef.current?.value);
-									}
-								}}
-							/>
-							<Button
-								icon={passwordVisible ? <FormView /> : <FormViewHide />}
-								onClick={() => setPasswordVisible((pwv) => !pwv)}
-								tip="Toggle password visibility"
-							/>
-						</Box>
-						<Box direction="row">
-							<Button
-								label="home"
-								onClick={() => {
-									route(`/`);
-									location.reload();
-								}}
-								icon={<CaretLeftFill />}
-							/>
-							<Button
-								onClick={() => {
-									if (passwordRef.current?.value.trim() === "") return;
-									roomSet(passwordRef.current?.value);
-								}}
-								style={{ marginLeft: "auto", width: "100%" }}
-								label="Go"
-								primary
-							/>
-						</Box>
-					</Box>
-				</GenericHeader>
-			)}
-		</>
-	);
-};
+  	return (
+  		<>
+  			{currentRoom ? (
+  				<MainModal roomId={roomId} room={currentRoom} />
+  			) : (
+  				<GenericHeader>
+  					<Box border={{ color: "brand", size: "large" }} pad="medium">
+  						<Text color="red">Enter room password:</Text>
+  						<Box direction="row">
+  							<TextInput
+  								icon={<Key />}
+  								ref={passwordRef}
+  								name="userInput"
+  								type={passwordVisible ? "text" : "password"}
+  								autoComplete="off"
+  								placeholder="Please enter a password"
+  								onKeyUp={(e: { key: string }) => {
+  									if (e.key === "Enter") {
+  										roomSet(passwordRef.current?.value);
+  									}
+  								}}
+  							/>
+  							<Button
+  								icon={passwordVisible ? <FormView /> : <FormViewHide />}
+  								onClick={() => setPasswordVisible((pwv) => !pwv)}
+  								tip="Toggle password visibility"
+  							/>
+  						</Box>
+  						<Box direction="row">
+  							<Button
+  								label="home"
+  								onClick={() => {
+  									route(`/`);
+  									location.reload();
+  								}}
+  								icon={<CaretLeftFill />}
+  							/>
+  							<Button
+  								onClick={() => {
+  									if (passwordRef.current?.value.trim() === "") return;
+  									roomSet(passwordRef.current?.value);
+  								}}
+  								style={{ marginLeft: "auto", width: "100%" }}
+  								label="Go"
+  								primary
+  							/>
+  						</Box>
+  					</Box>
+  				</GenericHeader>
+  			)}
+  		</>
+  	);
+  };
 
 export default PasswordModal;

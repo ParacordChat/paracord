@@ -9,6 +9,32 @@ export type RoomActionType =
   | "cutStream"
   | "view";
 
+const mergeAudioStreams = (
+	desktopStream: MediaStream,
+	voiceStream: MediaStream
+) => {
+	const context = new AudioContext();
+
+	// Create a couple of sources
+	const source1 = context.createMediaStreamSource(desktopStream);
+	const source2 = context.createMediaStreamSource(voiceStream);
+	const destination = context.createMediaStreamDestination();
+
+	const desktopGain = context.createGain();
+	const voiceGain = context.createGain();
+
+	desktopGain.gain.value = 0.7;
+	voiceGain.gain.value = 0.7;
+
+	source1.connect(desktopGain)
+		.connect(destination);
+	// Connect source2
+	source2.connect(voiceGain)
+		.connect(destination);
+
+	return destination.stream.getAudioTracks();
+};
+
 export default class CallManager {
 	private joinRoom;
 	private removeStream;
@@ -132,10 +158,19 @@ export default class CallManager {
 						});
 					}
 					case "screen": {
-						return await navigator.mediaDevices.getDisplayMedia({
+						const desktopStream = await navigator.mediaDevices.getDisplayMedia({
 							audio: true,
 							video: true
 						});
+						const voiceStream = await navigator.mediaDevices.getUserMedia({
+							audio: true,
+							video: false
+						});
+						const tracks = [
+							...desktopStream.getVideoTracks(),
+							...voiceStream.getAudioTracks()
+						];
+						return new MediaStream(tracks);
 					}
 					default: {
 						throw new Error("Invalid media type");

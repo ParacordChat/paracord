@@ -3,37 +3,11 @@ import { useCallPrefsState } from "../stateManagers/commsManagers/personalCallPr
 import { useClientSideUserTraits } from "../stateManagers/userManagers/clientSideUserTraits";
 
 export type RoomActionType =
-  | "phone"
-  | "video"
-  | "screen"
-  | "cutStream"
-  | "view";
-
-const mergeAudioStreams = (
-	desktopStream: MediaStream,
-	voiceStream: MediaStream
-) => {
-	const context = new AudioContext();
-
-	// Create a couple of sources
-	const source1 = context.createMediaStreamSource(desktopStream);
-	const source2 = context.createMediaStreamSource(voiceStream);
-	const destination = context.createMediaStreamDestination();
-
-	const desktopGain = context.createGain();
-	const voiceGain = context.createGain();
-
-	desktopGain.gain.value = 0.7;
-	voiceGain.gain.value = 0.7;
-
-	source1.connect(desktopGain)
-		.connect(destination);
-	// Connect source2
-	source2.connect(voiceGain)
-		.connect(destination);
-
-	return destination.stream.getAudioTracks();
-};
+	| "phone"
+	| "video"
+	| "screen"
+	| "cutStream"
+	| "view";
 
 export default class CallManager {
 	private joinRoom;

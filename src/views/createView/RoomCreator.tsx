@@ -98,12 +98,12 @@ export function RoomCreator() {
 								pad="small"
 								checked={usePassword}
 								label="Use Password?"
-								color="brand"
+								toggle
 								onChange={(event: {
-                  target: {
-                    checked: boolean | ((prevState: boolean) => boolean);
-                  };
-                }) => setUsePassword(event.target.checked)}
+									target: {
+										checked: boolean | ((prevState: boolean) => boolean);
+									};
+								}) => setUsePassword(event.target.checked)}
 							/>
 							<Select
 								options={strategyList}

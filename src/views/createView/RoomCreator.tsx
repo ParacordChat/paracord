@@ -18,7 +18,7 @@ import {
 import { genId } from "../../helpers/utils";
 
 export function RoomCreator() {
-	const [usePassword, setUsePassword] = useState(true);
+	const [usePassword, setUsePassword] = useState(false);
 	const [strategyUsed, setStrategyUsed] = useState<RoomStrategy>(
 		strategyList[0]
 	);
@@ -53,7 +53,7 @@ export function RoomCreator() {
 						<b style={{ color: "#af79ff" }}>cord</b>.
 					</Text>
 					<Text size="small" style={{ background: "black", color: "white" }}>
-            Send multiple gigabytes, Call and chat without anyone in the middle.
+            Send multiple gigabytes, call and chat without anyone in the middle.
 					</Text>
 
 					<Box
@@ -108,6 +108,7 @@ export function RoomCreator() {
 							<Select
 								options={strategyList}
 								value={strategyUsed}
+								style={{ right: "0" }}
 								onChange={({ option }: { option: RoomStrategy }) =>
 									setStrategyUsed(option)
 								}

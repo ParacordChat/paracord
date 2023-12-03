@@ -3,7 +3,7 @@ import { FirebaseRoomConfig, TorrentRoomConfig } from "../../Distra";
 export const tradeName = "paracord_chat";
 
 export const turnAPI =
-  "https://paracord.metered.live/api/v1/turn/credentials?apiKey=97a4d31acf5e4c6fe6fb573eecc0f9f4ccbf";
+	"https://paracord.metered.live/api/v1/turn/credentials?apiKey=97a4d31acf5e4c6fe6fb573eecc0f9f4ccbf";
 
 export const trackerUrls = [
 	"wss://fediverse.tv/tracker/socket",
@@ -23,9 +23,11 @@ export const firebaseRoomConfig: FirebaseRoomConfig = {
 	appId: "paracord-d5594-default-rtdb"
 };
 
-export type RoomStrategy = "firebase" | "torrent";
+export type RoomStrategy =
+	| "firebase(fast but centralized)"
+	| "torrent(slow but decentralized)";
 export const roomStrategyUrl: Record<RoomStrategy, string> = {
-	firebase: "f",
-	torrent: "t"
+	"firebase(fast but centralized)": "f",
+	"torrent(slow but decentralized)": "t"
 };
 export const strategyList = Object.keys(roomStrategyUrl) as RoomStrategy[];

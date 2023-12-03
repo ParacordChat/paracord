@@ -56,8 +56,8 @@ function App() {
 								const roomIdProps = cleanUrl[2].trim()
 									.split("?");
 								const roomProps =
-                  roomIdProps.length === 1 ? ["s", "f"] : [...roomIdProps[1]];
-								if (roomProps.length === 0) roomProps.push("s");
+                  roomIdProps.length === 1 ? ["p", "f"] : [...roomIdProps[1]];
+								if (roomProps.length === 0) roomProps.push("p");
 								if (roomProps.length < 2) roomProps.push("f");
 
 								return module.default(

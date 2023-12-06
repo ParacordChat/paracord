@@ -7,7 +7,7 @@ import {
 	Risk
 } from "grommet-icons";
 import { route } from "preact-router";
-import { useRef, useState } from "preact/hooks";
+import { useEffect, useRef, useState } from "preact/hooks";
 import packageJson from "../../../package.json";
 import GenericHeader from "../../helpers/components/GenericHeader";
 import {
@@ -16,6 +16,12 @@ import {
 	strategyList
 } from "../../helpers/consts/roomConfig";
 import { genId } from "../../helpers/utils";
+
+const BrowserIsFirefox = () => {
+	const ua = navigator.userAgent.toLowerCase();
+	if(ua.includes("firefox"))
+		alert("Warning: You are advised not to use Firefox with Paracord, it is still being tested.");
+};
 
 export function RoomCreator() {
 	const [usePassword, setUsePassword] = useState(false);
@@ -29,6 +35,10 @@ export function RoomCreator() {
 				roomStrategyUrl[strategyUsed]
 			}`
 		);
+
+	useEffect(() => {
+		BrowserIsFirefox();
+	});
 	return (
 		<>
 			<GenericHeader>
@@ -200,8 +210,6 @@ export function RoomCreator() {
 						{packageJson.version}
 					</Text>
 				</Box>
-
-				<p>WARNING: YOU ARE ADVISED NOT TO USE FIREFOX WITH PARACORD</p>
 				<a
 					href="https://github.com/ParacordChat/paracord/issues"
 					style={{ textAlign: "center" }}

@@ -19,8 +19,10 @@ import { genId } from "../../helpers/utils";
 
 const BrowserIsFirefox = () => {
 	const ua = navigator.userAgent.toLowerCase();
-	if(ua.includes("firefox"))
-		alert("Warning: You are advised not to use Firefox with Paracord, it is still being tested.");
+	if (ua.includes("firefox"))
+		alert(
+			"Warning: You are advised not to use Firefox with Paracord, it is still being tested."
+		);
 };
 
 export function RoomCreator() {
@@ -110,10 +112,10 @@ export function RoomCreator() {
 								label="Use Password?"
 								toggle
 								onChange={(event: {
-									target: {
-										checked: boolean | ((prevState: boolean) => boolean);
-									};
-								}) => setUsePassword(event.target.checked)}
+                  target: {
+                    checked: boolean | ((prevState: boolean) => boolean);
+                  };
+                }) => setUsePassword(event.target.checked)}
 							/>
 							<Select
 								options={strategyList}

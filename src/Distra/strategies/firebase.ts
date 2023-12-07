@@ -23,7 +23,6 @@ import { initGuard, initPeer, noOp, selfId } from "../../helpers/utils.js";
 import room from "../roomManagement/room.js";
 
 const presencePath = "_";
-const defaultRootPath = `__${libName.toLowerCase()}__`;
 const occupiedRooms: { [x: string]: any } = {};
 const dbs: { [x: string]: Database } = {};
 const getPath = (...xs: string[]) => xs.join("/");
@@ -62,8 +61,7 @@ export const joinRoom = initGuard(
 		const peerMap: { [x: string]: any } = {};
 		const peerSigs: { [x: string]: { [x: string]: boolean } } = {};
 		const connectedPeers: { [peerId: string]: boolean } = {};
-		const rootPath = config.rootPath || defaultRootPath;
-		const roomRef = ref(db, getPath(rootPath, `${ns}`));
+		const roomRef = ref(db, `${ns}`);
 		const selfRef = child(roomRef, selfId);
 		const cryptoKey = config.password && (await genKey(config.password, ns));
 		const unsubFns: Unsubscribe[] = [];
@@ -86,7 +84,7 @@ export const joinRoom = initGuard(
 				}
 
 				const payload = JSON.stringify(sdp);
-				const signalRef = push(ref(db, getPath(rootPath, `${ns}`, id, selfId)));
+				const signalRef = push(ref(db, getPath(`${ns}`, id, selfId)));
 
 				onDisconnect(signalRef)
 					.remove();
@@ -105,9 +103,9 @@ export const joinRoom = initGuard(
 
 		let didSyncRoom = false;
 		let onPeerConnect: (
-      peer: ExtendedInstance,
-      id: string,
-    ) => void | (() => void) = noOp;
+			peer: ExtendedInstance,
+			id: string
+		) => void | (() => void) = noOp;
 
 		occupiedRooms[ns] = true;
 
@@ -182,15 +180,3 @@ export const joinRoom = initGuard(
 		);
 	}
 );
-
-// export const getOccupants = firebaseGuard(
-// 	occupiedRooms,
-// 	(config: FirebaseRoomConfig, ns: string | number): Promise<string[]> =>
-// 		new Promise((res) =>
-// 			onValue(
-// 				ref(init(config), getPath(config.rootPath || defaultRootPath, `${ns}`)),
-// 				(data) => res(Object.keys(data.val() || {})),
-// 				{ onlyOnce: true }
-// 			)
-// 		)
-// );

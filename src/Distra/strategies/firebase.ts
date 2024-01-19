@@ -60,7 +60,7 @@ export const joinRoom = initGuard(
 		if (!db) throw new Error("No database!");
 		const peerMap: { [x: string]: any } = {};
 		const peerSigs: { [x: string]: { [x: string]: boolean } } = {};
-		const connectedPeers: { [peerId: string]: boolean } = {};
+		const connectedPeers: { [peerId: string]: number } = {};
 		const roomRef = ref(db, `${ns}`);
 		const selfRef = child(roomRef, selfId);
 		const cryptoKey = config.password && (await genKey(config.password, ns));
@@ -75,7 +75,7 @@ export const joinRoom = initGuard(
 
 			peer.once(events.connect, () => {
 				onPeerConnect(peer, id);
-				connectedPeers[id] = true;
+				connectedPeers[id] = Math.floor(Date.now() / 1000);
 			});
 
 			peer.on(events.signal, async (sdp: Object) => {
